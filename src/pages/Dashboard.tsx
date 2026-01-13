@@ -6,12 +6,7 @@ import RecentSales from "@/components/dashboard/RecentSales";
 import InventoryAlert from "@/components/dashboard/InventoryAlert";
 import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-  DollarSign,
-  ShoppingCart,
-  Package,
-  TrendingUp,
-} from "lucide-react";
+import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useAuth();

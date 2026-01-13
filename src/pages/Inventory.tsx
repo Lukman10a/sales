@@ -34,7 +34,8 @@ const inventoryItems: InventoryItem[] = [
   {
     id: "1",
     name: "Samsung Galaxy A54",
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&h=200&fit=crop",
     wholesalePrice: 150000,
     sellingPrice: 185000,
     quantity: 8,
@@ -45,7 +46,8 @@ const inventoryItems: InventoryItem[] = [
   {
     id: "2",
     name: "iPhone 15 Pro Max Case",
-    image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=200&h=200&fit=crop",
     wholesalePrice: 2500,
     sellingPrice: 4500,
     quantity: 2,
@@ -56,7 +58,8 @@ const inventoryItems: InventoryItem[] = [
   {
     id: "3",
     name: "Wireless Earbuds Pro",
-    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=200&h=200&fit=crop",
     wholesalePrice: 15000,
     sellingPrice: 25000,
     quantity: 15,
@@ -67,7 +70,8 @@ const inventoryItems: InventoryItem[] = [
   {
     id: "4",
     name: "USB-C Fast Charger 65W",
-    image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=200&h=200&fit=crop",
     wholesalePrice: 8000,
     sellingPrice: 12000,
     quantity: 0,
@@ -77,8 +81,9 @@ const inventoryItems: InventoryItem[] = [
   },
   {
     id: "5",
-    name: "Laptop Sleeve 15\"",
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
+    name: 'Laptop Sleeve 15"',
+    image:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
     wholesalePrice: 7000,
     sellingPrice: 12000,
     quantity: 22,
@@ -89,7 +94,8 @@ const inventoryItems: InventoryItem[] = [
   {
     id: "6",
     name: "Wireless Mouse",
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
     wholesalePrice: 4000,
     sellingPrice: 7500,
     quantity: 5,
@@ -100,9 +106,18 @@ const inventoryItems: InventoryItem[] = [
 ];
 
 const statusConfig = {
-  "in-stock": { label: "In Stock", className: "bg-success/10 text-success border-success/20" },
-  "low-stock": { label: "Low Stock", className: "bg-warning/10 text-warning border-warning/20" },
-  "out-of-stock": { label: "Out of Stock", className: "bg-destructive/10 text-destructive border-destructive/20" },
+  "in-stock": {
+    label: "In Stock",
+    className: "bg-success/10 text-success border-success/20",
+  },
+  "low-stock": {
+    label: "Low Stock",
+    className: "bg-warning/10 text-warning border-warning/20",
+  },
+  "out-of-stock": {
+    label: "Out of Stock",
+    className: "bg-destructive/10 text-destructive border-destructive/20",
+  },
 };
 
 const formatCurrency = (amount: number) => {
@@ -188,7 +203,9 @@ const Inventory = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-card rounded-xl border p-4 card-elevated">
             <p className="text-sm text-muted-foreground">Total Items</p>
-            <p className="text-2xl font-display font-bold text-foreground">{inventoryItems.length}</p>
+            <p className="text-2xl font-display font-bold text-foreground">
+              {inventoryItems.length}
+            </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
             <p className="text-sm text-muted-foreground">In Stock</p>
@@ -243,14 +260,18 @@ const Inventory = () => {
                     >
                       {statusConfig[item.status].label}
                     </Badge>
-                    {!item.confirmedByApprentice && userRole === "apprentice" && (
-                      <div className="absolute inset-0 bg-warning/20 backdrop-blur-sm flex items-center justify-center">
-                        <Button size="sm" className="bg-warning text-warning-foreground">
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Confirm Receipt
-                        </Button>
-                      </div>
-                    )}
+                    {!item.confirmedByApprentice &&
+                      userRole === "apprentice" && (
+                        <div className="absolute inset-0 bg-warning/20 backdrop-blur-sm flex items-center justify-center">
+                          <Button
+                            size="sm"
+                            className="bg-warning text-warning-foreground"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Confirm Receipt
+                          </Button>
+                        </div>
+                      )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-foreground mb-2 truncate">
@@ -258,17 +279,25 @@ const Inventory = () => {
                     </h3>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Qty Available</span>
-                        <span className="font-medium text-foreground">{item.quantity}</span>
+                        <span className="text-muted-foreground">
+                          Qty Available
+                        </span>
+                        <span className="font-medium text-foreground">
+                          {item.quantity}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Sold</span>
-                        <span className="font-medium text-success">{item.sold}</span>
+                        <span className="font-medium text-success">
+                          {item.sold}
+                        </span>
                       </div>
                       {userRole === "owner" && (
                         <>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Cost Price</span>
+                            <span className="text-muted-foreground">
+                              Cost Price
+                            </span>
                             <span className="font-medium text-foreground">
                               {formatCurrency(item.wholesalePrice)}
                             </span>
@@ -276,7 +305,9 @@ const Inventory = () => {
                         </>
                       )}
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Selling Price</span>
+                        <span className="text-muted-foreground">
+                          Selling Price
+                        </span>
                         <span className="font-medium text-accent">
                           {formatCurrency(item.sellingPrice)}
                         </span>
@@ -288,7 +319,11 @@ const Inventory = () => {
                           <Edit className="w-3 h-3 mr-1" />
                           Edit
                         </Button>
-                        <Button variant="outline" size="sm" className="text-destructive hover:bg-destructive/10">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-destructive hover:bg-destructive/10"
+                        >
                           <Trash2 className="w-3 h-3" />
                         </Button>
                       </div>
@@ -309,20 +344,37 @@ const Inventory = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b bg-muted/50">
-                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Item</th>
-                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Status</th>
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">Qty</th>
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">Sold</th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                        Item
+                      </th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                        Status
+                      </th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        Qty
+                      </th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        Sold
+                      </th>
                       {userRole === "owner" && (
-                        <th className="text-right p-4 text-sm font-medium text-muted-foreground">Cost</th>
+                        <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                          Cost
+                        </th>
                       )}
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">Price</th>
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">Actions</th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        Price
+                      </th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredItems.map((item) => (
-                      <tr key={item.id} className="border-b hover:bg-muted/30 transition-colors">
+                      <tr
+                        key={item.id}
+                        className="border-b hover:bg-muted/30 transition-colors"
+                      >
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             <img
@@ -331,7 +383,9 @@ const Inventory = () => {
                               className="w-12 h-12 rounded-lg object-cover"
                             />
                             <div>
-                              <p className="font-medium text-foreground">{item.name}</p>
+                              <p className="font-medium text-foreground">
+                                {item.name}
+                              </p>
                               {!item.confirmedByApprentice && (
                                 <span className="flex items-center gap-1 text-xs text-warning">
                                   <AlertTriangle className="w-3 h-3" />
@@ -342,14 +396,23 @@ const Inventory = () => {
                           </div>
                         </td>
                         <td className="p-4">
-                          <Badge variant="outline" className={statusConfig[item.status].className}>
+                          <Badge
+                            variant="outline"
+                            className={statusConfig[item.status].className}
+                          >
                             {statusConfig[item.status].label}
                           </Badge>
                         </td>
-                        <td className="p-4 text-right font-medium">{item.quantity}</td>
-                        <td className="p-4 text-right font-medium text-success">{item.sold}</td>
+                        <td className="p-4 text-right font-medium">
+                          {item.quantity}
+                        </td>
+                        <td className="p-4 text-right font-medium text-success">
+                          {item.sold}
+                        </td>
                         {userRole === "owner" && (
-                          <td className="p-4 text-right">{formatCurrency(item.wholesalePrice)}</td>
+                          <td className="p-4 text-right">
+                            {formatCurrency(item.wholesalePrice)}
+                          </td>
                         )}
                         <td className="p-4 text-right font-medium text-accent">
                           {formatCurrency(item.sellingPrice)}
@@ -361,12 +424,19 @@ const Inventory = () => {
                                 <Button variant="ghost" size="icon">
                                   <Edit className="w-4 h-4" />
                                 </Button>
-                                <Button variant="ghost" size="icon" className="text-destructive">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="text-destructive"
+                                >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
                               </>
                             ) : !item.confirmedByApprentice ? (
-                              <Button size="sm" className="bg-warning text-warning-foreground">
+                              <Button
+                                size="sm"
+                                className="bg-warning text-warning-foreground"
+                              >
                                 Confirm
                               </Button>
                             ) : (

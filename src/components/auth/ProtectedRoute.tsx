@@ -19,7 +19,12 @@ export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {
       router.replace("/auth/login");
     }
 
-    if (!isLoading && isAuthenticated && requireRole && user?.role !== requireRole) {
+    if (
+      !isLoading &&
+      isAuthenticated &&
+      requireRole &&
+      user?.role !== requireRole
+    ) {
       // User doesn't have required role, redirect to dashboard
       router.replace("/");
     }

@@ -70,7 +70,7 @@ const topProducts = [
   { name: "Samsung Galaxy A54", sold: 45, revenue: 8325000 },
   { name: "Wireless Earbuds Pro", sold: 89, revenue: 2225000 },
   { name: "iPhone Charger Cable", sold: 156, revenue: 702000 },
-  { name: "Laptop Sleeve 15\"", sold: 34, revenue: 408000 },
+  { name: 'Laptop Sleeve 15"', sold: 34, revenue: 408000 },
   { name: "Wireless Mouse", sold: 67, revenue: 502500 },
 ];
 
@@ -101,7 +101,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const Analytics = () => {
-  const [dateRange, setDateRange] = useState<"today" | "week" | "month" | "custom">("week");
+  const [dateRange, setDateRange] = useState<
+    "today" | "week" | "month" | "custom"
+  >("week");
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
@@ -170,7 +172,9 @@ const Analytics = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground mb-1">Total Revenue</p>
-            <p className="text-3xl font-display font-bold text-foreground">₦3.65M</p>
+            <p className="text-3xl font-display font-bold text-foreground">
+              ₦3.65M
+            </p>
           </motion.div>
 
           <motion.div
@@ -189,7 +193,9 @@ const Analytics = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground mb-1">Net Profit</p>
-            <p className="text-3xl font-display font-bold text-foreground">₦784k</p>
+            <p className="text-3xl font-display font-bold text-foreground">
+              ₦784k
+            </p>
           </motion.div>
 
           <motion.div
@@ -208,7 +214,9 @@ const Analytics = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground mb-1">Total Orders</p>
-            <p className="text-3xl font-display font-bold text-foreground">391</p>
+            <p className="text-3xl font-display font-bold text-foreground">
+              391
+            </p>
           </motion.div>
 
           <motion.div
@@ -226,8 +234,12 @@ const Analytics = () => {
                 <span>+5.8%</span>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground mb-1">Avg Order Value</p>
-            <p className="text-3xl font-display font-bold text-foreground">₦9,340</p>
+            <p className="text-sm text-muted-foreground mb-1">
+              Avg Order Value
+            </p>
+            <p className="text-3xl font-display font-bold text-foreground">
+              ₦9,340
+            </p>
           </motion.div>
         </div>
 
@@ -246,23 +258,43 @@ const Analytics = () => {
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={salesData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="day"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                    tick={{
+                      fill: "hsl(var(--muted-foreground))",
+                      fontSize: 12,
+                    }}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                    tick={{
+                      fill: "hsl(var(--muted-foreground))",
+                      fontSize: 12,
+                    }}
                     tickFormatter={formatCurrency}
                   />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
-                  <Bar dataKey="sales" name="Sales" fill="hsl(230, 45%, 50%)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="profit" name="Profit" fill="hsl(160, 60%, 45%)" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="sales"
+                    name="Sales"
+                    fill="hsl(230, 45%, 50%)"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="profit"
+                    name="Profit"
+                    fill="hsl(160, 60%, 45%)"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -282,22 +314,46 @@ const Analytics = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={hourlyData}>
                   <defs>
-                    <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(160, 60%, 45%)" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(160, 60%, 45%)" stopOpacity={0} />
+                    <linearGradient
+                      id="salesGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="5%"
+                        stopColor="hsl(160, 60%, 45%)"
+                        stopOpacity={0.3}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="hsl(160, 60%, 45%)"
+                        stopOpacity={0}
+                      />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="hour"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                    tick={{
+                      fill: "hsl(var(--muted-foreground))",
+                      fontSize: 12,
+                    }}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                    tick={{
+                      fill: "hsl(var(--muted-foreground))",
+                      fontSize: 12,
+                    }}
                     tickFormatter={formatCurrency}
                   />
                   <Tooltip content={<CustomTooltip />} />
@@ -354,8 +410,12 @@ const Analytics = () => {
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: cat.color }}
                   />
-                  <span className="text-sm text-muted-foreground">{cat.name}</span>
-                  <span className="text-sm font-medium ml-auto">{cat.value}%</span>
+                  <span className="text-sm text-muted-foreground">
+                    {cat.name}
+                  </span>
+                  <span className="text-sm font-medium ml-auto">
+                    {cat.value}%
+                  </span>
                 </div>
               ))}
             </div>
@@ -379,11 +439,17 @@ const Analytics = () => {
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <span className="font-bold text-primary text-sm">#{index + 1}</span>
+                      <span className="font-bold text-primary text-sm">
+                        #{index + 1}
+                      </span>
                     </div>
                     <div>
-                      <p className="font-medium text-foreground">{product.name}</p>
-                      <p className="text-sm text-muted-foreground">{product.sold} units sold</p>
+                      <p className="font-medium text-foreground">
+                        {product.name}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {product.sold} units sold
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">

@@ -42,35 +42,40 @@ const availableItems: SaleItem[] = [
   {
     id: "1",
     name: "Samsung Galaxy A54",
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&h=200&fit=crop",
     sellingPrice: 185000,
     availableQty: 8,
   },
   {
     id: "2",
     name: "iPhone 15 Pro Max Case",
-    image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=200&h=200&fit=crop",
     sellingPrice: 4500,
     availableQty: 2,
   },
   {
     id: "3",
     name: "Wireless Earbuds Pro",
-    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=200&h=200&fit=crop",
     sellingPrice: 25000,
     availableQty: 15,
   },
   {
     id: "4",
-    name: "Laptop Sleeve 15\"",
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
+    name: 'Laptop Sleeve 15"',
+    image:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
     sellingPrice: 12000,
     availableQty: 22,
   },
   {
     id: "5",
     name: "Wireless Mouse",
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop",
     sellingPrice: 7500,
     availableQty: 5,
   },
@@ -79,9 +84,7 @@ const availableItems: SaleItem[] = [
 const recentSalesData: SaleRecord[] = [
   {
     id: "1",
-    items: [
-      { name: "Samsung Galaxy A54", quantity: 1, price: 185000 },
-    ],
+    items: [{ name: "Samsung Galaxy A54", quantity: 1, price: 185000 }],
     total: 185000,
     soldBy: "Ibrahim",
     time: "2 mins ago",
@@ -100,9 +103,7 @@ const recentSalesData: SaleRecord[] = [
   },
   {
     id: "3",
-    items: [
-      { name: "Wireless Earbuds Pro", quantity: 2, price: 50000 },
-    ],
+    items: [{ name: "Wireless Earbuds Pro", quantity: 2, price: 50000 }],
     total: 50000,
     soldBy: "Ibrahim",
     time: "32 mins ago",
@@ -137,7 +138,10 @@ const Sales = () => {
         );
       }
     } else {
-      setCart([...cart, { ...item, quantity: 1, actualPrice: item.sellingPrice }]);
+      setCart([
+        ...cart,
+        { ...item, quantity: 1, actualPrice: item.sellingPrice },
+      ]);
     }
   };
 
@@ -169,7 +173,10 @@ const Sales = () => {
     );
   };
 
-  const cartTotal = cart.reduce((sum, item) => sum + item.actualPrice * item.quantity, 0);
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + item.actualPrice * item.quantity,
+    0
+  );
 
   return (
     <MainLayout>
@@ -257,7 +264,9 @@ const Sales = () => {
                       </div>
                       <div>
                         <p className="font-medium text-foreground">
-                          {sale.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
+                          {sale.items
+                            .map((i) => `${i.name} x${i.quantity}`)
+                            .join(", ")}
                         </p>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Clock className="w-3 h-3" />
@@ -383,11 +392,15 @@ const Sales = () => {
                   <div className="border-t pt-4 space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Subtotal</span>
-                      <span className="font-medium">{formatCurrency(cartTotal)}</span>
+                      <span className="font-medium">
+                        {formatCurrency(cartTotal)}
+                      </span>
                     </div>
                     <div className="flex justify-between text-lg font-display font-bold">
                       <span>Total</span>
-                      <span className="text-accent">{formatCurrency(cartTotal)}</span>
+                      <span className="text-accent">
+                        {formatCurrency(cartTotal)}
+                      </span>
                     </div>
                     <Button className="w-full bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent mt-4">
                       <CheckCircle className="w-4 h-4 mr-2" />

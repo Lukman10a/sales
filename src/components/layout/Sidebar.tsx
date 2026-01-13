@@ -39,7 +39,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  
+
   const userRole = user?.role || propUserRole || "owner";
   const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
@@ -189,12 +189,12 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
           {!collapsed && <span className="font-medium text-sm">Settings</span>}
         </Link>
         <button
+          onClick={logout}
           className={cn(
             "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sidebar-foreground/70 hover:bg-destructive/10 hover:text-destructive transition-all",
             collapsed && "justify-center"
           )}
         >
-          onClick={logout}
           <LogOut className="w-5 h-5" />
           {!collapsed && <span className="font-medium text-sm">Logout</span>}
         </button>
