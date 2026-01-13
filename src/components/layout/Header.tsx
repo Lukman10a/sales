@@ -54,7 +54,7 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
                   : "bg-primary/10 text-primary text-xs"
               }
             >
-              {userRole === "owner" ? "Super Admin" : "Admin"}
+              {userRole === "owner" ? "Owner" : "Admin"}
             </Badge>
           </div>
           <Avatar className="w-10 h-10 border-2 border-accent/30">

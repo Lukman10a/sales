@@ -148,7 +148,7 @@ export function LoginForm() {
         </p>
         <div className="space-y-1 text-xs text-muted-foreground">
           <p>
-            <span className="font-medium">Super Admin:</span> ahmed@luxa.com /
+            <span className="font-medium">Owner:</span> ahmed@luxa.com /
             admin123
           </p>
           <p>

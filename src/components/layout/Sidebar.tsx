@@ -40,6 +40,8 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
+  const isSettingsActive = pathname?.startsWith("/settings");
+
   const userRole = user?.role || propUserRole || "owner";
   const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
@@ -108,7 +110,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                   {displayName}
                 </p>
                 <p className="text-xs text-sidebar-foreground/60 capitalize">
-                  {userRole === "owner" ? "Super Admin" : "Admin"}
+                  {userRole === "owner" ? "Owner" : "Admin"}
                 </p>
               </div>
             </motion.div>
@@ -181,7 +183,10 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
         <Link
           href="/settings"
           className={cn(
-            "flex items-center gap-3 px-4 py-3 rounded-xl text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-all",
+            "flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
+            isSettingsActive
+              ? "bg-sidebar-accent text-sidebar-primary"
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
             collapsed && "justify-center"
           )}
         >

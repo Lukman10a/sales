@@ -38,7 +38,7 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
           <span className="font-medium text-sm">Admin</span>
         </button>
 
-        {/* Super Admin option */}
+        {/* Owner option */}
         <button
           type="button"
           onClick={() => onChange("owner")}
@@ -50,7 +50,7 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
           )}
         >
           <Shield className="w-4 h-4" />
-          <span className="font-medium text-sm">Super Admin</span>
+          <span className="font-medium text-sm">Owner</span>
         </button>
       </div>
     </div>
