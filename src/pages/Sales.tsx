@@ -119,7 +119,6 @@ const formatCurrency = (amount: number) => {
 };
 
 const Sales = () => {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -173,7 +172,7 @@ const Sales = () => {
   const cartTotal = cart.reduce((sum, item) => sum + item.actualPrice * item.quantity, 0);
 
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Product Selection */}

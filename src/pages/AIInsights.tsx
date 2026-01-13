@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -141,10 +140,8 @@ const priorityConfig = {
 };
 
 const AIInsights = () => {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
-
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

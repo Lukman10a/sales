@@ -20,6 +20,7 @@ LUXA Sales is a modern, full-featured sales and inventory management system desi
 ## Architecture & Technology Stack
 
 ### Core Technologies
+
 - **Frontend Framework:** Next.js 15.1.6 (App Router - Server Components + Client Components)
 - **UI Library:** React 18.3.1
 - **Language:** TypeScript 5.8.3
@@ -34,6 +35,7 @@ LUXA Sales is a modern, full-featured sales and inventory management system desi
 - **Theme Support:** next-themes 0.3.0
 
 ### Development Dependencies
+
 - **Linting:** ESLint 9.32.0 with Next.js config
 - **CSS Processing:** PostCSS 8.5.6, Autoprefixer 10.4.21
 - **Type Utilities:** @types/estree, @types/node, @types/react, @types/react-dom
@@ -103,6 +105,7 @@ Config Files:
 ## Design System
 
 ### Color Palette
+
 - **Primary:** Dark Navy Blue (#1F2B3C) - Main brand color
 - **Accent:** Teal Green (#4FBD9A) - Highlights & CTAs
 - **Success:** Same as Accent (#4FBD9A)
@@ -113,17 +116,20 @@ Config Files:
 - **Sidebar:** Dark Navy (#1A1F2E) with custom sidebar color scheme
 
 ### Typography
+
 - **Display Font:** Space Grotesk (Headers, titles)
 - **Body Font:** Inter (Body text, UI)
 - **Font Sizes:** Follow standard Tailwind scale
 
 ### Design Tokens (CSS Variables)
+
 - Custom HSL color variables for light/dark mode support
 - Gradient variables for buttons and cards
 - Shadow utilities (sm, md, lg, glow)
 - Border radius: 0.75rem (12px) default
 
 ### Components
+
 - **40+ shadcn/ui components** fully configured and ready to use
 - Radix UI primitive-based for accessibility
 - Custom styling through Tailwind CSS
@@ -133,7 +139,9 @@ Config Files:
 ## Features Implemented
 
 ### ✅ Core Features
+
 1. **Dashboard**
+
    - KPI statistics (Today's Sales, Items Sold, In Stock, Profit Margin)
    - Weekly sales chart with profit overlay
    - Recent sales list with status badges
@@ -142,6 +150,7 @@ Config Files:
    - Quick action buttons for common tasks
 
 2. **Inventory Management**
+
    - View products in grid or list layout
    - Search and filter functionality
    - Stock level indicators (In Stock, Low Stock, Out of Stock)
@@ -151,6 +160,7 @@ Config Files:
    - Units sold tracking
 
 3. **Sales Recording**
+
    - Quick product selection from grid
    - Shopping cart with quantity adjustment
    - Custom price adjustment per item
@@ -159,6 +169,7 @@ Config Files:
    - Real-time total calculation
 
 4. **Analytics**
+
    - Weekly sales vs profit comparison
    - Hourly sales trends
    - Sales by category (pie chart)
@@ -167,6 +178,7 @@ Config Files:
    - Key metrics with trend indicators
 
 5. **Notifications**
+
    - Notification center with filtering
    - Unread badge counter
    - Mark as read/dismiss functionality
@@ -174,6 +186,7 @@ Config Files:
    - Multiple notification types (Inventory, Sale, Alert, AI)
 
 6. **AI Insights**
+
    - Smart restock recommendations
    - Trending product identification
    - Slow-moving inventory warnings
@@ -190,7 +203,9 @@ Config Files:
    - Help & Support (placeholder)
 
 ### ✅ Multi-User Features
+
 1. **Role-Based Access**
+
    - Owner: Full access (edit, delete, add products)
    - Apprentice: Limited access (view, confirm inventory, record sales)
    - Role switcher in sidebar for testing
@@ -206,17 +221,21 @@ Config Files:
 ## Missing Features (To Be Implemented)
 
 ### High Priority
+
 1. **Product Management**
+
    - Add New Product page (`/inventory/new`)
    - Edit Product page (`/inventory/:id`)
    - Delete product functionality
 
 2. **Transaction Details**
+
    - Transaction/Receipt detail page (`/sales/:id`)
    - Print receipt functionality
    - Refund management
 
 3. **Customer Management**
+
    - Customer list page (`/customers`)
    - Customer detail/history page
    - Customer creation/editing
@@ -227,13 +246,16 @@ Config Files:
    - Inventory audit trail
 
 ### Medium Priority
+
 5. **Team/User Management**
+
    - Team member list (`/team`)
    - Add/Edit staff users
    - Permission management
    - Activity logging
 
 6. **Reports & Export**
+
    - Custom report generation (`/reports`)
    - Export to CSV/PDF
    - Schedule report emails
@@ -245,7 +267,9 @@ Config Files:
    - Preferences
 
 ### Low Priority
+
 8. **Data Management**
+
    - Backup functionality
    - Data import/export
    - Database management
@@ -260,18 +284,21 @@ Config Files:
 ## Styling & Theme
 
 ### Light Mode (Default)
+
 - Background: #F7F9FC (Light gray)
 - Foreground: #1E1F3C (Dark blue)
 - Cards: Pure white with subtle shadows
 - Sidebar: Dark navy (#1A1F2E)
 
 ### Dark Mode
+
 - Background: #0A0E18 (Very dark blue)
 - Foreground: #E8EDEF (Light gray)
 - Cards: Dark navy with subtle shadows
 - Sidebar: Slightly lighter dark navy
 
 ### Custom CSS Classes
+
 - `.bg-gradient-primary` - Dark navy to lighter navy gradient
 - `.bg-gradient-accent` - Teal green gradient
 - `.glow-accent` - Teal glow effect on buttons
@@ -285,11 +312,13 @@ Config Files:
 ## State Management & Data Flow
 
 ### Client-Side State
+
 - **React Query (TanStack):** For server state & API caching
 - **React Hooks:** Local component state (useState, useEffect)
 - **React Hook Form:** Form state & validation
 
 ### Data Flow Patterns
+
 1. Pages are wrapped as "use client" components
 2. MainLayout provides user role state
 3. Dashboard/Pages maintain local state with useState
@@ -301,6 +330,7 @@ Config Files:
 ## Navigation & Routing
 
 ### Main Routes
+
 - `/` → Dashboard (Home)
 - `/inventory` → Inventory Management
 - `/sales` → Sales Recording
@@ -310,6 +340,7 @@ Config Files:
 - `/settings` → Settings
 
 ### Sidebar Navigation Items
+
 - Dashboard (Badge count: N/A)
 - Inventory (Package icon)
 - Sales (ShoppingCart icon)
@@ -320,6 +351,7 @@ Config Files:
 - Logout (LogOut icon, bottom)
 
 ### Navigation Implementation
+
 - Using Next.js `Link` component (not React Router)
 - `usePathname()` from `next/navigation` for active route detection
 - Sidebar collapse animation (280px → 80px)
@@ -329,6 +361,7 @@ Config Files:
 ## Performance Considerations
 
 ### Optimizations Implemented
+
 1. **Image Optimization:** Using next/image (implicit)
 2. **Code Splitting:** App Router automatic splitting per route
 3. **Font Optimization:** Google Fonts via next/font with variable fonts
@@ -337,6 +370,7 @@ Config Files:
 6. **CSS Modules:** Tailwind purges unused styles
 
 ### Potential Improvements
+
 1. Add Image component with lazy loading
 2. Implement service worker for offline support
 3. Database integration (currently mock data)
@@ -348,6 +382,7 @@ Config Files:
 ## Development Workflow
 
 ### Commands
+
 ```bash
 npm run dev     # Start development server (localhost:3000)
 npm run build   # Build for production
@@ -356,6 +391,7 @@ npm run lint    # Run ESLint
 ```
 
 ### Key Development Notes
+
 1. All components use "use client" where React hooks are needed
 2. PostCSS config uses CommonJS (module.exports) not ES modules
 3. CSS variables are scoped in :root and .dark
@@ -367,11 +403,13 @@ npm run lint    # Run ESLint
 ## Authentication & Authorization
 
 ### Current Implementation
+
 - **No backend authentication** (mock implementation)
 - Role switching via sidebar toggle (Owner/Apprentice)
 - Role-based UI rendering (some buttons/fields hidden based on role)
 
 ### Future Implementation Needed
+
 - Authentication provider (Auth0, NextAuth, Firebase, etc.)
 - JWT token storage
 - Protected routes middleware
@@ -383,11 +421,13 @@ npm run lint    # Run ESLint
 ## API Integration
 
 ### Current State
+
 - **No backend connected** - All data is mock/hardcoded
 - Uses TanStack React Query for state management
 - Ready for API integration
 
 ### When Integrating APIs:
+
 1. Replace hardcoded data with API calls
 2. Use React Query hooks (useQuery, useMutation)
 3. Implement proper error handling
@@ -409,15 +449,18 @@ npm run lint    # Run ESLint
 ## Environment Setup
 
 ### Requirements
+
 - Node.js 18+ (uses nvm)
 - npm 9+
 
 ### Installation
+
 ```bash
 npm install
 ```
 
 ### Configuration Files
+
 - `.env.local` - Not required yet, will be needed for API keys/database URLs
 
 ---
@@ -434,18 +477,21 @@ npm install
 ## Future Roadmap
 
 ### Phase 1 (MVP)
+
 - [ ] Product Add/Edit/Delete
 - [ ] Customer Management
 - [ ] Transaction Details/Receipts
 - [ ] Basic authentication
 
 ### Phase 2
+
 - [ ] Backend API integration
 - [ ] Database setup (PostgreSQL/MongoDB)
 - [ ] User team management
 - [ ] Advanced reporting
 
 ### Phase 3
+
 - [ ] Mobile app (React Native)
 - [ ] Real-time sync
 - [ ] Advanced AI features

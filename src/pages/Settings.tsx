@@ -57,11 +57,10 @@ const settingSections = [
 ];
 
 const Settings = () => {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
   const [activeSection, setActiveSection] = useState("profile");
 
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">
@@ -128,14 +127,18 @@ const Settings = () => {
                         <Label htmlFor="firstName">First Name</Label>
                         <Input
                           id="firstName"
-                          defaultValue={userRole === "owner" ? "Ahmed" : "Ibrahim"}
+                          defaultValue={
+                            userRole === "owner" ? "Ahmed" : "Ibrahim"
+                          }
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name</Label>
                         <Input
                           id="lastName"
-                          defaultValue={userRole === "owner" ? "Hassan" : "Musa"}
+                          defaultValue={
+                            userRole === "owner" ? "Hassan" : "Musa"
+                          }
                         />
                       </div>
                     </div>
@@ -153,10 +156,7 @@ const Settings = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        defaultValue="+234 801 234 5678"
-                      />
+                      <Input id="phone" defaultValue="+234 801 234 5678" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="business">Business Name</Label>
@@ -187,7 +187,9 @@ const Settings = () => {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-foreground">Sales Alerts</p>
+                        <p className="font-medium text-foreground">
+                          Sales Alerts
+                        </p>
                         <p className="text-sm text-muted-foreground">
                           Get notified when a sale is recorded
                         </p>
@@ -196,7 +198,9 @@ const Settings = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-foreground">Low Stock Warnings</p>
+                        <p className="font-medium text-foreground">
+                          Low Stock Warnings
+                        </p>
                         <p className="text-sm text-muted-foreground">
                           Alert when items are running low
                         </p>
@@ -205,7 +209,9 @@ const Settings = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-foreground">Discrepancy Alerts</p>
+                        <p className="font-medium text-foreground">
+                          Discrepancy Alerts
+                        </p>
                         <p className="text-sm text-muted-foreground">
                           Immediate alert for stock mismatches
                         </p>
@@ -214,7 +220,9 @@ const Settings = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-foreground">AI Insights</p>
+                        <p className="font-medium text-foreground">
+                          AI Insights
+                        </p>
                         <p className="text-sm text-muted-foreground">
                           Receive smart business recommendations
                         </p>
@@ -223,7 +231,9 @@ const Settings = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-foreground">Daily Summary</p>
+                        <p className="font-medium text-foreground">
+                          Daily Summary
+                        </p>
                         <p className="text-sm text-muted-foreground">
                           End of day sales summary
                         </p>

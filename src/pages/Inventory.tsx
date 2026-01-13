@@ -114,7 +114,6 @@ const formatCurrency = (amount: number) => {
 };
 
 const Inventory = () => {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -123,7 +122,7 @@ const Inventory = () => {
   );
 
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

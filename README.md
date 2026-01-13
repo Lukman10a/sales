@@ -7,6 +7,7 @@
 LUXA Sales is a modern, full-featured sales and inventory management system designed for small to medium-sized retail businesses. The platform enables business owners and staff to efficiently manage inventory, record sales transactions, track analytics, and receive AI-powered business insights—all from an intuitive, fast, and beautiful interface.
 
 ### Key Capabilities
+
 - **Multi-User Support:** Owner and Apprentice (staff) roles with tailored access levels
 - **Real-Time Dashboard:** KPIs, sales trends, inventory status, and AI recommendations
 - **Inventory Management:** Grid/List views, search, filtering, pricing, and stock tracking
@@ -21,6 +22,7 @@ LUXA Sales is a modern, full-featured sales and inventory management system desi
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ ([install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
 - npm 9+
 
@@ -54,6 +56,7 @@ npm run lint     # Run ESLint code validation
 ## 🛠️ Tech Stack
 
 ### Frontend Framework & Libraries
+
 - **Next.js 15** - React framework with App Router & Server Components
 - **React 18** - UI library with hooks support
 - **TypeScript** - Type-safe JavaScript development
@@ -61,21 +64,25 @@ npm run lint     # Run ESLint code validation
 - **shadcn/ui** - 40+ accessible UI components built on Radix UI
 
 ### State Management & Forms
+
 - **TanStack React Query (5.83.0)** - Server state, caching, and data synchronization
 - **React Hook Form (7.61.1)** - Performant form state management
 - **Zod** - TypeScript-first schema validation
 
 ### Visualization & Animation
+
 - **Recharts (2.15.4)** - Composable charting library for analytics
 - **Framer Motion (12.26.1)** - Production-ready motion library for animations
 - **Lucide React (0.462.0)** - Beautiful, consistent icon library
 
 ### UI & UX
+
 - **Sonner (1.7.4)** - Toast notifications system
 - **next-themes (0.3.0)** - Dark/Light mode support
 - **Radix UI Primitives** - Unstyled, accessible component primitives
 
 ### Development Tools
+
 - **TypeScript (5.8.3)** - Type checking and IDE support
 - **ESLint (9.32.0)** - Code quality and consistency
 - **PostCSS & Autoprefixer** - CSS processing and vendor prefixes
@@ -131,23 +138,26 @@ luxa-sales/
 ## 🎨 Design System
 
 ### Color Palette
-| Purpose | Color | HSL Value |
-|---------|-------|-----------|
-| Primary | Navy Blue | 230° 45% 20% |
-| Accent | Teal Green | 160° 60% 45% |
-| Success | Teal Green | 160° 60% 45% |
-| Warning | Orange | 38° 92% 50% |
-| Destructive | Red | 0° 72% 55% |
-| Background | Light Gray | 220° 20% 97% |
-| Card | White | 0° 0% 100% |
-| Sidebar | Dark Navy | 230° 45% 15% |
+
+| Purpose     | Color      | HSL Value    |
+| ----------- | ---------- | ------------ |
+| Primary     | Navy Blue  | 230° 45% 20% |
+| Accent      | Teal Green | 160° 60% 45% |
+| Success     | Teal Green | 160° 60% 45% |
+| Warning     | Orange     | 38° 92% 50%  |
+| Destructive | Red        | 0° 72% 55%   |
+| Background  | Light Gray | 220° 20% 97% |
+| Card        | White      | 0° 0% 100%   |
+| Sidebar     | Dark Navy  | 230° 45% 15% |
 
 ### Typography
+
 - **Display Font:** Space Grotesk (Headers, titles)
 - **Body Font:** Inter (Body text, UI elements)
 - **Weights:** 300, 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold), 800 (Extra Bold)
 
 ### Components
+
 40+ shadcn/ui components including: Button, Card, Input, Select, Dialog, Alert, Badge, Tabs, Switch, Toast, and more.
 
 ---
@@ -157,6 +167,7 @@ luxa-sales/
 ### ✅ Implemented Features
 
 #### Dashboard
+
 - Key Performance Indicators (Sales, Items Sold, Stock, Profit Margin)
 - Weekly sales chart with profit overlay
 - Recent sales transaction list
@@ -165,6 +176,7 @@ luxa-sales/
 - Quick action shortcuts
 
 #### Inventory Management
+
 - Grid and List view layouts
 - Product search and filtering
 - Stock level indicators (In Stock, Low Stock, Out of Stock)
@@ -173,6 +185,7 @@ luxa-sales/
 - Units sold tracking
 
 #### Sales Recording
+
 - Quick product selection interface
 - Shopping cart with quantity adjustment
 - Per-item custom pricing
@@ -181,6 +194,7 @@ luxa-sales/
 - Real-time total calculation
 
 #### Analytics
+
 - Weekly sales vs. profit comparison chart
 - Hourly sales trend visualization
 - Sales by category breakdown (pie chart)
@@ -189,6 +203,7 @@ luxa-sales/
 - Trend indicators with percentage changes
 
 #### Notifications
+
 - Centralized notification center
 - Unread badge counter
 - Mark as read/dismiss
@@ -196,6 +211,7 @@ luxa-sales/
 - Notification type filtering
 
 #### AI Insights
+
 - Smart restock recommendations with impact calculation
 - Trending product identification
 - Slow-moving inventory warnings
@@ -204,6 +220,7 @@ luxa-sales/
 - Priority-based categorization (High/Medium/Low)
 
 #### Multi-User Features
+
 - Owner role with full access (edit, delete, create)
 - Apprentice role with limited access (view, confirm, record)
 - Role-based UI visibility
@@ -215,18 +232,21 @@ luxa-sales/
 ### 🔲 Features Not Yet Implemented
 
 **High Priority:**
+
 - Product Add/Edit/Delete functionality
 - Customer management system
 - Transaction/Receipt detail pages
 - Inventory reconciliation workflow
 
 **Medium Priority:**
+
 - Team/Staff user management
 - Custom report generation & export
 - Advanced user profile page
 - Data backup & export
 
 **Low Priority:**
+
 - Dashboard widget customization
 - Multi-language support
 - Mobile app (React Native)
@@ -239,6 +259,7 @@ See [MEMORY_BANK.md](./MEMORY_BANK.md) for detailed roadmap.
 ## 👥 User Roles
 
 ### Owner
+
 - Full access to all features
 - Create, edit, delete products
 - View all reports and analytics
@@ -246,6 +267,7 @@ See [MEMORY_BANK.md](./MEMORY_BANK.md) for detailed roadmap.
 - Configure settings
 
 ### Apprentice (Staff)
+
 - Limited inventory access (view only)
 - Can record sales
 - Can confirm received inventory
@@ -265,12 +287,14 @@ See [MEMORY_BANK.md](./MEMORY_BANK.md) for detailed roadmap.
 ## 🌐 Deployment
 
 ### Building for Production
+
 ```bash
 npm run build
 npm start
 ```
 
 ### Deployment Options
+
 - **Vercel** - Recommended for Next.js (one-click deployment)
 - **AWS (Amplify, EC2, ECS)**
 - **Google Cloud (App Engine, Cloud Run)**
@@ -283,6 +307,7 @@ npm start
 **Current State:** All data is mock/hardcoded. Ready for API integration.
 
 When connecting to a backend:
+
 1. Define API endpoints and types
 2. Use React Query hooks for data fetching
 3. Implement error handling and loading states
@@ -294,11 +319,13 @@ When connecting to a backend:
 ## 🎯 Development Workflow
 
 ### Code Style
+
 - **ESLint** configured for code consistency
 - **TypeScript** with strict mode enabled
 - **Prettier** formatting (via ESLint)
 
 ### Component Development Pattern
+
 1. Use `"use client"` directive for interactive components
 2. Prefer functional components with hooks
 3. Extract reusable components to `src/components/`
@@ -306,6 +333,7 @@ When connecting to a backend:
 5. Style with Tailwind CSS utilities
 
 ### Adding New Pages
+
 1. Create folder in `src/app/` with `page.tsx`
 2. Wrap with `"use client"` if using hooks
 3. Import layout components
@@ -316,9 +344,11 @@ When connecting to a backend:
 ## 📚 Documentation
 
 For detailed project information, architecture, styling guidelines, and development notes, see:
+
 - **[MEMORY_BANK.md](./MEMORY_BANK.md)** - Comprehensive project documentation
 
 ### External Resources
+
 - [Next.js Documentation](https://nextjs.org/docs)
 - [React Documentation](https://react.dev)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
@@ -339,6 +369,7 @@ For detailed project information, architecture, styling guidelines, and developm
 ## 💡 Contributing
 
 When contributing to this project:
+
 1. Create a feature branch from `main`
 2. Follow the code style (TypeScript, Tailwind, shadcn/ui patterns)
 3. Test thoroughly on desktop and mobile

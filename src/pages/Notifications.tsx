@@ -30,7 +30,8 @@ const notifications: Notification[] = [
     id: "1",
     type: "inventory",
     title: "New Items Added",
-    message: "Ahmed added 20 units of iPhone 15 Pro Max Cases to inventory. Please confirm receipt.",
+    message:
+      "Ahmed added 20 units of iPhone 15 Pro Max Cases to inventory. Please confirm receipt.",
     time: "5 mins ago",
     read: false,
     actionable: true,
@@ -39,7 +40,8 @@ const notifications: Notification[] = [
     id: "2",
     type: "alert",
     title: "Stock Discrepancy Detected",
-    message: "Expected 12 Wireless Mouse units but system shows 8. Please verify physical count.",
+    message:
+      "Expected 12 Wireless Mouse units but system shows 8. Please verify physical count.",
     time: "15 mins ago",
     read: false,
     actionable: true,
@@ -48,7 +50,8 @@ const notifications: Notification[] = [
     id: "3",
     type: "sale",
     title: "Large Sale Recorded",
-    message: "Ibrahim sold Samsung Galaxy A54 for ₦185,000. Transaction completed successfully.",
+    message:
+      "Ibrahim sold Samsung Galaxy A54 for ₦185,000. Transaction completed successfully.",
     time: "32 mins ago",
     read: false,
   },
@@ -56,7 +59,8 @@ const notifications: Notification[] = [
     id: "4",
     type: "ai",
     title: "Restock Recommendation",
-    message: "USB-C Fast Chargers are selling fast. Consider restocking within 48 hours to avoid stockout.",
+    message:
+      "USB-C Fast Chargers are selling fast. Consider restocking within 48 hours to avoid stockout.",
     time: "1 hour ago",
     read: true,
   },
@@ -64,7 +68,8 @@ const notifications: Notification[] = [
     id: "5",
     type: "inventory",
     title: "Low Stock Warning",
-    message: "iPhone 15 Pro Max Case has only 2 units left. Reorder to maintain stock levels.",
+    message:
+      "iPhone 15 Pro Max Case has only 2 units left. Reorder to maintain stock levels.",
     time: "2 hours ago",
     read: true,
   },
@@ -72,7 +77,8 @@ const notifications: Notification[] = [
     id: "6",
     type: "sale",
     title: "Daily Sales Summary",
-    message: "Total sales for today: ₦892,400 with 47 items sold. Profit margin: 24.8%.",
+    message:
+      "Total sales for today: ₦892,400 with 47 items sold. Profit margin: 24.8%.",
     time: "3 hours ago",
     read: true,
   },
@@ -80,7 +86,8 @@ const notifications: Notification[] = [
     id: "7",
     type: "ai",
     title: "Price Optimization",
-    message: "Wireless Earbuds Pro are trending. Consider a slight price increase to maximize profits.",
+    message:
+      "Wireless Earbuds Pro are trending. Consider a slight price increase to maximize profits.",
     time: "5 hours ago",
     read: true,
   },
@@ -110,12 +117,12 @@ const typeConfig = {
 };
 
 const Notifications = () => {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
   const [notifs, setNotifs] = useState(notifications);
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
   const unreadCount = notifs.filter((n) => !n.read).length;
-  const filteredNotifs = filter === "unread" ? notifs.filter((n) => !n.read) : notifs;
+  const filteredNotifs =
+    filter === "unread" ? notifs.filter((n) => !n.read) : notifs;
 
   const markAsRead = (id: string) => {
     setNotifs(notifs.map((n) => (n.id === id ? { ...n, read: true } : n)));
@@ -130,7 +137,7 @@ const Notifications = () => {
   };
 
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -198,7 +205,8 @@ const Notifications = () => {
                 All caught up!
               </h3>
               <p className="text-muted-foreground">
-                No {filter === "unread" ? "unread " : ""}notifications at the moment.
+                No {filter === "unread" ? "unread " : ""}notifications at the
+                moment.
               </p>
             </motion.div>
           ) : (
@@ -252,7 +260,10 @@ const Notifications = () => {
                             </Button>
                           )}
                           {notif.actionable && (
-                            <Button size="sm" className="h-8 bg-accent text-accent-foreground">
+                            <Button
+                              size="sm"
+                              className="h-8 bg-accent text-accent-foreground"
+                            >
                               Take Action
                             </Button>
                           )}

@@ -4,30 +4,34 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
-  userRole: "owner" | "apprentice";
-  onRoleChange: (role: "owner" | "apprentice") => void;
+  requireRole?: "owner" | "apprentice";
 }
 
-const MainLayout = ({ children, userRole, onRoleChange }: MainLayoutProps) => {
+const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { user } = useAuth();
   const sidebarWidth = sidebarCollapsed ? 80 : 280;
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar userRole={userRole} onRoleChange={onRoleChange} />
-      <Header userRole={userRole} sidebarWidth={sidebarWidth} />
-      <motion.main
-        initial={false}
-        animate={{ marginLeft: sidebarWidth }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="pt-24 pb-8 px-6 min-h-screen"
-      >
-        {children}
-      </motion.main>
-    </div>
+    <ProtectedRoute requireRole={requireRole}>
+      <div className="min-h-screen bg-background">
+        <Sidebar />
+        <Header userRole={user?.role || "owner"} sidebarWidth={sidebarWidth} />
+        <motion.main
+          initial={false}
+          animate={{ marginLeft: sidebarWidth }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="pt-24 pb-8 px-6 min-h-screen"
+        >
+          {children}
+        </motion.main>
+      </div>
+    </ProtectedRoute>
   );
 };
 

@@ -14,15 +14,16 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Users,
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface SidebarProps {
-  userRole: "owner" | "apprentice";
-  onRoleChange: (role: "owner" | "apprentice") => void;
+  userRole?: "owner" | "apprentice";
+  onRoleChange?: (role: "owner" | "apprentice") => void;
 }
 
 const navigation = [
@@ -34,9 +35,14 @@ const navigation = [
   { name: "AI Insights", href: "/insights", icon: Sparkles },
 ];
 
-const Sidebar = ({ userRole, onRoleChange }: SidebarProps) => {
+const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
+  const { user, logout } = useAuth();
+  
+  const userRole = user?.role || propUserRole || "owner";
+  const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
 
   return (
     <motion.aside
@@ -76,7 +82,7 @@ const Sidebar = ({ userRole, onRoleChange }: SidebarProps) => {
         )}
       </div>
 
-      {/* Role Switcher */}
+      {/* User Profile */}
       <div
         className={cn(
           "p-4 border-b border-sidebar-border",
@@ -89,30 +95,22 @@ const Sidebar = ({ userRole, onRoleChange }: SidebarProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex gap-2 p-1 bg-sidebar-accent rounded-lg"
+              className="flex items-center gap-3"
             >
-              <button
-                onClick={() => onRoleChange("owner")}
-                className={cn(
-                  "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all",
-                  userRole === "owner"
-                    ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                    : "text-sidebar-foreground/70 hover:text-sidebar-foreground"
-                )}
-              >
-                Owner
-              </button>
-              <button
-                onClick={() => onRoleChange("apprentice")}
-                className={cn(
-                  "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all",
-                  userRole === "apprentice"
-                    ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                    : "text-sidebar-foreground/70 hover:text-sidebar-foreground"
-                )}
-              >
-                Apprentice
-              </button>
+              <Avatar className="w-10 h-10 border-2 border-sidebar-border">
+                <AvatarImage src={user?.avatar} />
+                <AvatarFallback className="bg-gradient-accent text-accent-foreground font-semibold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm text-sidebar-foreground truncate">
+                  {displayName}
+                </p>
+                <p className="text-xs text-sidebar-foreground/60 capitalize">
+                  {userRole === "owner" ? "Super Admin" : "Admin"}
+                </p>
+              </div>
             </motion.div>
           ) : (
             <motion.div
@@ -121,9 +119,12 @@ const Sidebar = ({ userRole, onRoleChange }: SidebarProps) => {
               exit={{ opacity: 0 }}
               className="flex justify-center"
             >
-              <div className="w-8 h-8 rounded-full bg-sidebar-primary flex items-center justify-center">
-                <Users className="w-4 h-4 text-sidebar-primary-foreground" />
-              </div>
+              <Avatar className="w-10 h-10 border-2 border-sidebar-border">
+                <AvatarImage src={user?.avatar} />
+                <AvatarFallback className="bg-gradient-accent text-accent-foreground font-semibold text-sm">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
             </motion.div>
           )}
         </AnimatePresence>
@@ -193,6 +194,7 @@ const Sidebar = ({ userRole, onRoleChange }: SidebarProps) => {
             collapsed && "justify-center"
           )}
         >
+          onClick={logout}
           <LogOut className="w-5 h-5" />
           {!collapsed && <span className="font-medium text-sm">Logout</span>}
         </button>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import StatCard from "@/components/dashboard/StatCard";
+import { useAuth } from "@/contexts/AuthContext";
 import QuickActions from "@/components/dashboard/QuickActions";
 import SalesChart from "@/components/dashboard/SalesChart";
 import RecentSales from "@/components/dashboard/RecentSales";
@@ -11,17 +11,15 @@ import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 
 export default function Dashboard() {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
+  const { user } = useAuth();
 
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-            {userRole === "owner"
-              ? "Welcome back, Ahmed!"
-              : "Welcome, Ibrahim!"}
+            Welcome back, {user?.firstName}!
           </h1>
           <p className="text-muted-foreground">
             Here's what's happening with your business today.

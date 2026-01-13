@@ -101,12 +101,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const Analytics = () => {
-  const [userRole, setUserRole] = useState<"owner" | "apprentice">("owner");
   const [dateRange, setDateRange] = useState<"today" | "week" | "month" | "custom">("week");
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
-    <MainLayout userRole={userRole} onRoleChange={setUserRole}>
+    <MainLayout>
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
