@@ -3,6 +3,7 @@
 import MainLayout from "@/components/layout/MainLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 import QuickActions from "@/components/dashboard/QuickActions";
 import SalesChart from "@/components/dashboard/SalesChart";
 import RecentSales from "@/components/dashboard/RecentSales";
@@ -12,6 +13,16 @@ import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { totalItemsInStock, totalItemsSold, totalSalesAmount, lowStockItems } =
+    useData();
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
 
   return (
     <MainLayout>
@@ -33,7 +44,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Today's Sales"
-            value="₦892,400"
+            value={formatCurrency(totalSalesAmount)}
             change={12.5}
             changeLabel="vs yesterday"
             icon={DollarSign}
@@ -42,7 +53,7 @@ export default function Dashboard() {
           />
           <StatCard
             title="Items Sold"
-            value="47"
+            value={String(totalItemsSold)}
             change={8.2}
             changeLabel="vs yesterday"
             icon={ShoppingCart}
@@ -50,7 +61,7 @@ export default function Dashboard() {
           />
           <StatCard
             title="In Stock"
-            value="342"
+            value={String(totalItemsInStock)}
             change={-2.4}
             changeLabel="from last week"
             icon={Package}
@@ -58,10 +69,10 @@ export default function Dashboard() {
             delay={0.2}
           />
           <StatCard
-            title="Profit Margin"
-            value="24.8%"
+            title="Low Stock Alerts"
+            value={String(lowStockItems)}
             change={3.1}
-            changeLabel="vs last month"
+            changeLabel="need attention"
             icon={TrendingUp}
             delay={0.3}
           />

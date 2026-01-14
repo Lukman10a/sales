@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,10 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { availableItems, recentSalesData } from "@/data/sales";
 import { CartItem, SaleItem } from "@/types/salesTypes";
+import { toast } from "@/components/ui/sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("en-NG", {
@@ -27,11 +29,31 @@ const formatCurrency = (amount: number) => {
 };
 
 const Sales = () => {
+  const { user } = useAuth();
+  const {
+    inventory: allProducts,
+    decrementInventory,
+    addSaleRecord,
+    recentSales,
+  } = useData();
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const filteredItems = availableItems.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  // Convert inventory items to SaleItem format for cart
+  const products: SaleItem[] = allProducts.map((item) => ({
+    id: item.id,
+    name: item.name,
+    image: item.image,
+    sellingPrice: item.sellingPrice,
+    availableQty: item.quantity,
+  }));
+
+  const filteredItems = useMemo(
+    () =>
+      products.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [products, searchQuery]
   );
 
   const addToCart = (item: SaleItem) => {
@@ -84,6 +106,54 @@ const Sales = () => {
     (sum, item) => sum + item.actualPrice * item.quantity,
     0
   );
+
+  const handleCompleteSale = () => {
+    if (cart.length === 0) {
+      toast("Cart is empty");
+      return;
+    }
+
+    // Validate against current products stock
+    for (const ci of cart) {
+      const p = allProducts.find((p) => p.id === ci.id);
+      if (!p || ci.quantity > p.quantity) {
+        toast("Insufficient stock for " + ci.name);
+        return;
+      }
+    }
+
+    // Decrement inventory globally
+    cart.forEach((item) => {
+      decrementInventory(item.id, item.quantity);
+    });
+
+    // Create and add sale record globally
+    const newRecord = {
+      id: String(Date.now()),
+      items: cart.map((c) => ({
+        name: c.name,
+        quantity: c.quantity,
+        price: c.actualPrice,
+      })),
+      total: cartTotal,
+      soldBy: user ? user.firstName : "You",
+      time: "just now",
+      status: "completed" as const,
+    };
+    addSaleRecord(newRecord);
+
+    // Clear cart and reset search
+    setCart([]);
+    setSearchQuery("");
+
+    toast("Sale completed", {
+      description: `Total: ${new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+        minimumFractionDigits: 0,
+      }).format(cartTotal)}`,
+    });
+  };
 
   return (
     <MainLayout>
@@ -160,7 +230,7 @@ const Sales = () => {
                 Recent Sales
               </h3>
               <div className="space-y-3">
-                {recentSalesData.map((sale) => (
+                {recentSales.map((sale) => (
                   <div
                     key={sale.id}
                     className="flex items-center justify-between p-3 rounded-xl bg-muted/50"
@@ -309,7 +379,11 @@ const Sales = () => {
                         {formatCurrency(cartTotal)}
                       </span>
                     </div>
-                    <Button className="w-full bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent mt-4">
+                    <Button
+                      onClick={handleCompleteSale}
+                      disabled={cart.length === 0}
+                      className="w-full bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent mt-4"
+                    >
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Complete Sale
                     </Button>

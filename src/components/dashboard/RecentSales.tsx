@@ -1,58 +1,8 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Clock, Package, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-interface Sale {
-  id: string;
-  itemName: string;
-  quantity: number;
-  price: number;
-  time: string;
-  soldBy: string;
-}
-
-const recentSales: Sale[] = [
-  {
-    id: "1",
-    itemName: "Samsung Galaxy A54",
-    quantity: 1,
-    price: 185000,
-    time: "2 mins ago",
-    soldBy: "Ibrahim",
-  },
-  {
-    id: "2",
-    itemName: "iPhone Charger Cable",
-    quantity: 3,
-    price: 4500,
-    time: "15 mins ago",
-    soldBy: "Ibrahim",
-  },
-  {
-    id: "3",
-    itemName: "Wireless Earbuds Pro",
-    quantity: 2,
-    price: 25000,
-    time: "32 mins ago",
-    soldBy: "Ibrahim",
-  },
-  {
-    id: "4",
-    itemName: "Phone Screen Protector",
-    quantity: 5,
-    price: 7500,
-    time: "1 hour ago",
-    soldBy: "Ibrahim",
-  },
-  {
-    id: "5",
-    itemName: "Laptop Sleeve 15\"",
-    quantity: 1,
-    price: 12000,
-    time: "2 hours ago",
-    soldBy: "Ibrahim",
-  },
-];
+import { useData } from "@/contexts/DataContext";
 
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("en-NG", {
@@ -63,6 +13,9 @@ const formatCurrency = (amount: number) => {
 };
 
 const RecentSales = () => {
+  const { recentSales } = useData();
+  const displaySales = recentSales.slice(0, 5);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -76,7 +29,7 @@ const RecentSales = () => {
             Recent Sales
           </h3>
           <p className="text-sm text-muted-foreground">
-            Last {recentSales.length} transactions
+            Last {displaySales.length} transactions
           </p>
         </div>
         <button className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
@@ -86,7 +39,7 @@ const RecentSales = () => {
       </div>
 
       <div className="space-y-4">
-        {recentSales.map((sale, index) => (
+        {displaySales.map((sale, index) => (
           <motion.div
             key={sale.id}
             initial={{ opacity: 0, x: -10 }}
@@ -99,22 +52,19 @@ const RecentSales = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-foreground truncate">
-                {sale.itemName}
+                {sale.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
               </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Qty: {sale.quantity}</span>
-                <span>•</span>
                 <span>by {sale.soldBy}</span>
+                <span>•</span>
+                <span>{sale.time}</span>
               </div>
             </div>
             <div className="text-right">
               <p className="font-semibold text-foreground">
-                {formatCurrency(sale.price)}
+                {formatCurrency(sale.total)}
               </p>
-              <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="w-3 h-3" />
-                {sale.time}
-              </p>
+              <p className="text-xs text-success font-medium">{sale.status}</p>
             </div>
           </motion.div>
         ))}

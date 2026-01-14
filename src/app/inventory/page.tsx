@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -35,8 +36,8 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { inventoryItems } from "@/data/inventory";
 import { InventoryItem } from "@/types/inventoryTypes";
+import { toast } from "@/components/ui/sonner";
 
 const statusConfig = {
   "in-stock": {
@@ -74,8 +75,8 @@ const emptyNewItem: Omit<InventoryItem, "id"> = {
 
 export default function Inventory() {
   const { user } = useAuth();
+  const { inventory, addInventoryItem } = useData();
   const userRole = user?.role || "owner";
-  const [items, setItems] = useState<InventoryItem[]>(inventoryItems);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -84,15 +85,18 @@ export default function Inventory() {
 
   const filteredItems = useMemo(
     () =>
-      items.filter((item) =>
+      inventory.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       ),
-    [items, searchQuery]
+    [inventory, searchQuery]
   );
 
   const handleAddItem = () => {
     const trimmedName = newItem.name.trim();
-    if (!trimmedName) return;
+    if (!trimmedName) {
+      toast("Please enter an item name");
+      return;
+    }
 
     const itemToAdd: InventoryItem = {
       ...newItem,
@@ -103,9 +107,10 @@ export default function Inventory() {
         "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
     };
 
-    setItems((prev) => [itemToAdd, ...prev]);
+    addInventoryItem(itemToAdd);
     setNewItem(emptyNewItem);
     setIsAddOpen(false);
+    toast("Item added successfully");
   };
 
   return (
@@ -179,25 +184,25 @@ export default function Inventory() {
           <div className="bg-card rounded-xl border p-4 card-elevated">
             <p className="text-sm text-muted-foreground">Total Items</p>
             <p className="text-2xl font-display font-bold text-foreground">
-              {items.length}
+              {inventory.length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
             <p className="text-sm text-muted-foreground">In Stock</p>
             <p className="text-2xl font-display font-bold text-success">
-              {items.filter((i) => i.status === "in-stock").length}
+              {inventory.filter((i) => i.status === "in-stock").length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
             <p className="text-sm text-muted-foreground">Low Stock</p>
             <p className="text-2xl font-display font-bold text-warning">
-              {items.filter((i) => i.status === "low-stock").length}
+              {inventory.filter((i) => i.status === "low-stock").length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
             <p className="text-sm text-muted-foreground">Out of Stock</p>
             <p className="text-2xl font-display font-bold text-destructive">
-              {items.filter((i) => i.status === "out-of-stock").length}
+              {inventory.filter((i) => i.status === "out-of-stock").length}
             </p>
           </div>
         </div>

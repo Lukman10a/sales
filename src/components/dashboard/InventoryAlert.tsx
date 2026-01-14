@@ -1,60 +1,30 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { AlertTriangle, Package, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-interface AlertItem {
-  id: string;
-  name: string;
-  remaining: number;
-  status: "critical" | "low" | "discrepancy";
-  expectedQty?: number;
-}
-
-const alertItems: AlertItem[] = [
-  {
-    id: "1",
-    name: "iPhone 15 Pro Max Case",
-    remaining: 2,
-    status: "critical",
-  },
-  {
-    id: "2",
-    name: "USB-C Fast Charger",
-    remaining: 5,
-    status: "low",
-  },
-  {
-    id: "3",
-    name: "Wireless Mouse",
-    remaining: 8,
-    status: "discrepancy",
-    expectedQty: 12,
-  },
-  {
-    id: "4",
-    name: "HDMI Cable 2m",
-    remaining: 3,
-    status: "low",
-  },
-];
+import { useData } from "@/contexts/DataContext";
 
 const statusConfig = {
   critical: {
     label: "Critical",
     className: "bg-destructive/10 text-destructive border-destructive/20",
   },
-  low: {
+  "low-stock": {
     label: "Low Stock",
     className: "bg-warning/10 text-warning border-warning/20",
-  },
-  discrepancy: {
-    label: "Discrepancy",
-    className: "bg-destructive/10 text-destructive border-destructive/20",
   },
 };
 
 const InventoryAlert = () => {
+  const { inventory } = useData();
+
+  // Get low and out of stock items
+  const alertItems = inventory.filter(
+    (item) => item.status === "low-stock" || item.status === "out-of-stock"
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -83,44 +53,49 @@ const InventoryAlert = () => {
       </div>
 
       <div className="space-y-3">
-        {alertItems.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 * index }}
-            className={cn(
-              "flex items-center justify-between p-4 rounded-xl border",
-              item.status === "discrepancy"
-                ? "bg-destructive/5 border-destructive/20"
-                : "bg-muted/30 border-border"
-            )}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                <Package className="w-5 h-5 text-muted-foreground" />
-              </div>
-              <div>
-                <p className="font-medium text-foreground">{item.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {item.status === "discrepancy" ? (
-                    <span className="text-destructive">
-                      Expected: {item.expectedQty} • Actual: {item.remaining}
-                    </span>
-                  ) : (
-                    <span>{item.remaining} remaining</span>
-                  )}
-                </p>
-              </div>
-            </div>
-            <Badge
-              variant="outline"
-              className={cn("font-medium", statusConfig[item.status].className)}
+        {alertItems.length === 0 ? (
+          <p className="text-sm text-muted-foreground py-4 text-center">
+            All items are in good stock
+          </p>
+        ) : (
+          alertItems.slice(0, 4).map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 * index }}
+              className={cn(
+                "flex items-center justify-between p-4 rounded-xl border",
+                item.status === "out-of-stock"
+                  ? "bg-destructive/5 border-destructive/20"
+                  : "bg-muted/30 border-border"
+              )}
             >
-              {statusConfig[item.status].label}
-            </Badge>
-          </motion.div>
-        ))}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <Package className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">{item.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {item.quantity} remaining
+                  </p>
+                </div>
+              </div>
+              <Badge
+                variant="outline"
+                className={cn(
+                  "font-medium",
+                  item.status === "out-of-stock"
+                    ? "bg-destructive/10 text-destructive border-destructive/20"
+                    : statusConfig["low-stock"].className
+                )}
+              >
+                {item.status === "out-of-stock" ? "Out of Stock" : "Low Stock"}
+              </Badge>
+            </motion.div>
+          ))
+        )}
       </div>
     </motion.div>
   );
