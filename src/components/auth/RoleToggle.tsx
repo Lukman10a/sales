@@ -15,7 +15,9 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-foreground">{t("Login as")}</label>
+      <label className="text-sm font-medium text-foreground">
+        {t("Login as")}
+      </label>
       <div className="relative flex items-center bg-muted rounded-xl p-1">
         {/* Animated background */}
         <motion.div

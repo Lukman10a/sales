@@ -262,7 +262,9 @@ const Analytics = () => {
                     }}
                     tickFormatter={formatAxisCurrency}
                   />
-                  <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
+                  <Tooltip
+                    content={<CustomTooltip formatCurrency={formatCurrency} />}
+                  />
                   <Legend formatter={(value: string) => t(value)} />
                   <Bar
                     dataKey="sales"
@@ -337,7 +339,9 @@ const Analytics = () => {
                     }}
                     tickFormatter={formatAxisCurrency}
                   />
-                  <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
+                  <Tooltip
+                    content={<CustomTooltip formatCurrency={formatCurrency} />}
+                  />
                   <Area
                     type="monotone"
                     dataKey="sales"
@@ -437,7 +441,9 @@ const Analytics = () => {
                     <p className="font-semibold text-foreground">
                       {formatCurrency(product.revenue)}
                     </p>
-                    <p className="text-xs text-muted-foreground">{t("revenue")}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("revenue")}
+                    </p>
                   </div>
                 </div>
               ))}

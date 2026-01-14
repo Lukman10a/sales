@@ -156,9 +156,9 @@ const Notifications = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                          <h3 className="font-semibold text-foreground">
-                            {t(notif.title)}
-                          </h3>
+                        <h3 className="font-semibold text-foreground">
+                          {t(notif.title)}
+                        </h3>
                         <button
                           onClick={() => dismissNotif(notif.id)}
                           className="text-muted-foreground hover:text-foreground transition-colors"
@@ -166,13 +166,13 @@ const Notifications = () => {
                           <X className="w-4 h-4" />
                         </button>
                       </div>
-                        <p className="text-muted-foreground text-sm mb-3">
-                          {t(notif.message)}
-                        </p>
+                      <p className="text-muted-foreground text-sm mb-3">
+                        {t(notif.message)}
+                      </p>
                       <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">
-                            {t(notif.time, { fallback: notif.time })}
-                          </span>
+                        <span className="text-xs text-muted-foreground">
+                          {t(notif.time, { fallback: notif.time })}
+                        </span>
                         <div className="flex items-center gap-2">
                           {!notif.read && (
                             <Button
@@ -182,7 +182,7 @@ const Notifications = () => {
                               className="h-8"
                             >
                               <Check className="w-3 h-3 mr-1" />
-                                {t("Mark as read")}
+                              {t("Mark as read")}
                             </Button>
                           )}
                           {notif.actionable && (
@@ -190,7 +190,7 @@ const Notifications = () => {
                               size="sm"
                               className="h-8 bg-accent text-accent-foreground"
                             >
-                                {t("Take Action")}
+                              {t("Take Action")}
                             </Button>
                           )}
                         </div>

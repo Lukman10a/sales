@@ -26,7 +26,9 @@ const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
         <Header userRole={user?.role || "owner"} sidebarWidth={sidebarWidth} />
         <motion.main
           initial={false}
-          animate={isRTL ? { marginRight: sidebarWidth } : { marginLeft: sidebarWidth }}
+          animate={
+            isRTL ? { marginRight: sidebarWidth } : { marginLeft: sidebarWidth }
+          }
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="pt-24 pb-8 px-6 min-h-screen"
         >

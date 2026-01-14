@@ -26,7 +26,9 @@ export default function AuthLayout({
           variant="outline"
           onClick={toggleLanguage}
           className="absolute top-4"
-          style={isRTL ? { left: 16, right: "auto" } : { right: 16, left: "auto" }}
+          style={
+            isRTL ? { left: 16, right: "auto" } : { right: 16, left: "auto" }
+          }
         >
           {language === "en" ? "AR" : "EN"}
         </Button>

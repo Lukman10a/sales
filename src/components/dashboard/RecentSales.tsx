@@ -51,9 +51,7 @@ const RecentSales = () => {
                 {sale.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
               </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>
-                  {t("by {name}", { values: { name: sale.soldBy } })}
-                </span>
+                <span>{t("by {name}", { values: { name: sale.soldBy } })}</span>
                 <span>•</span>
                 <span>{sale.time}</span>
               </div>

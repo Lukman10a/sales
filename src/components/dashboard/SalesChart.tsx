@@ -83,8 +83,16 @@ const SalesChart = () => {
           <AreaChart data={hourlyData}>
             <defs>
               <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(160, 60%, 45%)" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="hsl(160, 60%, 45%)" stopOpacity={0} />
+                <stop
+                  offset="5%"
+                  stopColor="hsl(160, 60%, 45%)"
+                  stopOpacity={0.3}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="hsl(160, 60%, 45%)"
+                  stopOpacity={0}
+                />
               </linearGradient>
             </defs>
             <CartesianGrid
@@ -104,7 +112,9 @@ const SalesChart = () => {
               tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
               tickFormatter={formatCompactCurrency}
             />
-            <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
+            <Tooltip
+              content={<CustomTooltip formatCurrency={formatCurrency} />}
+            />
             <Area
               type="monotone"
               dataKey="sales"

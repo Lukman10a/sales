@@ -1,5 +1,11 @@
 import { motion } from "framer-motion";
-import { Sparkles, TrendingUp, AlertCircle, Package, ArrowRight } from "lucide-react";
+import {
+  Sparkles,
+  TrendingUp,
+  AlertCircle,
+  Package,
+  ArrowRight,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -16,21 +22,24 @@ const insights: Insight[] = [
     id: "1",
     type: "restock",
     title: "Restock iPhone Chargers",
-    description: "Based on sales velocity, you'll run out in 2 days. Order now to maintain stock.",
+    description:
+      "Based on sales velocity, you'll run out in 2 days. Order now to maintain stock.",
     action: "Order Now",
   },
   {
     id: "2",
     type: "trending",
     title: "Wireless Earbuds are Hot!",
-    description: "Sales up 45% this week. Consider increasing stock and promoting.",
+    description:
+      "Sales up 45% this week. Consider increasing stock and promoting.",
     action: "View Details",
   },
   {
     id: "3",
     type: "warning",
     title: "Slow Moving: Laptop Sleeves",
-    description: "Only 2 sold in 30 days. Consider price reduction or bundle deals.",
+    description:
+      "Only 2 sold in 30 days. Consider price reduction or bundle deals.",
     action: "Adjust Pricing",
   },
 ];

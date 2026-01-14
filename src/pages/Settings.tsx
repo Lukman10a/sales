@@ -315,7 +315,9 @@ const Settings = () => {
                   <Separator />
                   <div className="space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="currentPassword">{t("Current Password")}</Label>
+                      <Label htmlFor="currentPassword">
+                        {t("Current Password")}
+                      </Label>
                       <Input id="currentPassword" type="password" />
                     </div>
                     <div className="space-y-2">
@@ -323,7 +325,9 @@ const Settings = () => {
                       <Input id="newPassword" type="password" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword">{t("Confirm Password")}</Label>
+                      <Label htmlFor="confirmPassword">
+                        {t("Confirm Password")}
+                      </Label>
                       <Input id="confirmPassword" type="password" />
                     </div>
                     <Button className="w-fit bg-gradient-accent text-accent-foreground">
@@ -412,12 +416,12 @@ const Settings = () => {
                                   : "bg-warning/10 text-warning border-warning/30"
                               }
                             >
-                                {member.status === "active"
-                                  ? t("Active")
-                                  : t("Invited")}
+                              {member.status === "active"
+                                ? t("Active")
+                                : t("Invited")}
                             </Badge>
-                              <Badge variant="secondary" className="text-xs">
-                                {t("Admin")}
+                            <Badge variant="secondary" className="text-xs">
+                              {t("Admin")}
                             </Badge>
                           </div>
                         </div>
@@ -425,9 +429,9 @@ const Settings = () => {
 
                       {staff.length === 0 && (
                         <div className="p-4 border rounded-xl bg-muted/40 text-sm text-muted-foreground">
-                            {t(
-                              "No staff members yet. Invite your first admin to get started."
-                            )}
+                          {t(
+                            "No staff members yet. Invite your first admin to get started."
+                          )}
                         </div>
                       )}
                     </div>

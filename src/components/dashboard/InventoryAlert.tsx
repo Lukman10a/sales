@@ -82,7 +82,9 @@ const InventoryAlert = () => {
                 <div>
                   <p className="font-medium text-foreground">{item.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    {t("{quantity} remaining", { values: { quantity: item.quantity } })}
+                    {t("{quantity} remaining", {
+                      values: { quantity: item.quantity },
+                    })}
                   </p>
                 </div>
               </div>
@@ -95,7 +97,9 @@ const InventoryAlert = () => {
                     : statusConfig["low-stock"].className
                 )}
               >
-                {item.status === "out-of-stock" ? t("Out of Stock") : t("Low Stock")}
+                {item.status === "out-of-stock"
+                  ? t("Out of Stock")
+                  : t("Low Stock")}
               </Badge>
             </motion.div>
           ))

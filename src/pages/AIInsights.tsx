@@ -104,16 +104,16 @@ const AIInsights = () => {
               <div className="p-2 rounded-lg bg-destructive/10">
                 <Target className="w-5 h-5 text-destructive" />
               </div>
-                <span className="text-sm text-muted-foreground">
-                  {t("High Priority")}
-                </span>
+              <span className="text-sm text-muted-foreground">
+                {t("High Priority")}
+              </span>
             </div>
             <p className="text-3xl font-display font-bold text-foreground">
               {insights.filter((i) => i.priority === "high").length}
             </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t("Actions needed")}
-              </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {t("Actions needed")}
+            </p>
           </motion.div>
 
           <motion.div
@@ -126,16 +126,16 @@ const AIInsights = () => {
               <div className="p-2 rounded-lg bg-success/10">
                 <TrendingUp className="w-5 h-5 text-success" />
               </div>
-                <span className="text-sm text-muted-foreground">
-                  {t("Potential Gain")}
-                </span>
+              <span className="text-sm text-muted-foreground">
+                {t("Potential Gain")}
+              </span>
             </div>
             <p className="text-3xl font-display font-bold text-foreground">
               ₦326k
             </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t("Monthly opportunity")}
-              </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {t("Monthly opportunity")}
+            </p>
           </motion.div>
 
           <motion.div
@@ -148,14 +148,16 @@ const AIInsights = () => {
               <div className="p-2 rounded-lg bg-accent/10">
                 <Sparkles className="w-5 h-5 text-accent" />
               </div>
-                <span className="text-sm text-muted-foreground">{t("AI Accuracy")}</span>
+              <span className="text-sm text-muted-foreground">
+                {t("AI Accuracy")}
+              </span>
             </div>
             <p className="text-3xl font-display font-bold text-foreground">
               94.2%
             </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t("Prediction rate")}
-              </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {t("Prediction rate")}
+            </p>
           </motion.div>
         </div>
 

@@ -275,7 +275,9 @@ export default function Inventory() {
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t("Sold")}</span>
+                        <span className="text-muted-foreground">
+                          {t("Sold")}
+                        </span>
                         <span className="font-medium text-success">
                           {item.sold}
                         </span>
@@ -305,7 +307,7 @@ export default function Inventory() {
                       <div className="flex gap-2 mt-4 pt-4 border-t">
                         <Button variant="outline" size="sm" className="flex-1">
                           <Edit className="w-3 h-3 mr-1" />
-                            {t("Edit")}
+                          {t("Edit")}
                         </Button>
                         <Button
                           variant="outline"
@@ -536,7 +538,9 @@ export default function Inventory() {
                   <SelectContent>
                     <SelectItem value="in-stock">{t("In Stock")}</SelectItem>
                     <SelectItem value="low-stock">{t("Low Stock")}</SelectItem>
-                    <SelectItem value="out-of-stock">{t("Out of Stock")}</SelectItem>
+                    <SelectItem value="out-of-stock">
+                      {t("Out of Stock")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

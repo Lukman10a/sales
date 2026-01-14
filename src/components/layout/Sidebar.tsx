@@ -45,9 +45,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const isSettingsActive = pathname?.startsWith("/settings");
 
   const userRole = user?.role || propUserRole || "owner";
-  const displayName = user
-    ? `${user.firstName} ${user.lastName}`
-    : t("User");
+  const displayName = user ? `${user.firstName} ${user.lastName}` : t("User");
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
 
   return (
@@ -86,12 +84,12 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
         </AnimatePresence>
         {collapsed && (
           <div className="w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center mx-auto">
-                  <span
-                    className={cn(
-                      "absolute top-1 w-2 h-2 bg-destructive rounded-full",
-                      isRTL ? "left-1" : "right-1"
-                    )}
-                  />
+            <span
+              className={cn(
+                "absolute top-1 w-2 h-2 bg-destructive rounded-full",
+                isRTL ? "left-1" : "right-1"
+              )}
+            />
           </div>
         )}
       </div>

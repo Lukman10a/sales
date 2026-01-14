@@ -47,7 +47,9 @@ export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {
         <div className="fixed inset-0 bg-background/70 flex items-center justify-center z-[2000]">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-accent mx-auto mb-3" />
-            <p className="text-muted-foreground">{t("Loading your workspace...")}</p>
+            <p className="text-muted-foreground">
+              {t("Loading your workspace...")}
+            </p>
           </div>
         </div>
       )}

@@ -113,7 +113,9 @@ export default function Sales() {
     for (const ci of cart) {
       const p = allProducts.find((p) => p.id === ci.id);
       if (!p || ci.quantity > p.quantity) {
-        toast(t("Insufficient stock for {name}", { values: { name: ci.name } }));
+        toast(
+          t("Insufficient stock for {name}", { values: { name: ci.name } })
+        );
         return;
       }
     }
@@ -250,7 +252,9 @@ export default function Sales() {
                           <Clock className="w-3 h-3" />
                           <span>{sale.time}</span>
                           <span>•</span>
-                          <span>{t("by {name}", { values: { name: sale.soldBy } })}</span>
+                          <span>
+                            {t("by {name}", { values: { name: sale.soldBy } })}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -369,7 +373,9 @@ export default function Sales() {
 
                   <div className="border-t pt-4 space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">{t("Subtotal")}</span>
+                      <span className="text-muted-foreground">
+                        {t("Subtotal")}
+                      </span>
                       <span className="font-medium">
                         {formatCurrency(cartTotal)}
                       </span>

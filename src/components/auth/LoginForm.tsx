@@ -118,7 +118,7 @@ export function LoginForm() {
             htmlFor="remember"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
           >
-              {t("Remember me")}
+            {t("Remember me")}
           </label>
         </div>
         <a
@@ -126,7 +126,7 @@ export function LoginForm() {
           className="text-sm font-medium text-accent hover:underline"
           onClick={(e) => e.preventDefault()}
         >
-            {t("Forgot password?")}
+          {t("Forgot password?")}
         </a>
       </div>
 
@@ -157,8 +157,8 @@ export function LoginForm() {
             admin123
           </p>
           <p>
-            <span className="font-medium">{t("Admin:")}</span> ibrahim@luxa.com /
-            staff123
+            <span className="font-medium">{t("Admin:")}</span> ibrahim@luxa.com
+            / staff123
           </p>
         </div>
       </div>

@@ -19,10 +19,16 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
   return (
     <motion.header
       initial={false}
-      animate={isRTL ? { marginRight: sidebarWidth } : { marginLeft: sidebarWidth }}
+      animate={
+        isRTL ? { marginRight: sidebarWidth } : { marginLeft: sidebarWidth }
+      }
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className="fixed top-0 right-0 h-16 bg-card/80 backdrop-blur-xl border-b border-border z-40 flex items-center justify-between px-6"
-      style={isRTL ? { right: sidebarWidth, left: 0 } : { left: sidebarWidth, right: 0 }}
+      style={
+        isRTL
+          ? { right: sidebarWidth, left: 0 }
+          : { left: sidebarWidth, right: 0 }
+      }
     >
       {/* Search */}
       <div className="relative w-80">
