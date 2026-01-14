@@ -14,7 +14,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -44,7 +44,10 @@ export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {
     <>
       {children}
       {isLoading && (
-        <div className="fixed inset-0 bg-background/70 flex items-center justify-center z-[2000]">
+        <div
+          className="fixed inset-0 bg-background/70 flex items-center justify-center z-[2000]"
+          style={{ direction: isRTL ? "rtl" : "ltr" }}
+        >
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-accent mx-auto mb-3" />
             <p className="text-muted-foreground">
