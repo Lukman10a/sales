@@ -1,55 +1,13 @@
 import { motion } from "framer-motion";
-import { Plus, ShoppingCart, BarChart3, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface QuickAction {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  variant: "primary" | "accent" | "secondary";
-  href: string;
-}
-
-const actions: QuickAction[] = [
-  {
-    id: "add-item",
-    title: "Add New Item",
-    description: "Add products to inventory",
-    icon: Plus,
-    variant: "accent",
-    href: "/inventory",
-  },
-  {
-    id: "record-sale",
-    title: "Record Sale",
-    description: "Log a new transaction",
-    icon: ShoppingCart,
-    variant: "primary",
-    href: "/sales",
-  },
-  {
-    id: "view-reports",
-    title: "View Reports",
-    description: "Check analytics & insights",
-    icon: BarChart3,
-    variant: "secondary",
-    href: "/analytics",
-  },
-  {
-    id: "stock-check",
-    title: "Stock Check",
-    description: "Verify inventory levels",
-    icon: Package,
-    variant: "secondary",
-    href: "/inventory",
-  },
-];
+import { actions } from "@/data/data";
 
 const variantStyles = {
   primary: "bg-gradient-primary text-primary-foreground hover:opacity-90",
-  accent: "bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent",
-  secondary: "bg-card border border-border hover:border-accent/50 text-foreground",
+  accent:
+    "bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent",
+  secondary:
+    "bg-card border border-border hover:border-accent/50 text-foreground",
 };
 
 const QuickActions = () => {
@@ -76,10 +34,14 @@ const QuickActions = () => {
         >
           <action.icon className="w-6 h-6 mb-3" />
           <h4 className="font-semibold text-sm mb-1">{action.title}</h4>
-          <p className={cn(
-            "text-xs",
-            action.variant === "secondary" ? "text-muted-foreground" : "opacity-80"
-          )}>
+          <p
+            className={cn(
+              "text-xs",
+              action.variant === "secondary"
+                ? "text-muted-foreground"
+                : "opacity-80"
+            )}
+          >
             {action.description}
           </p>
         </motion.a>

@@ -30,18 +30,7 @@ export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {
     }
   }, [isAuthenticated, isLoading, requireRole, user, router]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-accent mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isLoading) {
     return null;
   }
 
@@ -49,5 +38,17 @@ export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {isLoading && (
+        <div className="fixed inset-0 bg-background/70 flex items-center justify-center z-[2000]">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-accent mx-auto mb-3" />
+            <p className="text-muted-foreground">Loading your workspace...</p>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

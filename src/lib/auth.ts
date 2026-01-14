@@ -27,7 +27,7 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
       firstName: "Ahmed",
       lastName: "Hassan",
       role: "owner",
-      businessName: "Hassan Electronics",
+      businessName: "Prime Store",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     },
   },
