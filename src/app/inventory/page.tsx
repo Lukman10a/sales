@@ -38,6 +38,7 @@ import {
 import { cn } from "@/lib/utils";
 import { InventoryItem } from "@/types/inventoryTypes";
 import { toast } from "@/components/ui/sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const statusConfig = {
   "in-stock": {
@@ -82,6 +83,7 @@ export default function Inventory() {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newItem, setNewItem] =
     useState<Omit<InventoryItem, "id">>(emptyNewItem);
+  const { t, formatCurrency, isRTL } = useLanguage();
 
   const filteredItems = useMemo(
     () =>
@@ -94,7 +96,7 @@ export default function Inventory() {
   const handleAddItem = () => {
     const trimmedName = newItem.name.trim();
     if (!trimmedName) {
-      toast("Please enter an item name");
+      toast(t("Please enter an item name"));
       return;
     }
 
@@ -110,7 +112,7 @@ export default function Inventory() {
     addInventoryItem(itemToAdd);
     setNewItem(emptyNewItem);
     setIsAddOpen(false);
-    toast("Item added successfully");
+    toast(t("Item added successfully"));
   };
 
   return (
@@ -120,10 +122,10 @@ export default function Inventory() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-              Inventory
+              {t("Inventory")}
             </h1>
             <p className="text-muted-foreground">
-              Manage your products and stock levels
+              {t("Manage your products and stock levels")}
             </p>
           </div>
           {userRole === "owner" && (
@@ -132,7 +134,7 @@ export default function Inventory() {
               className="bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add New Item
+              {t("Add New Item")}
             </Button>
           )}
         </div>
@@ -140,12 +142,18 @@ export default function Inventory() {
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search
+              className={
+                isRTL
+                  ? "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+                  : "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+              }
+            />
             <Input
-              placeholder="Search items..."
+              placeholder={t("Search items...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className={isRTL ? "pr-10" : "pl-10"}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -182,25 +190,25 @@ export default function Inventory() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">Total Items</p>
+            <p className="text-sm text-muted-foreground">{t("Total Items")}</p>
             <p className="text-2xl font-display font-bold text-foreground">
               {inventory.length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">In Stock</p>
+            <p className="text-sm text-muted-foreground">{t("In Stock")}</p>
             <p className="text-2xl font-display font-bold text-success">
               {inventory.filter((i) => i.status === "in-stock").length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">Low Stock</p>
+            <p className="text-sm text-muted-foreground">{t("Low Stock")}</p>
             <p className="text-2xl font-display font-bold text-warning">
               {inventory.filter((i) => i.status === "low-stock").length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">Out of Stock</p>
+            <p className="text-sm text-muted-foreground">{t("Out of Stock")}</p>
             <p className="text-2xl font-display font-bold text-destructive">
               {inventory.filter((i) => i.status === "out-of-stock").length}
             </p>
@@ -238,7 +246,7 @@ export default function Inventory() {
                         statusConfig[item.status].className
                       )}
                     >
-                      {statusConfig[item.status].label}
+                      {t(statusConfig[item.status].label)}
                     </Badge>
                     {!item.confirmedByApprentice &&
                       userRole === "apprentice" && (
@@ -248,7 +256,7 @@ export default function Inventory() {
                             className="bg-warning text-warning-foreground"
                           >
                             <CheckCircle className="w-4 h-4 mr-2" />
-                            Confirm Receipt
+                            {t("Confirm Receipt")}
                           </Button>
                         </div>
                       )}
@@ -260,14 +268,14 @@ export default function Inventory() {
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">
-                          Qty Available
+                          {t("Qty Available")}
                         </span>
                         <span className="font-medium text-foreground">
                           {item.quantity}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Sold</span>
+                        <span className="text-muted-foreground">{t("Sold")}</span>
                         <span className="font-medium text-success">
                           {item.sold}
                         </span>
@@ -276,7 +284,7 @@ export default function Inventory() {
                         <>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">
-                              Cost Price
+                              {t("Cost Price")}
                             </span>
                             <span className="font-medium text-foreground">
                               {formatCurrency(item.wholesalePrice)}
@@ -286,7 +294,7 @@ export default function Inventory() {
                       )}
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">
-                          Selling Price
+                          {t("Selling Price")}
                         </span>
                         <span className="font-medium text-accent">
                           {formatCurrency(item.sellingPrice)}
@@ -297,7 +305,7 @@ export default function Inventory() {
                       <div className="flex gap-2 mt-4 pt-4 border-t">
                         <Button variant="outline" size="sm" className="flex-1">
                           <Edit className="w-3 h-3 mr-1" />
-                          Edit
+                            {t("Edit")}
                         </Button>
                         <Button
                           variant="outline"
@@ -325,27 +333,27 @@ export default function Inventory() {
                   <thead>
                     <tr className="border-b bg-muted/50">
                       <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                        Item
+                        {t("Item")}
                       </th>
                       <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                        Status
+                        {t("Status")}
                       </th>
                       <th className="text-right p-4 text-sm font-medium text-muted-foreground">
-                        Qty
+                        {t("Qty")}
                       </th>
                       <th className="text-right p-4 text-sm font-medium text-muted-foreground">
-                        Sold
+                        {t("Sold")}
                       </th>
                       {userRole === "owner" && (
                         <th className="text-right p-4 text-sm font-medium text-muted-foreground">
-                          Cost
+                          {t("Cost")}
                         </th>
                       )}
                       <th className="text-right p-4 text-sm font-medium text-muted-foreground">
-                        Price
+                        {t("Price")}
                       </th>
                       <th className="text-right p-4 text-sm font-medium text-muted-foreground">
-                        Actions
+                        {t("Actions")}
                       </th>
                     </tr>
                   </thead>
@@ -369,7 +377,7 @@ export default function Inventory() {
                               {!item.confirmedByApprentice && (
                                 <span className="flex items-center gap-1 text-xs text-warning">
                                   <AlertTriangle className="w-3 h-3" />
-                                  Pending confirmation
+                                  {t("Pending confirmation")}
                                 </span>
                               )}
                             </div>
@@ -380,7 +388,7 @@ export default function Inventory() {
                             variant="outline"
                             className={statusConfig[item.status].className}
                           >
-                            {statusConfig[item.status].label}
+                            {t(statusConfig[item.status].label)}
                           </Badge>
                         </td>
                         <td className="p-4 text-right font-medium">
@@ -417,11 +425,11 @@ export default function Inventory() {
                                 size="sm"
                                 className="bg-warning text-warning-foreground"
                               >
-                                Confirm
+                                {t("Confirm")}
                               </Button>
                             ) : (
                               <Button size="sm" variant="outline">
-                                Sell
+                                {t("Sell")}
                               </Button>
                             )}
                           </div>
@@ -438,14 +446,14 @@ export default function Inventory() {
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Add New Item</DialogTitle>
+            <DialogTitle>{t("Add New Item")}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-2">
             <div className="grid gap-2">
-              <Label htmlFor="name">Item Name</Label>
+              <Label htmlFor="name">{t("Item Name")}</Label>
               <Input
                 id="name"
-                placeholder="e.g. Bluetooth Speaker"
+                placeholder={t("e.g. Bluetooth Speaker")}
                 value={newItem.name}
                 onChange={(e) =>
                   setNewItem((prev) => ({ ...prev, name: e.target.value }))
@@ -453,7 +461,7 @@ export default function Inventory() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="image">Image URL (optional)</Label>
+              <Label htmlFor="image">{t("Image URL (optional)")}</Label>
               <Input
                 id="image"
                 placeholder="https://..."
@@ -465,7 +473,7 @@ export default function Inventory() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label htmlFor="wholesale">Cost Price (NGN)</Label>
+                <Label htmlFor="wholesale">{t("Cost Price (NGN)")}</Label>
                 <Input
                   id="wholesale"
                   type="number"
@@ -480,7 +488,7 @@ export default function Inventory() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="selling">Selling Price (NGN)</Label>
+                <Label htmlFor="selling">{t("Selling Price (NGN)")}</Label>
                 <Input
                   id="selling"
                   type="number"
@@ -497,7 +505,7 @@ export default function Inventory() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label htmlFor="qty">Quantity</Label>
+                <Label htmlFor="qty">{t("Quantity")}</Label>
                 <Input
                   id="qty"
                   type="number"
@@ -512,7 +520,7 @@ export default function Inventory() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Status</Label>
+                <Label>{t("Status")}</Label>
                 <Select
                   value={newItem.status}
                   onValueChange={(value) =>
@@ -523,12 +531,12 @@ export default function Inventory() {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t("Select status")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="in-stock">In Stock</SelectItem>
-                    <SelectItem value="low-stock">Low Stock</SelectItem>
-                    <SelectItem value="out-of-stock">Out of Stock</SelectItem>
+                    <SelectItem value="in-stock">{t("In Stock")}</SelectItem>
+                    <SelectItem value="low-stock">{t("Low Stock")}</SelectItem>
+                    <SelectItem value="out-of-stock">{t("Out of Stock")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -542,10 +550,10 @@ export default function Inventory() {
                 setNewItem(emptyNewItem);
               }}
             >
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button onClick={handleAddItem} disabled={!newItem.name.trim()}>
-              Add Item
+              {t("Add Item")}
             </Button>
           </DialogFooter>
         </DialogContent>

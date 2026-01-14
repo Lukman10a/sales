@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const hourlyData = [
   { time: "8AM", sales: 12000 },
@@ -23,20 +24,13 @@ const hourlyData = [
   { time: "6PM", sales: 112000 },
 ];
 
-const formatCurrency = (value: number) => {
-  if (value >= 1000) {
-    return `₦${(value / 1000).toFixed(0)}k`;
-  }
-  return `₦${value}`;
-};
-
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, formatCurrency }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
         <p className="text-sm font-medium text-foreground">{label}</p>
         <p className="text-lg font-bold text-accent">
-          ₦{payload[0].value.toLocaleString()}
+          {formatCurrency(payload[0].value)}
         </p>
       </div>
     );
@@ -45,6 +39,16 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const SalesChart = () => {
+  const { t, formatCurrency } = useLanguage();
+
+  const formatCompactCurrency = (value: number) =>
+    formatCurrency(value, {
+      notation: value >= 100000 ? "compact" : "standard",
+      compactDisplay: "short",
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -55,19 +59,21 @@ const SalesChart = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="font-display font-semibold text-lg text-foreground">
-            Today's Sales
+            {t("Today's Sales")}
           </h3>
-          <p className="text-sm text-muted-foreground">Hourly breakdown</p>
+          <p className="text-sm text-muted-foreground">
+            {t("Hourly breakdown")}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button className="px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg">
-            Today
+            {t("Today")}
           </button>
           <button className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg transition-colors">
-            Week
+            {t("Week")}
           </button>
           <button className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg transition-colors">
-            Month
+            {t("Month")}
           </button>
         </div>
       </div>
@@ -96,9 +102,9 @@ const SalesChart = () => {
               axisLine={false}
               tickLine={false}
               tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-              tickFormatter={formatCurrency}
+              tickFormatter={formatCompactCurrency}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
             <Area
               type="monotone"
               dataKey="sales"

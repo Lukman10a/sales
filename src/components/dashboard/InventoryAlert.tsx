@@ -5,6 +5,7 @@ import { AlertTriangle, Package, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useData } from "@/contexts/DataContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const statusConfig = {
   critical: {
@@ -19,6 +20,7 @@ const statusConfig = {
 
 const InventoryAlert = () => {
   const { inventory } = useData();
+  const { t } = useLanguage();
 
   // Get low and out of stock items
   const alertItems = inventory.filter(
@@ -39,15 +41,17 @@ const InventoryAlert = () => {
           </div>
           <div>
             <h3 className="font-display font-semibold text-lg text-foreground">
-              Inventory Alerts
+              {t("Inventory Alerts")}
             </h3>
             <p className="text-sm text-muted-foreground">
-              {alertItems.length} items need attention
+              {t("{count} items need attention", {
+                values: { count: alertItems.length },
+              })}
             </p>
           </div>
         </div>
         <button className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
-          View All
+          {t("View All")}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -55,7 +59,7 @@ const InventoryAlert = () => {
       <div className="space-y-3">
         {alertItems.length === 0 ? (
           <p className="text-sm text-muted-foreground py-4 text-center">
-            All items are in good stock
+            {t("All items are in good stock")}
           </p>
         ) : (
           alertItems.slice(0, 4).map((item, index) => (
@@ -78,7 +82,7 @@ const InventoryAlert = () => {
                 <div>
                   <p className="font-medium text-foreground">{item.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    {item.quantity} remaining
+                    {t("{quantity} remaining", { values: { quantity: item.quantity } })}
                   </p>
                 </div>
               </div>
@@ -91,7 +95,7 @@ const InventoryAlert = () => {
                     : statusConfig["low-stock"].className
                 )}
               >
-                {item.status === "out-of-stock" ? "Out of Stock" : "Low Stock"}
+                {item.status === "out-of-stock" ? t("Out of Stock") : t("Low Stock")}
               </Badge>
             </motion.div>
           ))

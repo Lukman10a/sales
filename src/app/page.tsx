@@ -10,19 +10,13 @@ import RecentSales from "@/components/dashboard/RecentSales";
 import InventoryAlert from "@/components/dashboard/InventoryAlert";
 import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const { totalItemsInStock, totalItemsSold, totalSalesAmount, lowStockItems } =
     useData();
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
+  const { t, formatCurrency } = useLanguage();
 
   return (
     <MainLayout>
@@ -30,10 +24,10 @@ export default function Dashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-            Welcome back, {user?.firstName}!
+            {t("Welcome back, {name}!", { values: { name: user?.firstName || "" } })}
           </h1>
           <p className="text-muted-foreground">
-            Here's what's happening with your business today.
+            {t("Here's what's happening with your business today.")}
           </p>
         </div>
 
@@ -43,36 +37,36 @@ export default function Dashboard() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            title="Today's Sales"
+            title={t("Today's Sales")}
             value={formatCurrency(totalSalesAmount)}
             change={12.5}
-            changeLabel="vs yesterday"
+            changeLabel={t("vs yesterday")}
             icon={DollarSign}
             variant="accent"
             delay={0}
           />
           <StatCard
-            title="Items Sold"
+            title={t("Items Sold")}
             value={String(totalItemsSold)}
             change={8.2}
-            changeLabel="vs yesterday"
+            changeLabel={t("vs yesterday")}
             icon={ShoppingCart}
             delay={0.1}
           />
           <StatCard
-            title="In Stock"
+            title={t("In Stock")}
             value={String(totalItemsInStock)}
             change={-2.4}
-            changeLabel="from last week"
+            changeLabel={t("from last week")}
             icon={Package}
             variant="warning"
             delay={0.2}
           />
           <StatCard
-            title="Low Stock Alerts"
+            title={t("Low Stock Alerts")}
             value={String(lowStockItems)}
             change={3.1}
-            changeLabel="need attention"
+            changeLabel={t("need attention")}
             icon={TrendingUp}
             delay={0.3}
           />

@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SidebarProps {
   userRole?: "owner" | "apprentice";
@@ -39,11 +40,14 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { t, isRTL } = useLanguage();
 
   const isSettingsActive = pathname?.startsWith("/settings");
 
   const userRole = user?.role || propUserRole || "owner";
-  const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const displayName = user
+    ? `${user.firstName} ${user.lastName}`
+    : t("User");
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
 
   return (
@@ -51,7 +55,10 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
       initial={false}
       animate={{ width: collapsed ? 80 : 280 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed left-0 top-0 h-screen bg-sidebar flex flex-col z-50"
+      className={cn(
+        "fixed top-0 h-screen bg-sidebar flex flex-col z-50",
+        isRTL ? "right-0" : "left-0"
+      )}
     >
       {/* Logo */}
       <div className="p-6 flex items-center justify-between border-b border-sidebar-border">
@@ -68,10 +75,10 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
               </div>
               <div>
                 <h1 className="font-display font-bold text-sidebar-foreground text-lg">
-                  StockFlow
+                  {t("StockFlow")}
                 </h1>
                 <p className="text-xs text-sidebar-foreground/60">
-                  Sales & Inventory
+                  {t("Sales & Inventory")}
                 </p>
               </div>
             </motion.div>
@@ -79,7 +86,12 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
         </AnimatePresence>
         {collapsed && (
           <div className="w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center mx-auto">
-            <Package className="w-5 h-5 text-accent-foreground" />
+                  <span
+                    className={cn(
+                      "absolute top-1 w-2 h-2 bg-destructive rounded-full",
+                      isRTL ? "left-1" : "right-1"
+                    )}
+                  />
           </div>
         )}
       </div>
@@ -110,7 +122,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                   {displayName}
                 </p>
                 <p className="text-xs text-sidebar-foreground/60 capitalize">
-                  {userRole === "owner" ? "Owner" : "Admin"}
+                  {userRole === "owner" ? t("Owner") : t("Admin")}
                 </p>
               </div>
             </motion.div>
@@ -161,7 +173,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                     exit={{ opacity: 0, width: 0 }}
                     className="font-medium text-sm whitespace-nowrap"
                   >
-                    {item.name}
+                    {t(item.name)}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -191,7 +203,9 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
           )}
         >
           <Settings className="w-5 h-5" />
-          {!collapsed && <span className="font-medium text-sm">Settings</span>}
+          {!collapsed && (
+            <span className="font-medium text-sm">{t("Settings")}</span>
+          )}
         </Link>
         <button
           onClick={logout}
@@ -201,14 +215,19 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
           )}
         >
           <LogOut className="w-5 h-5" />
-          {!collapsed && <span className="font-medium text-sm">Logout</span>}
+          {!collapsed && (
+            <span className="font-medium text-sm">{t("Logout")}</span>
+          )}
         </button>
       </div>
 
       {/* Collapse Button */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-card border border-border rounded-full flex items-center justify-center shadow-md hover:bg-muted transition-colors"
+        className={cn(
+          "absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-card border border-border rounded-full flex items-center justify-center shadow-md hover:bg-muted transition-colors",
+          isRTL ? "-left-3" : "-right-3"
+        )}
       >
         {collapsed ? (
           <ChevronRight className="w-3 h-3 text-muted-foreground" />

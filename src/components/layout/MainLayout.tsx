@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface MainLayoutProps {
 const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { user } = useAuth();
+  const { isRTL } = useLanguage();
   const sidebarWidth = sidebarCollapsed ? 80 : 280;
 
   return (
@@ -24,7 +26,7 @@ const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
         <Header userRole={user?.role || "owner"} sidebarWidth={sidebarWidth} />
         <motion.main
           initial={false}
-          animate={{ marginLeft: sidebarWidth }}
+          animate={isRTL ? { marginRight: sidebarWidth } : { marginLeft: sidebarWidth }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="pt-24 pb-8 px-6 min-h-screen"
         >

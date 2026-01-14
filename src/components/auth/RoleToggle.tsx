@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Shield, User } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RoleToggleProps {
   value: "owner" | "apprentice";
@@ -10,9 +11,11 @@ interface RoleToggleProps {
 }
 
 export function RoleToggle({ value, onChange }: RoleToggleProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-foreground">Login as</label>
+      <label className="text-sm font-medium text-foreground">{t("Login as")}</label>
       <div className="relative flex items-center bg-muted rounded-xl p-1">
         {/* Animated background */}
         <motion.div
@@ -35,7 +38,7 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
           )}
         >
           <User className="w-4 h-4" />
-          <span className="font-medium text-sm">Admin</span>
+          <span className="font-medium text-sm">{t("Admin")}</span>
         </button>
 
         {/* Owner option */}
@@ -50,7 +53,7 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
           )}
         >
           <Shield className="w-4 h-4" />
-          <span className="font-medium text-sm">Owner</span>
+          <span className="font-medium text-sm">{t("Owner")}</span>
         </button>
       </div>
     </div>

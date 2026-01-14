@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { insights } from "@/data/aiInsight";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const typeConfig = {
   restock: {
@@ -66,6 +67,8 @@ const priorityConfig = {
 };
 
 const AIInsights = () => {
+  const { t } = useLanguage();
+
   return (
     <MainLayout>
       <div className="max-w-5xl mx-auto space-y-6">
@@ -77,16 +80,16 @@ const AIInsights = () => {
             </div>
             <div>
               <h1 className="font-display text-3xl font-bold text-foreground mb-1">
-                AI Insights
+                {t("AI Insights")}
               </h1>
               <p className="text-muted-foreground">
-                Smart recommendations powered by your sales data
+                {t("Smart recommendations powered by your sales data")}
               </p>
             </div>
           </div>
           <Button variant="outline" className="gap-2">
             <RefreshCw className="w-4 h-4" />
-            Refresh Insights
+            {t("Refresh Insights")}
           </Button>
         </div>
 
@@ -101,14 +104,16 @@ const AIInsights = () => {
               <div className="p-2 rounded-lg bg-destructive/10">
                 <Target className="w-5 h-5 text-destructive" />
               </div>
-              <span className="text-sm text-muted-foreground">
-                High Priority
-              </span>
+                <span className="text-sm text-muted-foreground">
+                  {t("High Priority")}
+                </span>
             </div>
             <p className="text-3xl font-display font-bold text-foreground">
               {insights.filter((i) => i.priority === "high").length}
             </p>
-            <p className="text-sm text-muted-foreground mt-1">Actions needed</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t("Actions needed")}
+              </p>
           </motion.div>
 
           <motion.div
@@ -121,16 +126,16 @@ const AIInsights = () => {
               <div className="p-2 rounded-lg bg-success/10">
                 <TrendingUp className="w-5 h-5 text-success" />
               </div>
-              <span className="text-sm text-muted-foreground">
-                Potential Gain
-              </span>
+                <span className="text-sm text-muted-foreground">
+                  {t("Potential Gain")}
+                </span>
             </div>
             <p className="text-3xl font-display font-bold text-foreground">
               ₦326k
             </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Monthly opportunity
-            </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t("Monthly opportunity")}
+              </p>
           </motion.div>
 
           <motion.div
@@ -143,14 +148,14 @@ const AIInsights = () => {
               <div className="p-2 rounded-lg bg-accent/10">
                 <Sparkles className="w-5 h-5 text-accent" />
               </div>
-              <span className="text-sm text-muted-foreground">AI Accuracy</span>
+                <span className="text-sm text-muted-foreground">{t("AI Accuracy")}</span>
             </div>
             <p className="text-3xl font-display font-bold text-foreground">
               94.2%
             </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Prediction rate
-            </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t("Prediction rate")}
+              </p>
           </motion.div>
         </div>
 
@@ -181,7 +186,7 @@ const AIInsights = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 flex-wrap mb-2">
                             <h3 className="font-display font-semibold text-lg text-foreground">
-                              {insight.title}
+                              {t(insight.title)}
                             </h3>
                             <Badge
                               variant="outline"
@@ -189,11 +194,11 @@ const AIInsights = () => {
                                 priorityConfig[insight.priority].className
                               }
                             >
-                              {priorityConfig[insight.priority].label}
+                              {t(priorityConfig[insight.priority].label)}
                             </Badge>
                           </div>
                           <p className="text-muted-foreground">
-                            {insight.description}
+                            {t(insight.description)}
                           </p>
                         </div>
                       </div>
@@ -207,7 +212,7 @@ const AIInsights = () => {
                               className="bg-muted/50 rounded-lg px-4 py-2"
                             >
                               <p className="text-xs text-muted-foreground mb-1">
-                                {metric.label}
+                                {t(metric.label)}
                               </p>
                               <div className="flex items-center gap-1">
                                 <span className="font-semibold text-foreground">
@@ -230,14 +235,14 @@ const AIInsights = () => {
                     <div className="lg:w-64 flex flex-col gap-3 lg:border-l lg:pl-6 pt-4 lg:pt-0 border-t lg:border-t-0">
                       <div>
                         <p className="text-xs text-muted-foreground mb-1">
-                          Impact
+                          {t("Impact")}
                         </p>
                         <p className="font-medium text-foreground text-sm">
-                          {insight.impact}
+                          {t(insight.impact)}
                         </p>
                       </div>
                       <Button className="bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent w-full justify-between">
-                        {insight.action}
+                        {t(insight.action)}
                         <ArrowRight className="w-4 h-4" />
                       </Button>
                     </div>

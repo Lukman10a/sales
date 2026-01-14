@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, TrendingUp, AlertCircle, Package, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Insight {
   id: string;
@@ -62,6 +63,8 @@ const typeConfig = {
 };
 
 const AIInsightCard = () => {
+  const { t } = useLanguage();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -75,10 +78,10 @@ const AIInsightCard = () => {
         </div>
         <div>
           <h3 className="font-display font-semibold text-lg text-foreground">
-            AI Insights
+            {t("AI Insights")}
           </h3>
           <p className="text-sm text-muted-foreground">
-            Smart recommendations for your business
+            {t("Smart recommendations for your business")}
           </p>
         </div>
       </div>
@@ -105,14 +108,14 @@ const AIInsightCard = () => {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-medium text-foreground mb-1">
-                    {insight.title}
+                    {t(insight.title)}
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3">
-                    {insight.description}
+                    {t(insight.description)}
                   </p>
                   {insight.action && (
                     <button className="flex items-center gap-1 text-sm font-medium text-accent hover:text-accent/80 transition-colors">
-                      {insight.action}
+                      {t(insight.action)}
                       <ArrowRight className="w-3 h-3" />
                     </button>
                   )}

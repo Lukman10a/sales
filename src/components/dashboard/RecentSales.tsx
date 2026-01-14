@@ -3,18 +3,12 @@
 import { motion } from "framer-motion";
 import { Clock, Package, ArrowRight } from "lucide-react";
 import { useData } from "@/contexts/DataContext";
-
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const RecentSales = () => {
   const { recentSales } = useData();
   const displaySales = recentSales.slice(0, 5);
+  const { t, formatCurrency } = useLanguage();
 
   return (
     <motion.div
@@ -26,14 +20,16 @@ const RecentSales = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="font-display font-semibold text-lg text-foreground">
-            Recent Sales
+            {t("Recent Sales")}
           </h3>
           <p className="text-sm text-muted-foreground">
-            Last {displaySales.length} transactions
+            {t("Last {count} transactions", {
+              values: { count: displaySales.length },
+            })}
           </p>
         </div>
         <button className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
-          View All
+          {t("View All")}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -55,7 +51,9 @@ const RecentSales = () => {
                 {sale.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
               </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>by {sale.soldBy}</span>
+                <span>
+                  {t("by {name}", { values: { name: sale.soldBy } })}
+                </span>
                 <span>•</span>
                 <span>{sale.time}</span>
               </div>
@@ -64,7 +62,9 @@ const RecentSales = () => {
               <p className="font-semibold text-foreground">
                 {formatCurrency(sale.total)}
               </p>
-              <p className="text-xs text-success font-medium">{sale.status}</p>
+              <p className="text-xs text-success font-medium">
+                {t(sale.status)}
+              </p>
             </div>
           </motion.div>
         ))}

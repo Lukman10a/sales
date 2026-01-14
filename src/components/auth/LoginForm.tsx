@@ -11,6 +11,7 @@ import { RoleToggle } from "./RoleToggle";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function LoginForm() {
   const { login } = useAuth();
@@ -22,6 +23,7 @@ export function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,9 +33,12 @@ export function LoginForm() {
     try {
       await login({ email, password, role });
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Login failed. Please try again."
-      );
+      const fallback = t("Login failed. Please try again.");
+      if (err instanceof Error) {
+        setError(t(err.message, { fallback }));
+      } else {
+        setError(fallback);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -63,13 +68,13 @@ export function LoginForm() {
 
       {/* Email Field */}
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("Email")}</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             id="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder={t("Enter your email")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="pl-10"
@@ -81,13 +86,13 @@ export function LoginForm() {
 
       {/* Password Field */}
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("Password")}</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder={t("Enter your password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="pl-10"
@@ -113,7 +118,7 @@ export function LoginForm() {
             htmlFor="remember"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
           >
-            Remember me
+              {t("Remember me")}
           </label>
         </div>
         <a
@@ -121,7 +126,7 @@ export function LoginForm() {
           className="text-sm font-medium text-accent hover:underline"
           onClick={(e) => e.preventDefault()}
         >
-          Forgot password?
+            {t("Forgot password?")}
         </a>
       </div>
 
@@ -134,25 +139,25 @@ export function LoginForm() {
         {isLoading ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Signing in...
+            {t("Signing in...")}
           </>
         ) : (
-          "Sign In"
+          t("Sign In")
         )}
       </Button>
 
       {/* Demo Credentials */}
       <div className="mt-6 p-4 bg-muted/50 rounded-xl border border-border">
         <p className="text-xs font-medium text-muted-foreground mb-2">
-          Demo Credentials:
+          {t("Demo Credentials:")}
         </p>
         <div className="space-y-1 text-xs text-muted-foreground">
           <p>
-            <span className="font-medium">Owner:</span> ahmed@luxa.com /
+            <span className="font-medium">{t("Owner:")}</span> ahmed@luxa.com /
             admin123
           </p>
           <p>
-            <span className="font-medium">Admin:</span> ibrahim@luxa.com /
+            <span className="font-medium">{t("Admin:")}</span> ibrahim@luxa.com /
             staff123
           </p>
         </div>

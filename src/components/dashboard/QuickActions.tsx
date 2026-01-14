@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { actions } from "@/data/data";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const variantStyles = {
   primary: "bg-gradient-primary text-primary-foreground hover:opacity-90",
@@ -11,6 +12,8 @@ const variantStyles = {
 };
 
 const QuickActions = () => {
+  const { t } = useLanguage();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,7 +36,7 @@ const QuickActions = () => {
           )}
         >
           <action.icon className="w-6 h-6 mb-3" />
-          <h4 className="font-semibold text-sm mb-1">{action.title}</h4>
+          <h4 className="font-semibold text-sm mb-1">{t(action.title)}</h4>
           <p
             className={cn(
               "text-xs",
@@ -42,7 +45,7 @@ const QuickActions = () => {
                 : "opacity-80"
             )}
           >
-            {action.description}
+            {t(action.description)}
           </p>
         </motion.a>
       ))}

@@ -1,10 +1,16 @@
+"use client";
+
 import { Package } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { t, toggleLanguage, language, isRTL } = useLanguage();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 flex items-center justify-center p-4">
       {/* Background decorations */}
@@ -15,6 +21,15 @@ export default function AuthLayout({
 
       {/* Auth Card */}
       <div className="relative w-full max-w-md">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={toggleLanguage}
+          className="absolute top-4"
+          style={isRTL ? { left: 16, right: "auto" } : { right: 16, left: "auto" }}
+        >
+          {language === "en" ? "AR" : "EN"}
+        </Button>
         <div className="bg-card/80 backdrop-blur-xl rounded-3xl shadow-lg border border-border p-8">
           {/* Logo & Title */}
           <div className="text-center mb-8">
@@ -22,10 +37,10 @@ export default function AuthLayout({
               <Package className="w-8 h-8 text-accent-foreground" />
             </div>
             <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-              Welcome to LUXA
+              {t("Welcome to LUXA")}
             </h1>
             <p className="text-muted-foreground">
-              Sign in to manage your business
+              {t("Sign in to manage your business")}
             </p>
           </div>
 
@@ -35,7 +50,7 @@ export default function AuthLayout({
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground mt-6">
-          © 2026 LUXA Sales. All rights reserved.
+          © 2026 LUXA Sales. {t("All rights reserved.")}
         </p>
       </div>
     </div>

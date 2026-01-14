@@ -40,25 +40,16 @@ import {
   categoryData,
   topProducts,
 } from "@/data/analytics";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const formatCurrency = (amount: number) => {
-  if (amount >= 1000000) {
-    return `₦${(amount / 1000000).toFixed(1)}M`;
-  }
-  if (amount >= 1000) {
-    return `₦${(amount / 1000).toFixed(0)}k`;
-  }
-  return `₦${amount}`;
-};
-
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, formatCurrency }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
         <p className="text-sm font-medium text-foreground mb-2">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
-            {entry.name}: ₦{entry.value.toLocaleString()}
+            {entry.name}: {formatCurrency(entry.value)}
           </p>
         ))}
       </div>
@@ -72,6 +63,17 @@ const Analytics = () => {
     "today" | "week" | "month" | "custom"
   >("week");
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const { t, formatCurrency } = useLanguage();
+
+  const formatCompact = (value: number) =>
+    formatCurrency(value, { notation: "compact", maximumFractionDigits: 1 });
+
+  const formatAxisCurrency = (value: number) =>
+    formatCurrency(value, {
+      notation: value >= 100000 ? "compact" : "standard",
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    });
 
   return (
     <MainLayout>
@@ -80,10 +82,10 @@ const Analytics = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-              Analytics
+              {t("Analytics")}
             </h1>
             <p className="text-muted-foreground">
-              Track your business performance and insights
+              {t("Track your business performance and insights")}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -99,7 +101,13 @@ const Analytics = () => {
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  {range}
+                  {t(
+                    range === "today"
+                      ? "Today"
+                      : range === "week"
+                      ? "Week"
+                      : "Month"
+                  )}
                 </button>
               ))}
             </div>
@@ -107,7 +115,7 @@ const Analytics = () => {
               <PopoverTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <CalendarIcon className="w-4 h-4" />
-                  {date ? format(date, "MMM d, yyyy") : "Pick date"}
+                  {date ? format(date, "MMM d, yyyy") : t("Pick date")}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
@@ -138,9 +146,11 @@ const Analytics = () => {
                 <span>+18.2%</span>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground mb-1">Total Revenue</p>
+            <p className="text-sm text-muted-foreground mb-1">
+              {t("Total Revenue")}
+            </p>
             <p className="text-3xl font-display font-bold text-foreground">
-              ₦3.65M
+              {formatCompact(3650000)}
             </p>
           </motion.div>
 
@@ -159,9 +169,11 @@ const Analytics = () => {
                 <span>+12.5%</span>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground mb-1">Net Profit</p>
+            <p className="text-sm text-muted-foreground mb-1">
+              {t("Net Profit")}
+            </p>
             <p className="text-3xl font-display font-bold text-foreground">
-              ₦784k
+              {formatCompact(784000)}
             </p>
           </motion.div>
 
@@ -180,7 +192,9 @@ const Analytics = () => {
                 <span>-2.4%</span>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground mb-1">Total Orders</p>
+            <p className="text-sm text-muted-foreground mb-1">
+              {t("Total Orders")}
+            </p>
             <p className="text-3xl font-display font-bold text-foreground">
               391
             </p>
@@ -202,10 +216,10 @@ const Analytics = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground mb-1">
-              Avg Order Value
+              {t("Avg Order Value")}
             </p>
             <p className="text-3xl font-display font-bold text-foreground">
-              ₦9,340
+              {formatCurrency(9340)}
             </p>
           </motion.div>
         </div>
@@ -220,7 +234,7 @@ const Analytics = () => {
             className="bg-card rounded-2xl border card-elevated p-6"
           >
             <h3 className="font-display font-semibold text-lg text-foreground mb-6">
-              Weekly Performance
+              {t("Weekly Performance")}
             </h3>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
@@ -246,19 +260,19 @@ const Analytics = () => {
                       fill: "hsl(var(--muted-foreground))",
                       fontSize: 12,
                     }}
-                    tickFormatter={formatCurrency}
+                    tickFormatter={formatAxisCurrency}
                   />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
+                  <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
+                  <Legend formatter={(value: string) => t(value)} />
                   <Bar
                     dataKey="sales"
-                    name="Sales"
+                    name={t("Sales")}
                     fill="hsl(230, 45%, 50%)"
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="profit"
-                    name="Profit"
+                    name={t("Profit")}
                     fill="hsl(160, 60%, 45%)"
                     radius={[4, 4, 0, 0]}
                   />
@@ -275,7 +289,7 @@ const Analytics = () => {
             className="bg-card rounded-2xl border card-elevated p-6"
           >
             <h3 className="font-display font-semibold text-lg text-foreground mb-6">
-              Hourly Sales Trend
+              {t("Hourly Sales Trend")}
             </h3>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
@@ -321,13 +335,13 @@ const Analytics = () => {
                       fill: "hsl(var(--muted-foreground))",
                       fontSize: 12,
                     }}
-                    tickFormatter={formatCurrency}
+                    tickFormatter={formatAxisCurrency}
                   />
-                  <Tooltip content={<CustomTooltip />} />
+                  <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
                   <Area
                     type="monotone"
                     dataKey="sales"
-                    name="Sales"
+                    name={t("Sales")}
                     stroke="hsl(160, 60%, 45%)"
                     strokeWidth={2}
                     fill="url(#salesGradient)"
@@ -348,7 +362,7 @@ const Analytics = () => {
             className="bg-card rounded-2xl border card-elevated p-6"
           >
             <h3 className="font-display font-semibold text-lg text-foreground mb-6">
-              Sales by Category
+              {t("Sales by Category")}
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -378,7 +392,7 @@ const Analytics = () => {
                     style={{ backgroundColor: cat.color }}
                   />
                   <span className="text-sm text-muted-foreground">
-                    {cat.name}
+                    {t(cat.name)}
                   </span>
                   <span className="text-sm font-medium ml-auto">
                     {cat.value}%
@@ -396,7 +410,7 @@ const Analytics = () => {
             className="bg-card rounded-2xl border card-elevated p-6 lg:col-span-2"
           >
             <h3 className="font-display font-semibold text-lg text-foreground mb-6">
-              Top Performing Products
+              {t("Top Performing Products")}
             </h3>
             <div className="space-y-4">
               {topProducts.map((product, index) => (
@@ -415,7 +429,7 @@ const Analytics = () => {
                         {product.name}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {product.sold} units sold
+                        {product.sold} {t("units sold")}
                       </p>
                     </div>
                   </div>
@@ -423,7 +437,7 @@ const Analytics = () => {
                     <p className="font-semibold text-foreground">
                       {formatCurrency(product.revenue)}
                     </p>
-                    <p className="text-xs text-muted-foreground">revenue</p>
+                    <p className="text-xs text-muted-foreground">{t("revenue")}</p>
                   </div>
                 </div>
               ))}

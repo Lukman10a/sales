@@ -21,14 +21,7 @@ import { CartItem, SaleItem } from "@/types/salesTypes";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
-
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Sales() {
   const { user } = useAuth();
@@ -40,6 +33,7 @@ export default function Sales() {
   } = useData();
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
+  const { t, formatCurrency, isRTL } = useLanguage();
 
   // Convert inventory items to SaleItem format for cart
   const products: SaleItem[] = allProducts.map((item) => ({
@@ -111,7 +105,7 @@ export default function Sales() {
 
   const handleCompleteSale = () => {
     if (cart.length === 0) {
-      toast("Cart is empty");
+      toast(t("Cart is empty"));
       return;
     }
 
@@ -119,7 +113,7 @@ export default function Sales() {
     for (const ci of cart) {
       const p = allProducts.find((p) => p.id === ci.id);
       if (!p || ci.quantity > p.quantity) {
-        toast("Insufficient stock for " + ci.name);
+        toast(t("Insufficient stock for {name}", { values: { name: ci.name } }));
         return;
       }
     }
@@ -148,12 +142,11 @@ export default function Sales() {
     setCart([]);
     setSearchQuery("");
 
-    toast("Sale completed", {
-      description: `Total: ${new Intl.NumberFormat("en-NG", {
-        style: "currency",
-        currency: "NGN",
-        minimumFractionDigits: 0,
-      }).format(cartTotal)}`,
+    toast(t("Sale completed"), {
+      description: t("Total {amount}", {
+        values: { amount: formatCurrency(cartTotal) },
+        fallback: `${t("Total")}: ${formatCurrency(cartTotal)}`,
+      }),
     });
   };
 
@@ -166,21 +159,27 @@ export default function Sales() {
             {/* Header */}
             <div>
               <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-                Record Sale
+                {t("Record Sale")}
               </h1>
               <p className="text-muted-foreground">
-                Select items and record transactions
+                {t("Select items and record transactions")}
               </p>
             </div>
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search
+                className={
+                  isRTL
+                    ? "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+                    : "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+                }
+              />
               <Input
-                placeholder="Search products..."
+                placeholder={t("Search products...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className={isRTL ? "pr-10" : "pl-10"}
               />
             </div>
 
@@ -219,7 +218,7 @@ export default function Sales() {
                       {formatCurrency(item.sellingPrice)}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {item.availableQty} available
+                      {item.availableQty} {t("available")}
                     </p>
                   </motion.button>
                 );
@@ -229,7 +228,7 @@ export default function Sales() {
             {/* Recent Sales */}
             <div className="bg-card rounded-2xl border card-elevated p-6">
               <h3 className="font-display font-semibold text-lg text-foreground mb-4">
-                Recent Sales
+                {t("Recent Sales")}
               </h3>
               <div className="space-y-3">
                 {recentSales.slice(0, 5).map((sale) => (
@@ -251,7 +250,7 @@ export default function Sales() {
                           <Clock className="w-3 h-3" />
                           <span>{sale.time}</span>
                           <span>•</span>
-                          <span>by {sale.soldBy}</span>
+                          <span>{t("by {name}", { values: { name: sale.soldBy } })}</span>
                         </div>
                       </div>
                     </div>
@@ -272,7 +271,7 @@ export default function Sales() {
                         ) : (
                           <Clock className="w-3 h-3 mr-1" />
                         )}
-                        {sale.status}
+                        {t(sale.status)}
                       </Badge>
                     </div>
                   </div>
@@ -290,10 +289,10 @@ export default function Sales() {
                 </div>
                 <div>
                   <h3 className="font-display font-semibold text-lg text-foreground">
-                    Current Sale
+                    {t("Current Sale")}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {cart.length} {cart.length === 1 ? "item" : "items"}
+                    {cart.length} {cart.length === 1 ? t("item") : t("items")}
                   </p>
                 </div>
               </div>
@@ -302,7 +301,7 @@ export default function Sales() {
                 <div className="text-center py-12">
                   <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
                   <p className="text-muted-foreground">
-                    Click on products to add them to the sale
+                    {t("Click on products to add them to the sale")}
                   </p>
                 </div>
               ) : (
@@ -352,7 +351,7 @@ export default function Sales() {
                           </div>
                           <div className="mt-2">
                             <label className="text-xs text-muted-foreground">
-                              Actual Price
+                              {t("Actual Price")}
                             </label>
                             <Input
                               type="number"
@@ -370,13 +369,13 @@ export default function Sales() {
 
                   <div className="border-t pt-4 space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-muted-foreground">{t("Subtotal")}</span>
                       <span className="font-medium">
                         {formatCurrency(cartTotal)}
                       </span>
                     </div>
                     <div className="flex justify-between text-lg font-display font-bold">
-                      <span>Total</span>
+                      <span>{t("Total")}</span>
                       <span className="text-accent">
                         {formatCurrency(cartTotal)}
                       </span>
@@ -387,7 +386,7 @@ export default function Sales() {
                       className="w-full bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent mt-4"
                     >
                       <CheckCircle className="w-4 h-4 mr-2" />
-                      Complete Sale
+                      {t("Complete Sale")}
                     </Button>
                   </div>
                 </>

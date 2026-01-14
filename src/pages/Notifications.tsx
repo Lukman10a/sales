@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { notifications } from "@/data/notification";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const typeConfig = {
   inventory: {
@@ -42,6 +43,7 @@ const typeConfig = {
 const Notifications = () => {
   const [notifs, setNotifs] = useState(notifications);
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const { t } = useLanguage();
 
   const unreadCount = notifs.filter((n) => !n.read).length;
   const filteredNotifs =
@@ -66,17 +68,17 @@ const Notifications = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-              Notifications
+              {t("Notifications")}
             </h1>
             <p className="text-muted-foreground">
-              Stay updated with your business activities
+              {t("Stay updated with your business activities")}
             </p>
           </div>
           <div className="flex items-center gap-2">
             {unreadCount > 0 && (
               <Button variant="outline" size="sm" onClick={markAllAsRead}>
                 <CheckCheck className="w-4 h-4 mr-2" />
-                Mark all as read
+                {t("Mark all as read")}
               </Button>
             )}
           </div>
@@ -94,7 +96,7 @@ const Notifications = () => {
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              All
+              {t("All")}
             </button>
             <button
               onClick={() => setFilter("unread")}
@@ -105,7 +107,7 @@ const Notifications = () => {
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              Unread
+              {t("Unread")}
               {unreadCount > 0 && (
                 <Badge className="bg-destructive text-destructive-foreground text-xs h-5">
                   {unreadCount}
@@ -125,11 +127,12 @@ const Notifications = () => {
             >
               <Bell className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
               <h3 className="font-display font-semibold text-lg text-foreground mb-2">
-                All caught up!
+                {t("All caught up!")}
               </h3>
               <p className="text-muted-foreground">
-                No {filter === "unread" ? "unread " : ""}notifications at the
-                moment.
+                {filter === "unread"
+                  ? t("No unread notifications at the moment.")
+                  : t("No notifications at the moment.")}
               </p>
             </motion.div>
           ) : (
@@ -153,9 +156,9 @@ const Notifications = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">
-                          {notif.title}
-                        </h3>
+                          <h3 className="font-semibold text-foreground">
+                            {t(notif.title)}
+                          </h3>
                         <button
                           onClick={() => dismissNotif(notif.id)}
                           className="text-muted-foreground hover:text-foreground transition-colors"
@@ -163,13 +166,13 @@ const Notifications = () => {
                           <X className="w-4 h-4" />
                         </button>
                       </div>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        {notif.message}
-                      </p>
+                        <p className="text-muted-foreground text-sm mb-3">
+                          {t(notif.message)}
+                        </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {notif.time}
-                        </span>
+                          <span className="text-xs text-muted-foreground">
+                            {t(notif.time, { fallback: notif.time })}
+                          </span>
                         <div className="flex items-center gap-2">
                           {!notif.read && (
                             <Button
@@ -179,7 +182,7 @@ const Notifications = () => {
                               className="h-8"
                             >
                               <Check className="w-3 h-3 mr-1" />
-                              Mark as read
+                                {t("Mark as read")}
                             </Button>
                           )}
                           {notif.actionable && (
@@ -187,7 +190,7 @@ const Notifications = () => {
                               size="sm"
                               className="h-8 bg-accent text-accent-foreground"
                             >
-                              Take Action
+                                {t("Take Action")}
                             </Button>
                           )}
                         </div>

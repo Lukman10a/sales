@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeaderProps {
   userRole: "owner" | "apprentice";
@@ -13,25 +14,45 @@ interface HeaderProps {
 }
 
 const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
+  const { t, language, toggleLanguage, isRTL } = useLanguage();
+
   return (
     <motion.header
       initial={false}
-      animate={{ marginLeft: sidebarWidth }}
+      animate={isRTL ? { marginRight: sidebarWidth } : { marginLeft: sidebarWidth }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className="fixed top-0 right-0 h-16 bg-card/80 backdrop-blur-xl border-b border-border z-40 flex items-center justify-between px-6"
-      style={{ left: sidebarWidth }}
+      style={isRTL ? { right: sidebarWidth, left: 0 } : { left: sidebarWidth, right: 0 }}
     >
       {/* Search */}
       <div className="relative w-80">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Search
+          className={
+            isRTL
+              ? "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+              : "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+          }
+        />
         <Input
-          placeholder="Search inventory, sales, reports..."
-          className="pl-10 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-accent"
+          placeholder={t("Search inventory, sales, reports...")}
+          className={
+            isRTL
+              ? "pr-10 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-accent"
+              : "pl-10 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-accent"
+          }
         />
       </div>
 
       {/* Right Actions */}
       <div className="flex items-center gap-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={toggleLanguage}
+          className="text-xs font-semibold"
+        >
+          {language === "en" ? "AR" : "EN"}
+        </Button>
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="w-5 h-5 text-muted-foreground" />
@@ -54,7 +75,7 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
                   : "bg-primary/10 text-primary text-xs"
               }
             >
-              {userRole === "owner" ? "Owner" : "Admin"}
+              {userRole === "owner" ? t("Owner") : t("Admin")}
             </Badge>
           </div>
           <Avatar className="w-10 h-10 border-2 border-accent/30">

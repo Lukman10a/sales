@@ -19,6 +19,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const settingSections = [
   {
@@ -96,17 +97,18 @@ const Settings = () => {
   const [newStaffName, setNewStaffName] = useState("");
   const [newStaffEmail, setNewStaffEmail] = useState("");
   const [inviteError, setInviteError] = useState("");
+  const { t } = useLanguage();
 
   const handleInviteStaff = () => {
     if (userRole !== "owner") return;
 
     if (!newStaffName.trim() || !newStaffEmail.trim()) {
-      setInviteError("Name and email are required");
+      setInviteError(t("Name and email are required"));
       return;
     }
 
     if (!newStaffEmail.includes("@")) {
-      setInviteError("Enter a valid email");
+      setInviteError(t("Enter a valid email"));
       return;
     }
 
@@ -129,10 +131,10 @@ const Settings = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-            Settings
+            {t("Settings")}
           </h1>
           <p className="text-muted-foreground">
-            Manage your account and preferences
+            {t("Manage your account and preferences")}
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -152,7 +154,7 @@ const Settings = () => {
                 >
                   <section.icon className="w-5 h-5" />
                   <div className="flex-1">
-                    <p className="font-medium text-sm">{section.title}</p>
+                    <p className="font-medium text-sm">{t(section.title)}</p>
                   </div>
                   <ChevronRight
                     className={cn(
@@ -178,24 +180,24 @@ const Settings = () => {
                 <div className="space-y-6">
                   <div>
                     <h2 className="font-display font-semibold text-xl text-foreground mb-1">
-                      Profile Settings
+                      {t("Profile Settings")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Update your personal information
+                      {t("Update your personal information")}
                     </p>
                   </div>
                   <Separator />
                   <div className="grid gap-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
+                        <Label htmlFor="firstName">{t("First Name")}</Label>
                         <Input
                           id="firstName"
                           defaultValue={user?.firstName ?? ""}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
+                        <Label htmlFor="lastName">{t("Last Name")}</Label>
                         <Input
                           id="lastName"
                           defaultValue={user?.lastName ?? ""}
@@ -203,7 +205,7 @@ const Settings = () => {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">{t("Email")}</Label>
                       <Input
                         id="email"
                         type="email"
@@ -211,11 +213,11 @@ const Settings = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
+                      <Label htmlFor="phone">{t("Phone Number")}</Label>
                       <Input id="phone" defaultValue="+234 801 234 5678" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="business">Business Name</Label>
+                      <Label htmlFor="business">{t("Business Name")}</Label>
                       <Input
                         id="business"
                         defaultValue="Hassan Electronics"
@@ -223,7 +225,7 @@ const Settings = () => {
                       />
                     </div>
                     <Button className="w-fit bg-gradient-accent text-accent-foreground">
-                      Save Changes
+                      {t("Save Changes")}
                     </Button>
                   </div>
                 </div>
@@ -233,10 +235,10 @@ const Settings = () => {
                 <div className="space-y-6">
                   <div>
                     <h2 className="font-display font-semibold text-xl text-foreground mb-1">
-                      Notification Preferences
+                      {t("Notification Preferences")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Choose what notifications you receive
+                      {t("Choose what notifications you receive")}
                     </p>
                   </div>
                   <Separator />
@@ -244,10 +246,10 @@ const Settings = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-foreground">
-                          Sales Alerts
+                          {t("Sales Alerts")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Get notified when a sale is recorded
+                          {t("Get notified when a sale is recorded")}
                         </p>
                       </div>
                       <Switch defaultChecked />
@@ -255,10 +257,10 @@ const Settings = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-foreground">
-                          Low Stock Warnings
+                          {t("Low Stock Warnings")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Alert when items are running low
+                          {t("Alert when items are running low")}
                         </p>
                       </div>
                       <Switch defaultChecked />
@@ -266,10 +268,10 @@ const Settings = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-foreground">
-                          Discrepancy Alerts
+                          {t("Discrepancy Alerts")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Immediate alert for stock mismatches
+                          {t("Immediate alert for stock mismatches")}
                         </p>
                       </div>
                       <Switch defaultChecked />
@@ -277,10 +279,10 @@ const Settings = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-foreground">
-                          AI Insights
+                          {t("AI Insights")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Receive smart business recommendations
+                          {t("Receive smart business recommendations")}
                         </p>
                       </div>
                       <Switch defaultChecked />
@@ -288,10 +290,10 @@ const Settings = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-foreground">
-                          Daily Summary
+                          {t("Daily Summary")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          End of day sales summary
+                          {t("End of day sales summary")}
                         </p>
                       </div>
                       <Switch />
@@ -304,28 +306,28 @@ const Settings = () => {
                 <div className="space-y-6">
                   <div>
                     <h2 className="font-display font-semibold text-xl text-foreground mb-1">
-                      Security Settings
+                      {t("Security Settings")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Manage your password and security options
+                      {t("Manage your password and security options")}
                     </p>
                   </div>
                   <Separator />
                   <div className="space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="currentPassword">Current Password</Label>
+                      <Label htmlFor="currentPassword">{t("Current Password")}</Label>
                       <Input id="currentPassword" type="password" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="newPassword">New Password</Label>
+                      <Label htmlFor="newPassword">{t("New Password")}</Label>
                       <Input id="newPassword" type="password" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword">Confirm Password</Label>
+                      <Label htmlFor="confirmPassword">{t("Confirm Password")}</Label>
                       <Input id="confirmPassword" type="password" />
                     </div>
                     <Button className="w-fit bg-gradient-accent text-accent-foreground">
-                      Update Password
+                      {t("Update Password")}
                     </Button>
                   </div>
                 </div>
@@ -335,10 +337,10 @@ const Settings = () => {
                 <div className="space-y-6">
                   <div>
                     <h2 className="font-display font-semibold text-xl text-foreground mb-1">
-                      Staff & Invitations
+                      {t("Staff & Invitations")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Invite team members to help manage your store
+                      {t("Invite team members to help manage your store")}
                     </p>
                   </div>
                   <Separator />
@@ -346,17 +348,17 @@ const Settings = () => {
                   <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
                     <div className="space-y-4 bg-muted/40 border rounded-2xl p-4">
                       <div className="space-y-2">
-                        <Label htmlFor="staffName">Full Name</Label>
+                        <Label htmlFor="staffName">{t("Full Name")}</Label>
                         <Input
                           id="staffName"
-                          placeholder="Enter full name"
+                          placeholder={t("Enter full name")}
                           value={newStaffName}
                           onChange={(e) => setNewStaffName(e.target.value)}
                           disabled={userRole !== "owner"}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="staffEmail">Email</Label>
+                        <Label htmlFor="staffEmail">{t("Email")}</Label>
                         <Input
                           id="staffEmail"
                           type="email"
@@ -376,12 +378,13 @@ const Settings = () => {
                         onClick={handleInviteStaff}
                         disabled={userRole !== "owner"}
                       >
-                        Send Invite
+                        {t("Send Invite")}
                       </Button>
                       {userRole !== "owner" && (
                         <p className="text-xs text-muted-foreground">
-                          Only owners can invite staff. Contact your owner to
-                          get access.
+                          {t(
+                            "Only owners can invite staff. Contact your owner to get access."
+                          )}
                         </p>
                       )}
                     </div>
@@ -409,12 +412,12 @@ const Settings = () => {
                                   : "bg-warning/10 text-warning border-warning/30"
                               }
                             >
-                              {member.status === "active"
-                                ? "Active"
-                                : "Invited"}
+                                {member.status === "active"
+                                  ? t("Active")
+                                  : t("Invited")}
                             </Badge>
-                            <Badge variant="secondary" className="text-xs">
-                              Admin
+                              <Badge variant="secondary" className="text-xs">
+                                {t("Admin")}
                             </Badge>
                           </div>
                         </div>
@@ -422,8 +425,9 @@ const Settings = () => {
 
                       {staff.length === 0 && (
                         <div className="p-4 border rounded-xl bg-muted/40 text-sm text-muted-foreground">
-                          No staff members yet. Invite your first admin to get
-                          started.
+                            {t(
+                              "No staff members yet. Invite your first admin to get started."
+                            )}
                         </div>
                       )}
                     </div>
@@ -436,7 +440,7 @@ const Settings = () => {
                 activeSection === "help") && (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
-                    This section will be available soon.
+                    {t("This section will be available soon.")}
                   </p>
                 </div>
               )}
