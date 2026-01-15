@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
@@ -41,4 +41,4 @@ const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
   );
 };
 
-export default MainLayout;
+export default React.memo(MainLayout);

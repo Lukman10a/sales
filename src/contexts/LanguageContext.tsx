@@ -388,21 +388,24 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return interpolate(template, options?.values);
   };
 
-  const toggleLanguage = () => {
+  const toggleLanguage = React.useCallback(() => {
     setLanguage((prev) => (prev === "en" ? "ar" : "en"));
-  };
+  }, []);
+
+  const value = React.useMemo(
+    () => ({
+      language,
+      isRTL,
+      t,
+      setLanguage,
+      toggleLanguage,
+      formatCurrency,
+    }),
+    [language, isRTL, t, formatCurrency, toggleLanguage]
+  );
 
   return (
-    <LanguageContext.Provider
-      value={{
-        language,
-        isRTL,
-        t,
-        setLanguage,
-        toggleLanguage,
-        formatCurrency,
-      }}
-    >
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

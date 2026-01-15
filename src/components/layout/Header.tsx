@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Bell, Search, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
@@ -99,4 +100,4 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useMemo,
+} from "react";
 import { inventoryItems } from "@/data/inventory";
 import { recentSalesData } from "@/data/sales";
 import type { InventoryItem } from "@/types/inventoryTypes";
@@ -55,41 +61,68 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setRecentSales((prev) => [sale, ...prev]);
   };
 
-  // Computed stats
-  const totalItemsInStock = inventory.filter(
-    (i) => i.status === "in-stock"
-  ).length;
-  const lowStockItems = inventory.filter(
-    (i) => i.status === "low-stock"
-  ).length;
-  const outOfStockItems = inventory.filter(
-    (i) => i.status === "out-of-stock"
-  ).length;
-  const totalSalesAmount = recentSales
-    .filter((s) => s.status === "completed")
-    .reduce((sum, sale) => sum + sale.total, 0);
-  const totalItemsSold = recentSales
-    .filter((s) => s.status === "completed")
-    .reduce(
-      (sum, sale) => sum + sale.items.reduce((sum, i) => sum + i.quantity, 0),
-      0
-    );
+  // Computed stats - memoized to prevent recalculation on every render
+  const totalItemsInStock = useMemo(
+    () => inventory.filter((i) => i.status === "in-stock").length,
+    [inventory]
+  );
 
-  const value: DataContextType = {
-    inventory,
-    setInventory,
-    addInventoryItem,
-    updateInventoryItem,
-    decrementInventory,
-    recentSales,
-    setRecentSales,
-    addSaleRecord,
-    totalItemsInStock,
-    lowStockItems,
-    outOfStockItems,
-    totalSalesAmount,
-    totalItemsSold,
-  };
+  const lowStockItems = useMemo(
+    () => inventory.filter((i) => i.status === "low-stock").length,
+    [inventory]
+  );
+
+  const outOfStockItems = useMemo(
+    () => inventory.filter((i) => i.status === "out-of-stock").length,
+    [inventory]
+  );
+
+  const totalSalesAmount = useMemo(
+    () =>
+      recentSales
+        .filter((s) => s.status === "completed")
+        .reduce((sum, sale) => sum + sale.total, 0),
+    [recentSales]
+  );
+
+  const totalItemsSold = useMemo(
+    () =>
+      recentSales
+        .filter((s) => s.status === "completed")
+        .reduce(
+          (sum, sale) =>
+            sum + sale.items.reduce((sum, i) => sum + i.quantity, 0),
+          0
+        ),
+    [recentSales]
+  );
+
+  const value: DataContextType = useMemo(
+    () => ({
+      inventory,
+      setInventory,
+      addInventoryItem,
+      updateInventoryItem,
+      decrementInventory,
+      recentSales,
+      setRecentSales,
+      addSaleRecord,
+      totalItemsInStock,
+      lowStockItems,
+      outOfStockItems,
+      totalSalesAmount,
+      totalItemsSold,
+    }),
+    [
+      inventory,
+      recentSales,
+      totalItemsInStock,
+      lowStockItems,
+      outOfStockItems,
+      totalSalesAmount,
+      totalItemsSold,
+    ]
+  );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

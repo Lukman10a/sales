@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -237,4 +237,4 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);

@@ -35,14 +35,18 @@ export default function Sales() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const { t, formatCurrency, isRTL } = useLanguage();
 
-  // Convert inventory items to SaleItem format for cart
-  const products: SaleItem[] = allProducts.map((item) => ({
-    id: item.id,
-    name: item.name,
-    image: item.image,
-    sellingPrice: item.sellingPrice,
-    availableQty: item.quantity,
-  }));
+  // Convert inventory items to SaleItem format for cart - memoized
+  const products: SaleItem[] = useMemo(
+    () =>
+      allProducts.map((item) => ({
+        id: item.id,
+        name: item.name,
+        image: item.image,
+        sellingPrice: item.sellingPrice,
+        availableQty: item.quantity,
+      })),
+    [allProducts]
+  );
 
   const filteredItems = useMemo(
     () =>
