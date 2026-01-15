@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 
 const NotFound = () => {
@@ -26,13 +25,14 @@ const NotFound = () => {
           Page Not Found
         </p>
         <p className="mb-8 text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
-        <Link href="/">
-          <Button className="bg-gradient-accent text-accent-foreground">
-            <Home className="w-4 h-4 mr-2" />
-            Return to Dashboard
-          </Button>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-accent text-accent-foreground rounded-lg hover:opacity-90 transition-opacity font-medium"
+        >
+          <Home className="w-4 h-4" />
+          Return to Dashboard
         </Link>
       </div>
     </div>

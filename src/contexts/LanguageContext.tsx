@@ -136,7 +136,6 @@ const translations: Record<Language, Record<string, string>> = {
     "Enter your password": "أدخل كلمة المرور",
     "Actual Price": "السعر الفعلي",
     Subtotal: "المجموع الفرعي",
-    "Current Sale": "البيع الحالي",
     Total: "الإجمالي",
     "Complete Sale": "إتمام البيع",
     "Cart is empty": "السلة فارغة",
@@ -153,7 +152,6 @@ const translations: Record<Language, Record<string, string>> = {
     "Hourly Sales Trend": "اتجاه المبيعات حسب الساعة",
     "Sales by Category": "المبيعات حسب الفئة",
     "Top Performing Products": "أفضل المنتجات أداءً",
-    Sales: "المبيعات",
     Profit: "الربح",
     "units sold": "وحدات مباعة",
     revenue: "إيرادات",
@@ -238,8 +236,6 @@ const translations: Record<Language, Record<string, string>> = {
       "دعوة أعضاء الفريق للمساعدة في إدارة متجرك",
     "Full Name": "الاسم الكامل",
     "Enter full name": "أدخل الاسم الكامل",
-    "Enter your email": "أدخل بريدك الإلكتروني",
-    "Enter your password": "أدخل كلمة المرور",
     "Remember me": "تذكرني",
     "Forgot password?": "هل نسيت كلمة المرور؟",
     "Sign In": "تسجيل الدخول",
@@ -379,14 +375,17 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     };
   }, [language]);
 
-  const t = (key: string, options?: TranslateOptions) => {
-    const template =
-      translations[language][key] ??
-      translations.en[key as keyof typeof translations.en] ??
-      options?.fallback ??
-      key;
-    return interpolate(template, options?.values);
-  };
+  const t = React.useCallback(
+    (key: string, options?: TranslateOptions) => {
+      const template =
+        translations[language][key] ??
+        translations.en[key as keyof typeof translations.en] ??
+        options?.fallback ??
+        key;
+      return interpolate(template, options?.values);
+    },
+    [language]
+  );
 
   const toggleLanguage = React.useCallback(() => {
     setLanguage((prev) => (prev === "en" ? "ar" : "en"));

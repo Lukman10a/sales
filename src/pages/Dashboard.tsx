@@ -20,7 +20,7 @@ const Dashboard = () => {
             Welcome back, {user?.firstName}!
           </h1>
           <p className="text-muted-foreground">
-            Here's what's happening with your business today.
+            Here&apos;s what&apos;s happening with your business today.
           </p>
         </div>
 

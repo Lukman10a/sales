@@ -46,6 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isAuthenticated: !!user,
       isLoading,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user, isLoading]
   );
 
