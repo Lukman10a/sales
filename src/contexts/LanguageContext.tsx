@@ -32,8 +32,77 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(
 );
 
 const translations: Record<Language, Record<string, string>> = {
-  en: {},
+  en: {
+    "Modern Sales Management": "Modern Sales Management",
+    "Made Simple": "Made Simple",
+    "Streamline your inventory, track sales, and gain AI-powered insights to grow your business faster than ever before.":
+      "Streamline your inventory, track sales, and gain AI-powered insights to grow your business faster than ever before.",
+    "Get Started": "Get Started",
+    "Learn More": "Learn More",
+    "Powerful Features": "Powerful Features",
+    "Everything you need to manage your business efficiently":
+      "Everything you need to manage your business efficiently",
+    "Real-time Analytics": "Real-time Analytics",
+    "Track your sales, inventory, and business metrics in real-time":
+      "Track your sales, inventory, and business metrics in real-time",
+    "AI-Powered Insights": "AI-Powered Insights",
+    "Get intelligent recommendations to optimize your business":
+      "Get intelligent recommendations to optimize your business",
+    "Inventory Management": "Inventory Management",
+    "Keep track of stock levels and get low-stock alerts":
+      "Keep track of stock levels and get low-stock alerts",
+    "Fast & Responsive": "Fast & Responsive",
+    "Lightning-fast performance for smooth experience":
+      "Lightning-fast performance for smooth experience",
+    "Secure & Reliable": "Secure & Reliable",
+    "Enterprise-grade security to protect your data":
+      "Enterprise-grade security to protect your data",
+    "Team Collaboration": "Team Collaboration",
+    "Invite team members and manage roles easily":
+      "Invite team members and manage roles easily",
+    "Active Users": "Active Users",
+    Uptime: "Uptime",
+    Support: "Support",
+    "Ready to Transform Your Business?": "Ready to Transform Your Business?",
+    "Join thousands of businesses using LUXA to manage sales and inventory efficiently.":
+      "Join thousands of businesses using LUXA to manage sales and inventory efficiently.",
+    "Start Free Trial": "Start Free Trial",
+  },
   ar: {
+    "Modern Sales Management": "إدارة المبيعات الحديثة",
+    "Made Simple": "مبسطة وسهلة",
+    "Streamline your inventory, track sales, and gain AI-powered insights to grow your business faster than ever before.":
+      "قم بتبسيط مخزونك وتتبع المبيعات والحصول على رؤى مدعومة بالذكاء الاصطناعي لتنمية عملك بشكل أسرع من أي وقت مضى.",
+    "Get Started": "ابدأ الآن",
+    "Learn More": "تعرف على المزيد",
+    "Powerful Features": "ميزات قوية",
+    "Everything you need to manage your business efficiently":
+      "كل ما تحتاجه لإدارة عملك بكفاءة",
+    "Real-time Analytics": "تحليلات فورية",
+    "Track your sales, inventory, and business metrics in real-time":
+      "تتبع مبيعاتك والمخزون والمقاييس التجارية في الوقت الفعلي",
+    "AI-Powered Insights": "رؤى مدعومة بالذكاء الاصطناعي",
+    "Get intelligent recommendations to optimize your business":
+      "احصل على توصيات ذكية لتحسين عملك",
+    "Inventory Management": "إدارة المخزون",
+    "Keep track of stock levels and get low-stock alerts":
+      "تتبع مستويات المخزون والحصول على تنبيهات انخفاض المخزون",
+    "Fast & Responsive": "سريع وفعال",
+    "Lightning-fast performance for smooth experience":
+      "أداء سريع البرق لتجربة سلسة",
+    "Secure & Reliable": "آمن وموثوق",
+    "Enterprise-grade security to protect your data":
+      "أمان من المستوى الإنترنتي لحماية بياناتك",
+    "Team Collaboration": "التعاون الفريقي",
+    "Invite team members and manage roles easily":
+      "ادعُ أعضاء الفريق وأدر الأدوار بسهولة",
+    "Active Users": "المستخدمون النشطون",
+    Uptime: "وقت التشغيل",
+    Support: "الدعم",
+    "Ready to Transform Your Business?": "هل أنت مستعد لتحويل عملك؟",
+    "Join thousands of businesses using LUXA to manage sales and inventory efficiently.":
+      "انضم إلى آلاف الشركات التي تستخدم LUXA لإدارة المبيعات والمخزون بكفاءة.",
+    "Start Free Trial": "ابدأ النسخة التجريبية المجانية",
     StockFlow: "ستوك فلو",
     "Sales & Inventory": "المبيعات والمخزون",
     Dashboard: "لوحة التحكم",

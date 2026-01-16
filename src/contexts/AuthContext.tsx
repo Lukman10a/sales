@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (credentials: LoginCredentials) => {
     const user = await AuthService.login(credentials);
     setUser(user);
-    router.push("/");
+    router.push("/dashboard");
   };
 
   const logout = () => {

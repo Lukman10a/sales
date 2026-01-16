@@ -66,7 +66,11 @@ const Analytics = () => {
   const { t, formatCurrency } = useLanguage();
 
   const formatCompact = (value: number) =>
-    formatCurrency(value, { notation: "compact", maximumFractionDigits: 1 });
+    formatCurrency(value, {
+      notation: "compact",
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 0,
+    });
 
   const formatAxisCurrency = (value: number) =>
     formatCurrency(value, {
