@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -24,9 +23,7 @@ const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
       <div className="min-h-screen bg-background">
         <Sidebar />
         <Header userRole={user?.role || "owner"} sidebarWidth={sidebarWidth} />
-        <motion.main
-          initial={false}
-          animate={false}
+        <main
           className="pt-24 pb-8 px-6 min-h-screen"
           style={{
             marginLeft: isRTL ? 0 : sidebarWidth,
@@ -35,7 +32,7 @@ const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
           }}
         >
           {children}
-        </motion.main>
+        </main>
       </div>
     </ProtectedRoute>
   );

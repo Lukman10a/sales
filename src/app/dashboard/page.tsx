@@ -36,7 +36,7 @@ export default function Dashboard() {
     );
   }
 
-  // Don't render anything if not authenticated
+  // Don't render anything if not authenticated (will redirect)
   if (!isAuthenticated) {
     return null;
   }
