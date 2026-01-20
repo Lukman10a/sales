@@ -12,6 +12,7 @@ import { formatCurrency } from "@/lib/investorUtils";
 import { Badge } from "@/components/ui/badge";
 import { Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface WithdrawalRequestsProps {
   withdrawalRecords: WithdrawalRecord[];
@@ -24,6 +25,10 @@ export function WithdrawalRequests({
   investorId,
   pendingCount,
 }: WithdrawalRequestsProps) {
+  const { t, language } = useLanguage();
+
+  const dateLocale = language === "ar" ? "ar-EG" : "en-NG";
+
   const relevantRecords = withdrawalRecords
     .filter((wd) => wd.investorId === investorId)
     .sort(
@@ -50,19 +55,19 @@ export function WithdrawalRequests({
       case "pending":
         return (
           <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
-            Pending
+            {t("Pending")}
           </Badge>
         );
       case "approved":
         return (
           <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
-            Approved
+            {t("Approved")}
           </Badge>
         );
       case "completed":
         return (
           <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-            Completed
+            {t("Completed")}
           </Badge>
         );
       default:
@@ -79,20 +84,24 @@ export function WithdrawalRequests({
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">Withdrawal Requests</CardTitle>
+            <CardTitle className="text-lg">
+              {t("Withdrawal Requests")}
+            </CardTitle>
             {pendingCount > 0 && (
               <Badge className="bg-yellow-100 text-yellow-800">
-                {pendingCount} pending
+                {t("{count} pending", { values: { count: pendingCount } })}
               </Badge>
             )}
           </div>
-          <CardDescription>Your profit withdrawal history</CardDescription>
+          <CardDescription>
+            {t("Your profit withdrawal history")}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             {relevantRecords.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-4">
-                No withdrawal records yet
+                {t("No withdrawal records yet")}
               </p>
             ) : (
               relevantRecords.map((record, idx) => (
@@ -108,7 +117,7 @@ export function WithdrawalRequests({
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-foreground">
                         {new Date(record.requestDate).toLocaleDateString(
-                          "en-NG",
+                          dateLocale,
                           {
                             month: "short",
                             year: "numeric",
@@ -116,7 +125,13 @@ export function WithdrawalRequests({
                         )}
                       </p>
                       <p className="text-xs text-muted-foreground capitalize">
-                        {record.status}
+                        {t(
+                          record.status === "pending"
+                            ? "Pending"
+                            : record.status === "approved"
+                              ? "Approved"
+                              : "Completed",
+                        )}
                       </p>
                     </div>
                   </div>

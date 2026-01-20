@@ -1,3 +1,5 @@
+"use client";
+
 import MainLayout from "@/components/layout/MainLayout";
 import {
   getInvestorDashboardData,
@@ -16,8 +18,10 @@ import {
   WithdrawalRequests,
   ProfitChart,
 } from "@/components/investor";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function InvestorDashboard() {
+  const { t } = useLanguage();
   // Get current investor based on investorId from auth
   const investor = mockInvestors.find((inv) => inv.id === "inv-1");
 
@@ -27,9 +31,11 @@ export default function InvestorDashboard() {
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-foreground mb-2">
-              Investor Profile Not Found
+              {t("Investor Profile Not Found")}
             </h1>
-            <p className="text-muted-foreground">Please contact support</p>
+            <p className="text-muted-foreground">
+              {t("Please contact support")}
+            </p>
           </div>
         </div>
       </MainLayout>
@@ -53,10 +59,10 @@ export default function InvestorDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-            Investment Dashboard
+            {t("Investment Dashboard")}
           </h1>
           <p className="text-muted-foreground">
-            Track your investment performance and earnings
+            {t("Track your investment performance and earnings")}
           </p>
         </div>
 

@@ -23,12 +23,12 @@ interface LanguageContextValue {
   toggleLanguage: () => void;
   formatCurrency: (
     amount: number,
-    options?: Intl.NumberFormatOptions
+    options?: Intl.NumberFormatOptions,
   ) => string;
 }
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 const translations: Record<Language, Record<string, string>> = {
@@ -391,6 +391,54 @@ const translations: Record<Language, Record<string, string>> = {
     "Price Optimization": "تحسين السعر",
     "Wireless Earbuds Pro are trending. Consider a slight price increase to maximize profits.":
       "سماعات الأذن اللاسلكية برو رائجة. فكر في زيادة طفيفة في السعر لتعظيم الأرباح.",
+    "Investor Profile Not Found": "لم يتم العثور على ملف المستثمر",
+    "Please contact support": "يرجى الاتصال بالدعم",
+    "Investment Dashboard": "لوحة تحكم الاستثمار",
+    "Track your investment performance and earnings":
+      "تتبع أداء استثمارك وأرباحك",
+    "Investment Amount": "مبلغ الاستثمار",
+    "Initial capital invested": "رأس المال الأولي المستثمر",
+    Ownership: "نسبة الملكية",
+    "{value} of business equity": "{value} من ملكية العمل",
+    "Total Profit Accrued": "إجمالي الأرباح المتراكمة",
+    "Cumulative profit earned": "الأرباح المتراكمة المكتسبة",
+    "Investment Date": "تاريخ الاستثمار",
+    "When you invested": "تاريخ استثمارك",
+    "Profit Summary": "ملخص الأرباح",
+    "ROI Percentage": "نسبة العائد على الاستثمار",
+    "Break-even Reached!": "تم تحقيق نقطة التعادل!",
+    "Break-even Status": "حالة التعادل",
+    "Recovery in progress": "جاري استرداد رأس المال",
+    "Still to recover": "المتبقي للاسترداد",
+    "Your Total Earnings": "إجمالي أرباحك",
+    "{share} share": "حصة {share}",
+    "Withdrawal Requests": "طلبات السحب",
+    "{count} pending": "{count} قيد الانتظار",
+    "Your profit withdrawal history": "سجل سحب أرباحك",
+    "No withdrawal records yet": "لا توجد سجلات سحب بعد",
+    Pending: "قيد الانتظار",
+    Approved: "مقبول",
+    Completed: "مكتمل",
+    "Profit Trend": "اتجاه الأرباح",
+    "Monthly breakdown of total profit and your share":
+      "تفصيل شهري لإجمالي الأرباح وحصتك",
+    "Average Monthly": "المتوسط الشهري",
+    "Highest Month": "أعلى شهر",
+    "Total 4-Month": "إجمالي الأربعة أشهر",
+    "Your Share": "حصتك",
+    "AI Investment Insights": "رؤى استثمارية مدعومة بالذكاء الاصطناعي",
+    "Data-driven analysis of your investment performance":
+      "تحليل قائم على البيانات لأداء استثمارك",
+    "{count} High Priority Insights": "{count} من الرؤى ذات الأولوية العالية",
+    "High Priority": "أولوية عالية",
+    "Medium Priority": "أولوية متوسطة",
+    "Low Priority": "أولوية منخفضة",
+    IMPACT: "التأثير",
+    "RECOMMENDED ACTION": "الإجراء الموصى به",
+    "AI Analysis Complete": "تم إكمال تحليل الذكاء الاصطناعي",
+    "These insights are generated based on your investment data, business financials, and market trends. Review regularly for optimal returns.":
+      "تم إنشاء هذه الرؤى بناءً على بيانات استثمارك والبيانات المالية للأعمال واتجاهات السوق. راجعها بانتظام لتحقيق أفضل عائد.",
+    "Total Profit": "إجمالي الأرباح",
   },
 };
 
@@ -398,7 +446,7 @@ const LANGUAGE_STORAGE_KEY = "luxa_language";
 
 const interpolate = (
   template: string,
-  values?: Record<string, string | number>
+  values?: Record<string, string | number>,
 ) => {
   if (!values) return template;
   return template.replace(/\{(.*?)\}/g, (_, key) => {
@@ -413,7 +461,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const stored = localStorage.getItem(
-      LANGUAGE_STORAGE_KEY
+      LANGUAGE_STORAGE_KEY,
     ) as Language | null;
     if (stored === "en" || stored === "ar") {
       setLanguage(stored);
@@ -433,7 +481,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const formatCurrency = useMemo(() => {
     return (
       amount: number,
-      options: Intl.NumberFormatOptions = { minimumFractionDigits: 0 }
+      options: Intl.NumberFormatOptions = { minimumFractionDigits: 0 },
     ) => {
       const locale = language === "ar" ? "ar-EG" : "en-NG";
       return new Intl.NumberFormat(locale, {
@@ -453,7 +501,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         key;
       return interpolate(template, options?.values);
     },
-    [language]
+    [language],
   );
 
   const toggleLanguage = React.useCallback(() => {
@@ -469,7 +517,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       toggleLanguage,
       formatCurrency,
     }),
-    [language, isRTL, t, formatCurrency, toggleLanguage]
+    [language, isRTL, t, formatCurrency, toggleLanguage],
   );
 
   return (

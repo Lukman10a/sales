@@ -29,6 +29,12 @@ export default function InvestorInsightsPage() {
     (i) => i.priority === "high",
   ).length;
 
+  const priorityLabel = {
+    high: t("High Priority"),
+    medium: t("Medium Priority"),
+    low: t("Low Priority"),
+  } as const;
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -40,16 +46,18 @@ export default function InvestorInsightsPage() {
         >
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              AI Investment Insights
+              {t("AI Investment Insights")}
             </h1>
             <p className="text-muted-foreground mt-1">
-              Data-driven analysis of your investment performance
+              {t("Data-driven analysis of your investment performance")}
             </p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-accent">
             <Sparkles className="w-5 h-5 text-accent-foreground" />
             <span className="text-sm font-medium text-accent-foreground">
-              {highPriorityCount} High Priority Insights
+              {t("{count} High Priority Insights", {
+                values: { count: highPriorityCount },
+              })}
             </span>
           </div>
         </motion.div>
@@ -75,13 +83,13 @@ export default function InvestorInsightsPage() {
                         </div>
                         <div className="flex-1 space-y-1">
                           <CardTitle className="text-xl">
-                            {insight.title}
+                            {t(insight.title)}
                           </CardTitle>
                           <Badge
                             variant="outline"
                             className={priorityColors[insight.priority]}
                           >
-                            {insight.priority.toUpperCase()} PRIORITY
+                            {priorityLabel[insight.priority]}
                           </Badge>
                         </div>
                       </div>
@@ -89,7 +97,7 @@ export default function InvestorInsightsPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-muted-foreground leading-relaxed">
-                      {insight.description}
+                      {t(insight.description)}
                     </p>
 
                     {/* Metrics */}
@@ -98,7 +106,7 @@ export default function InvestorInsightsPage() {
                         {insight.metrics.map((metric, idx) => (
                           <div key={idx} className="space-y-1">
                             <p className="text-xs text-muted-foreground">
-                              {metric.label}
+                              {t(metric.label)}
                             </p>
                             <p className="text-lg font-semibold flex items-center gap-1">
                               {metric.value}
@@ -118,17 +126,19 @@ export default function InvestorInsightsPage() {
                     <div className="flex items-center justify-between p-4 rounded-lg border border-dashed">
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground font-medium">
-                          IMPACT
+                          {t("IMPACT")}
                         </p>
-                        <p className="text-sm font-medium">{insight.impact}</p>
+                        <p className="text-sm font-medium">
+                          {t(insight.impact)}
+                        </p>
                       </div>
                       <div className="h-8 w-px bg-border" />
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground font-medium">
-                          RECOMMENDED ACTION
+                          {t("RECOMMENDED ACTION")}
                         </p>
                         <p className="text-sm font-medium text-primary">
-                          {insight.action}
+                          {t(insight.action)}
                         </p>
                       </div>
                     </div>
@@ -146,12 +156,12 @@ export default function InvestorInsightsPage() {
               <Sparkles className="w-6 h-6 text-accent-foreground" />
               <div>
                 <p className="font-medium text-accent-foreground">
-                  AI Analysis Complete
+                  {t("AI Analysis Complete")}
                 </p>
                 <p className="text-sm text-accent-foreground/80">
-                  These insights are generated based on your investment data,
-                  business financials, and market trends. Review regularly for
-                  optimal returns.
+                  {t(
+                    "These insights are generated based on your investment data, business financials, and market trends. Review regularly for optimal returns.",
+                  )}
                 </p>
               </div>
             </div>

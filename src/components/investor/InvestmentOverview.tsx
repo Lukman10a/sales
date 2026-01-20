@@ -11,6 +11,7 @@ import { Investor, InvestorDashboardData } from "@/types/investorTypes";
 import { formatCurrency, formatPercentage } from "@/lib/investorUtils";
 import { DollarSign, TrendingUp, Calendar, Percent } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface InvestmentOverviewProps {
   investor: Investor;
@@ -21,39 +22,48 @@ export function InvestmentOverview({
   investor,
   dashboardData,
 }: InvestmentOverviewProps) {
+  const { t, language } = useLanguage();
+
+  const dateLocale = language === "ar" ? "ar-EG" : "en-NG";
+
   const statCards = [
     {
-      title: "Investment Amount",
+      title: t("Investment Amount"),
       value: formatCurrency(dashboardData.investmentAmount),
-      description: "Initial capital invested",
+      description: t("Initial capital invested"),
       icon: DollarSign,
       variant: "default" as const,
       delay: 0,
     },
     {
-      title: "Ownership",
+      title: t("Ownership"),
       value: formatPercentage(dashboardData.percentageOwnership),
-      description: `${dashboardData.percentageOwnership}% of business equity`,
+      description: t("{value} of business equity", {
+        values: { value: formatPercentage(dashboardData.percentageOwnership) },
+      }),
       icon: Percent,
       variant: "accent" as const,
       delay: 0.1,
     },
     {
-      title: "Total Profit Accrued",
+      title: t("Total Profit Accrued"),
       value: formatCurrency(dashboardData.totalProfitAccrued),
-      description: "Cumulative profit earned",
+      description: t("Cumulative profit earned"),
       icon: TrendingUp,
       variant: "accent" as const,
       delay: 0.2,
     },
     {
-      title: "Investment Date",
-      value: new Date(dashboardData.dateInvested).toLocaleDateString("en-NG", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
-      description: "When you invested",
+      title: t("Investment Date"),
+      value: new Date(dashboardData.dateInvested).toLocaleDateString(
+        dateLocale,
+        {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        },
+      ),
+      description: t("When you invested"),
       icon: Calendar,
       variant: "default" as const,
       delay: 0.3,

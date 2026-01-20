@@ -20,6 +20,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ProfitChartProps {
   financialRecords: FinancialRecord[];
@@ -27,11 +28,14 @@ interface ProfitChartProps {
 }
 
 export function ProfitChart({ financialRecords, investor }: ProfitChartProps) {
+  const { t, language } = useLanguage();
+  const dateLocale = language === "ar" ? "ar-EG" : "en-NG";
+
   // Prepare chart data
   const chartData = financialRecords.map((record) => {
     const investorShare = record.netProfit * investor.percentageOwnership;
     return {
-      month: new Date(record.date).toLocaleDateString("en-NG", {
+      month: new Date(record.date).toLocaleDateString(dateLocale, {
         month: "short",
         year: "2-digit",
       }),
@@ -48,9 +52,9 @@ export function ProfitChart({ financialRecords, investor }: ProfitChartProps) {
     >
       <Card>
         <CardHeader>
-          <CardTitle>Profit Trend</CardTitle>
+          <CardTitle>{t("Profit Trend")}</CardTitle>
           <CardDescription>
-            Monthly breakdown of total profit and your share
+            {t("Monthly breakdown of total profit and your share")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -69,9 +73,15 @@ export function ProfitChart({ financialRecords, investor }: ProfitChartProps) {
                 formatter={(value: any) => formatCurrency(value)}
               />
               <Legend />
-              <Bar dataKey="Your Share" fill="#8B5CF6" radius={[8, 8, 0, 0]} />
+              <Bar
+                dataKey="Your Share"
+                name={t("Your Share")}
+                fill="#8B5CF6"
+                radius={[8, 8, 0, 0]}
+              />
               <Bar
                 dataKey="Total Profit"
+                name={t("Total Profit")}
                 fill="#06B6D4"
                 radius={[8, 8, 0, 0]}
               />
@@ -82,7 +92,7 @@ export function ProfitChart({ financialRecords, investor }: ProfitChartProps) {
           <div className="grid grid-cols-3 gap-4 mt-6">
             <div className="text-center p-3 bg-muted rounded-lg">
               <p className="text-xs text-muted-foreground mb-1">
-                Average Monthly
+                {t("Average Monthly")}
               </p>
               <p className="text-sm font-semibold text-foreground">
                 {formatCurrency(
@@ -93,7 +103,7 @@ export function ProfitChart({ financialRecords, investor }: ProfitChartProps) {
             </div>
             <div className="text-center p-3 bg-muted rounded-lg">
               <p className="text-xs text-muted-foreground mb-1">
-                Highest Month
+                {t("Highest Month")}
               </p>
               <p className="text-sm font-semibold text-foreground">
                 {formatCurrency(
@@ -103,7 +113,7 @@ export function ProfitChart({ financialRecords, investor }: ProfitChartProps) {
             </div>
             <div className="text-center p-3 bg-muted rounded-lg">
               <p className="text-xs text-muted-foreground mb-1">
-                Total 4-Month
+                {t("Total 4-Month")}
               </p>
               <p className="text-sm font-semibold text-foreground">
                 {formatCurrency(
