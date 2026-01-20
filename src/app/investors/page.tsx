@@ -2,7 +2,11 @@ import MainLayout from "@/components/layout/MainLayout";
 import { InvestorsList } from "@/components/investors/InvestorsList";
 import { InvestorsStats } from "@/components/investors/InvestorsStats";
 import { AddInvestorButton } from "@/components/investors/AddInvestorButton";
-import { mockInvestors, mockFinancialRecords, mockWithdrawalRecords } from "@/data/investor";
+import {
+  mockInvestors,
+  mockFinancialRecords,
+  mockWithdrawalRecords,
+} from "@/data/investor";
 
 export default function InvestorsPage() {
   return (
@@ -22,13 +26,13 @@ export default function InvestorsPage() {
         </div>
 
         {/* Stats */}
-        <InvestorsStats 
+        <InvestorsStats
           investors={mockInvestors}
           financialRecords={mockFinancialRecords}
         />
 
         {/* Investors List */}
-        <InvestorsList 
+        <InvestorsList
           investors={mockInvestors}
           financialRecords={mockFinancialRecords}
           withdrawalRecords={mockWithdrawalRecords}

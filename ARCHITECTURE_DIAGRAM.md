@@ -262,17 +262,17 @@ Login Page
 
 ## Role Permissions Matrix
 
-| Feature | Owner | Apprentice | Investor |
-|---------|-------|------------|----------|
-| Dashboard | ✅ | ✅ | ❌ |
-| Inventory | ✅ | ✅ | ❌ |
-| Sales | ✅ | ✅ | ❌ |
-| Analytics | ✅ | ✅ | ❌ |
-| Investors Mgmt | ✅ | ❌ | ❌ |
-| Withdrawals Mgmt | ✅ | ❌ | ❌ |
-| Investment Dashboard | ❌ | ❌ | ✅ |
-| Profit Tracking | ❌ | ❌ | ✅ |
-| View Financials | ✅ (All) | ❌ | ✅ (Own) |
+| Feature              | Owner    | Apprentice | Investor |
+| -------------------- | -------- | ---------- | -------- |
+| Dashboard            | ✅       | ✅         | ❌       |
+| Inventory            | ✅       | ✅         | ❌       |
+| Sales                | ✅       | ✅         | ❌       |
+| Analytics            | ✅       | ✅         | ❌       |
+| Investors Mgmt       | ✅       | ❌         | ❌       |
+| Withdrawals Mgmt     | ✅       | ❌         | ❌       |
+| Investment Dashboard | ❌       | ❌         | ✅       |
+| Profit Tracking      | ❌       | ❌         | ✅       |
+| View Financials      | ✅ (All) | ❌         | ✅ (Own) |
 
 ---
 

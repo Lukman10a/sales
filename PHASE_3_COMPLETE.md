@@ -7,6 +7,7 @@ Successfully created a complete owner management system for investors with compr
 ### Files Created
 
 #### Pages
+
 1. **[src/app/investors/page.tsx](src/app/investors/page.tsx)** - Main investor management page
    - Owner-only access (`requireRole="owner"`)
    - Dashboard with stats and investor list
@@ -18,6 +19,7 @@ Successfully created a complete owner management system for investors with compr
    - Status tracking (Pending, Approved, Completed)
 
 #### Components
+
 3. **[src/components/investors/InvestorsStats.tsx](src/components/investors/InvestorsStats.tsx)**
    - 4 stat cards showing:
      - Active Investors count
@@ -61,9 +63,11 @@ Successfully created a complete owner management system for investors with compr
    - Badge counts for each status
 
 #### Supporting Files
+
 7. **[src/components/investors/index.ts](src/components/investors/index.ts)** - Barrel export
 
 ### Sidebar Updates
+
 - Added "Investors" link to owner navigation (Users icon)
 - Added "Withdrawals" link to owner navigation (Banknote icon)
 - Icons automatically display based on user role
@@ -71,32 +75,36 @@ Successfully created a complete owner management system for investors with compr
 ### Features Implemented
 
 #### Investor Management
+
 ✅ View all investors in data table  
 ✅ See investment details (amount, date, ownership %)  
 ✅ Track profit accrued per investor  
 ✅ Monitor pending withdrawals  
 ✅ View investor status (Active/Inactive)  
 ✅ Add new investor via modal form  
-✅ Form validation and error handling  
+✅ Form validation and error handling
 
 #### Withdrawal Management
+
 ✅ Tabbed view of withdrawal requests  
 ✅ Filter by status (Pending, Approved, Completed)  
 ✅ Approve pending requests  
 ✅ Reject pending requests  
 ✅ View approval/rejection dates  
 ✅ Track withdrawal amounts and months  
-✅ Badge counters for each status  
+✅ Badge counters for each status
 
 #### Owner Dashboard Stats
+
 ✅ Count of active investors  
 ✅ Total capital invested  
 ✅ Total profit accrued  
-✅ Total ownership distributed  
+✅ Total ownership distributed
 
 ### Data Layer
 
 All components use mock data from:
+
 - `src/data/investor.ts` - Investor profiles & financial records
 - `src/lib/investorUtils.ts` - Calculation functions
 
@@ -113,7 +121,7 @@ Ready to integrate with backend API when needed.
 ✨ Dropdown menus for actions  
 ✨ Real-time toast notifications  
 ✨ Form validation with error messages  
-✨ Loading states on buttons  
+✨ Loading states on buttons
 
 ### Access Control
 
@@ -125,6 +133,7 @@ Ready to integrate with backend API when needed.
 ### Test Credentials
 
 **Owner Account:**
+
 ```
 Email: ahmed@luxa.com
 Password: admin123
@@ -132,6 +141,7 @@ Role: Owner
 ```
 
 **Investor Account:**
+
 ```
 Email: fatima@investor.com
 Password: investor123

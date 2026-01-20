@@ -1,8 +1,22 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Investor, FinancialRecord, WithdrawalRecord } from "@/types/investorTypes";
-import { formatCurrency, calculateInvestorTotalProfit, getPendingWithdrawals } from "@/lib/investorUtils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Investor,
+  FinancialRecord,
+  WithdrawalRecord,
+} from "@/types/investorTypes";
+import {
+  formatCurrency,
+  calculateInvestorTotalProfit,
+  getPendingWithdrawals,
+} from "@/lib/investorUtils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
@@ -27,30 +41,56 @@ export function InvestorsList({
   withdrawalRecords,
 }: InvestorsListProps) {
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+    >
       <Card>
         <CardHeader>
           <CardTitle>Investors</CardTitle>
-          <CardDescription>Complete list of all investors and their investment details</CardDescription>
+          <CardDescription>
+            Complete list of all investors and their investment details
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Investor</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Investment</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Ownership</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Profit Accrued</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Pending Withdrawals</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Status</th>
-                  <th className="text-right py-3 px-4 font-semibold text-foreground">Actions</th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Investor
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Investment
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Ownership
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Profit Accrued
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Pending Withdrawals
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Status
+                  </th>
+                  <th className="text-right py-3 px-4 font-semibold text-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {investors.map((investor, idx) => {
-                  const totalProfit = calculateInvestorTotalProfit(investor, financialRecords);
-                  const pendingWithdrawals = getPendingWithdrawals(investor.id, withdrawalRecords);
+                  const totalProfit = calculateInvestorTotalProfit(
+                    investor,
+                    financialRecords,
+                  );
+                  const pendingWithdrawals = getPendingWithdrawals(
+                    investor.id,
+                    withdrawalRecords,
+                  );
                   const investorInitials = `${investor.firstName[0]}${investor.lastName[0]}`;
 
                   return (
@@ -73,23 +113,33 @@ export function InvestorsList({
                             <p className="font-medium text-foreground">
                               {investor.firstName} {investor.lastName}
                             </p>
-                            <p className="text-xs text-muted-foreground">{investor.email}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {investor.email}
+                            </p>
                           </div>
                         </div>
                       </td>
                       <td className="py-4 px-4">
                         <div>
-                          <p className="font-semibold text-foreground">{formatCurrency(investor.investmentAmount)}</p>
+                          <p className="font-semibold text-foreground">
+                            {formatCurrency(investor.investmentAmount)}
+                          </p>
                           <p className="text-xs text-muted-foreground">
-                            {new Date(investor.dateInvested).toLocaleDateString("en-NG")}
+                            {new Date(investor.dateInvested).toLocaleDateString(
+                              "en-NG",
+                            )}
                           </p>
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <Badge variant="secondary">{(investor.percentageOwnership * 100).toFixed(1)}%</Badge>
+                        <Badge variant="secondary">
+                          {(investor.percentageOwnership * 100).toFixed(1)}%
+                        </Badge>
                       </td>
                       <td className="py-4 px-4">
-                        <p className="font-semibold text-accent">{formatCurrency(totalProfit)}</p>
+                        <p className="font-semibold text-accent">
+                          {formatCurrency(totalProfit)}
+                        </p>
                       </td>
                       <td className="py-4 px-4">
                         {pendingWithdrawals.length > 0 ? (
@@ -97,7 +147,9 @@ export function InvestorsList({
                             {pendingWithdrawals.length} pending
                           </Badge>
                         ) : (
-                          <span className="text-sm text-muted-foreground">—</span>
+                          <span className="text-sm text-muted-foreground">
+                            —
+                          </span>
                         )}
                       </td>
                       <td className="py-4 px-4">
@@ -123,9 +175,7 @@ export function InvestorsList({
                               <Edit2 className="w-4 h-4 mr-2" />
                               Edit Investor
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              View Details
-                            </DropdownMenuItem>
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
                             <DropdownMenuItem>
                               View Withdrawals
                             </DropdownMenuItem>
@@ -141,7 +191,9 @@ export function InvestorsList({
 
           {investors.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No investors yet. Add your first investor to get started!</p>
+              <p className="text-muted-foreground">
+                No investors yet. Add your first investor to get started!
+              </p>
             </div>
           )}
         </CardContent>

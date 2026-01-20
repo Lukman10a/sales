@@ -9,6 +9,7 @@ A comprehensive investor management system built into your LUXA Sales applicatio
 ## 📋 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
@@ -27,6 +28,7 @@ npm run dev
 ### Test Credentials
 
 **Owner (Management Panel):**
+
 ```
 Email: ahmed@luxa.com
 Password: admin123
@@ -34,6 +36,7 @@ Role: Owner
 ```
 
 **Investor (View Dashboard):**
+
 ```
 Email: fatima@investor.com
 Password: investor123
@@ -54,24 +57,24 @@ Role: Investor
 
 ### For Business Owners 👔
 
-| Feature | Status | URL |
-|---------|--------|-----|
-| View all investors | ✅ | `/investors` |
-| Add new investors | ✅ | `/investors` |
-| View investment stats | ✅ | `/investors` |
-| Manage withdrawals | ✅ | `/withdrawals` |
-| Approve/reject requests | ✅ | `/withdrawals` |
-| Track performance | ✅ | `/investors` |
+| Feature                 | Status | URL            |
+| ----------------------- | ------ | -------------- |
+| View all investors      | ✅     | `/investors`   |
+| Add new investors       | ✅     | `/investors`   |
+| View investment stats   | ✅     | `/investors`   |
+| Manage withdrawals      | ✅     | `/withdrawals` |
+| Approve/reject requests | ✅     | `/withdrawals` |
+| Track performance       | ✅     | `/investors`   |
 
 ### For Investors 📊
 
-| Feature | Status | URL |
-|---------|--------|-----|
-| Investment dashboard | ✅ | `/investor-dashboard` |
-| Profit tracking | ✅ | `/investor-dashboard` |
-| ROI calculation | ✅ | `/investor-dashboard` |
-| Withdrawal history | ✅ | `/investor-dashboard` |
-| Performance charts | ✅ | `/investor-dashboard` |
+| Feature              | Status | URL                   |
+| -------------------- | ------ | --------------------- |
+| Investment dashboard | ✅     | `/investor-dashboard` |
+| Profit tracking      | ✅     | `/investor-dashboard` |
+| ROI calculation      | ✅     | `/investor-dashboard` |
+| Withdrawal history   | ✅     | `/investor-dashboard` |
+| Performance charts   | ✅     | `/investor-dashboard` |
 
 ---
 
@@ -105,6 +108,7 @@ The system uses role-based access control:
 - **Investor:** Read-only access to own investment data
 
 Each page is protected with `requireRole` parameter:
+
 - `/investors` → `requireRole="owner"`
 - `/withdrawals` → `requireRole="owner"`
 - `/investor-dashboard` → `requireRole="investor"`
@@ -114,8 +118,9 @@ Each page is protected with `requireRole` parameter:
 ## 💡 How It Works
 
 ### Investor Registration Flow
+
 ```
-Owner clicks "Add Investor" 
+Owner clicks "Add Investor"
     ↓
 Modal form opens
     ↓
@@ -127,6 +132,7 @@ Success! Investor appears in list
 ```
 
 ### Profit Calculation Flow
+
 ```
 Monthly Financial Record Created
     ↓
@@ -142,6 +148,7 @@ Investor Sees Updated Dashboard
 ```
 
 ### Withdrawal Management Flow
+
 ```
 Owner Sees Pending Requests
     ↓
@@ -159,6 +166,7 @@ Investor Sees Updated Status
 ## 📊 Data Models
 
 ### Investor
+
 ```typescript
 interface Investor {
   id: string;
@@ -166,20 +174,21 @@ interface Investor {
   firstName: string;
   lastName: string;
   avatar?: string;
-  investmentAmount: number;        // ₦ Initial investment
-  dateInvested: string;            // ISO date
-  percentageOwnership: number;     // 0.20 for 20%
+  investmentAmount: number; // ₦ Initial investment
+  dateInvested: string; // ISO date
+  percentageOwnership: number; // 0.20 for 20%
   status: "active" | "inactive";
 }
 ```
 
 ### Financial Record
+
 ```typescript
 interface FinancialRecord {
   id: string;
-  date: string;                    // Month end date
+  date: string; // Month end date
   totalRevenue: number;
-  totalCost: number;               // COGS
+  totalCost: number; // COGS
   operatingExpenses: number;
   grossProfit: number;
   netProfit: number;
@@ -187,6 +196,7 @@ interface FinancialRecord {
 ```
 
 ### Withdrawal Record
+
 ```typescript
 interface WithdrawalRecord {
   id: string;
@@ -195,7 +205,7 @@ interface WithdrawalRecord {
   requestDate: string;
   approvalDate?: string;
   status: "pending" | "approved" | "completed";
-  month: string;                   // "2026-01"
+  month: string; // "2026-01"
 }
 ```
 
@@ -204,16 +214,19 @@ interface WithdrawalRecord {
 ## 🔢 Calculations
 
 ### ROI Percentage
+
 ```
 ROI % = (Total Profit Accrued / Investment Amount) × 100
 ```
 
 ### Investor Profit Share
+
 ```
 Investor Share = Net Profit × Investor's Ownership %
 ```
 
 ### Break-even Date
+
 ```
 When: Cumulative Profit >= Investment Amount
 ```
@@ -241,11 +254,13 @@ Built using **Shadcn UI** and **Framer Motion**:
 ### Scenario: Fatima's Investment
 
 **Investment Details:**
+
 - Amount: ₦500,000
 - Ownership: 20%
 - Date: Oct 15, 2025
 
 **Month 1 (October):**
+
 - Total Revenue: ₦1,200,000
 - COGS: ₦720,000
 - Expenses: ₦200,000
@@ -253,10 +268,12 @@ Built using **Shadcn UI** and **Framer Motion**:
 - **Fatima's Share: ₦280,000 × 20% = ₦56,000**
 
 **Month 2-4 (November-January):**
+
 - Similar calculations for each month
 - **Total Accrued: ~₦112,000**
 
 **ROI Calculation:**
+
 - ROI = (₦112,000 / ₦500,000) × 100
 - **ROI = 22.4%**
 
@@ -264,40 +281,45 @@ Built using **Shadcn UI** and **Framer Motion**:
 
 ## 📝 Documentation Files
 
-| File | Purpose |
-|------|---------|
+| File                        | Purpose                |
+| --------------------------- | ---------------------- |
 | `IMPLEMENTATION_SUMMARY.md` | Overall project status |
-| `PHASE_3_COMPLETE.md` | Phase 3 detailed docs |
-| `TESTING_GUIDE.md` | How to test the system |
-| `ARCHITECTURE_DIAGRAM.md` | System architecture |
-| `PHASE_3_COMMIT.md` | Changes made summary |
+| `PHASE_3_COMPLETE.md`       | Phase 3 detailed docs  |
+| `TESTING_GUIDE.md`          | How to test the system |
+| `ARCHITECTURE_DIAGRAM.md`   | System architecture    |
+| `PHASE_3_COMMIT.md`         | Changes made summary   |
 
 ---
 
 ## 🔧 Configuration
 
 ### Mock Data Location
+
 ```
 src/data/investor.ts
 ```
 
 Contains:
+
 - 2 sample investors
 - 4 months of financial records
 - 3 withdrawal records
 
 ### Utilities Location
+
 ```
 src/lib/investorUtils.ts
 ```
 
 Contains:
+
 - Profit calculation functions
 - ROI calculation
 - Break-even date calculation
 - Formatting utilities
 
 ### Type Definitions
+
 ```
 src/types/investorTypes.ts
 ```
@@ -309,10 +331,12 @@ All TypeScript interfaces for investor system.
 ## 🚨 Status Indicators
 
 ### Investor Status
+
 - 🟢 **Active** - Investor is currently active
 - ⚪ **Inactive** - Investor account is inactive
 
 ### Withdrawal Status
+
 - 🟡 **Pending** - Awaiting owner approval
 - 🔵 **Approved** - Approved but not processed
 - 🟢 **Completed** - Withdrawal processed
@@ -322,6 +346,7 @@ All TypeScript interfaces for investor system.
 ## 📱 Responsive Design
 
 All pages are fully responsive:
+
 - ✅ Desktop (1920px+)
 - ✅ Tablet (768px - 1024px)
 - ✅ Mobile (320px - 767px)
@@ -381,14 +406,14 @@ Currently using **mock data**. For production:
 
 ## 📊 Development Metrics
 
-| Metric | Count |
-|--------|-------|
-| Components | 8 |
-| Pages | 3 |
-| TypeScript Interfaces | 4 |
-| Utility Functions | 6 |
-| Lines of Code | 2,500+ |
-| TypeScript Errors | 0 |
+| Metric                | Count  |
+| --------------------- | ------ |
+| Components            | 8      |
+| Pages                 | 3      |
+| TypeScript Interfaces | 4      |
+| Utility Functions     | 6      |
+| Lines of Code         | 2,500+ |
+| TypeScript Errors     | 0      |
 
 ---
 
@@ -397,6 +422,7 @@ Currently using **mock data**. For production:
 ### Issue: Pages not accessible
 
 **Solution:**
+
 - Check user role (must be correct role for page)
 - Verify you're logged in
 - Check browser console for errors
@@ -404,6 +430,7 @@ Currently using **mock data**. For production:
 ### Issue: Numbers not calculating
 
 **Solution:**
+
 - Mock data is in `src/data/investor.ts`
 - Edit there to test different scenarios
 - Check `src/lib/investorUtils.ts` for calculation logic
@@ -411,6 +438,7 @@ Currently using **mock data**. For production:
 ### Issue: Sidebar not updating
 
 **Solution:**
+
 - Role comes from `user.role` in auth context
 - May need to refresh browser
 - Clear localStorage if needed
@@ -420,6 +448,7 @@ Currently using **mock data**. For production:
 ## 📚 Next Steps
 
 ### For Testing
+
 1. Login as Owner → `/investors`
 2. Add a test investor
 3. View withdrawal requests
@@ -427,12 +456,14 @@ Currently using **mock data**. For production:
 5. See your dashboard
 
 ### For Development
+
 1. Integrate with real backend API
 2. Connect to database
 3. Implement email notifications
 4. Add advanced analytics
 
 ### For Deployment
+
 1. Build: `npm run build`
 2. Test production build: `npm start`
 3. Deploy to hosting (Vercel, Netlify, etc.)
@@ -442,6 +473,7 @@ Currently using **mock data**. For production:
 ## 📞 Support
 
 For issues or questions:
+
 1. Check `TESTING_GUIDE.md` for testing instructions
 2. Review `ARCHITECTURE_DIAGRAM.md` for system overview
 3. Check browser console (F12) for error messages
@@ -465,6 +497,7 @@ For issues or questions:
 ## 🎉 You're All Set!
 
 Your investor management system is complete and ready to:
+
 - ✅ Test with demo accounts
 - ✅ Integrate with backend
 - ✅ Deploy to production
@@ -474,5 +507,5 @@ Your investor management system is complete and ready to:
 
 ---
 
-*Built with ❤️ for LUXA Sales*  
-*Version 1.0 - Complete Frontend*
+_Built with ❤️ for LUXA Sales_  
+_Version 1.0 - Complete Frontend_

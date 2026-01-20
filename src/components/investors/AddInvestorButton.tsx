@@ -58,7 +58,8 @@ export function AddInvestorButton() {
       if (isNaN(investmentAmount) || isNaN(percentageOwnership)) {
         toast({
           title: "Error",
-          description: "Investment amount and ownership % must be valid numbers",
+          description:
+            "Investment amount and ownership % must be valid numbers",
           variant: "destructive",
         });
         return;
@@ -178,7 +179,9 @@ export function AddInvestorButton() {
 
           {/* Ownership Percentage */}
           <div className="space-y-2">
-            <Label htmlFor="percentageOwnership">Ownership Percentage (%) *</Label>
+            <Label htmlFor="percentageOwnership">
+              Ownership Percentage (%) *
+            </Label>
             <Input
               id="percentageOwnership"
               name="percentageOwnership"
@@ -193,15 +196,17 @@ export function AddInvestorButton() {
               required
             />
             <p className="text-xs text-muted-foreground">
-              Investor will own {formData.percentageOwnership || 0}% of the business
+              Investor will own {formData.percentageOwnership || 0}% of the
+              business
             </p>
           </div>
 
           {/* Info Card */}
           <Card className="bg-muted/50 border-0 p-3">
             <p className="text-xs text-muted-foreground">
-              💡 <strong>Note:</strong> The investor will receive an account to track their investment and profits.
-              They will earn {formData.percentageOwnership || 0}% of all business profits.
+              💡 <strong>Note:</strong> The investor will receive an account to
+              track their investment and profits. They will earn{" "}
+              {formData.percentageOwnership || 0}% of all business profits.
             </p>
           </Card>
 
@@ -216,7 +221,11 @@ export function AddInvestorButton() {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading} className="flex-1 bg-gradient-accent hover:opacity-90">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="flex-1 bg-gradient-accent hover:opacity-90"
+            >
               {isLoading ? "Adding..." : "Add Investor"}
             </Button>
           </div>

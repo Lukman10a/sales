@@ -1,9 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Investor, WithdrawalRecord, FinancialRecord } from "@/types/investorTypes";
-import { formatCurrency, calculateInvestorTotalProfit } from "@/lib/investorUtils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Investor,
+  WithdrawalRecord,
+  FinancialRecord,
+} from "@/types/investorTypes";
+import {
+  formatCurrency,
+  calculateInvestorTotalProfit,
+} from "@/lib/investorUtils";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -26,7 +39,8 @@ export function WithdrawalManagement({
   const { toast } = useToast();
   const [actioningId, setActioningId] = useState<string | null>(null);
 
-  const getInvestor = (investorId: string) => investors.find((inv) => inv.id === investorId);
+  const getInvestor = (investorId: string) =>
+    investors.find((inv) => inv.id === investorId);
 
   const handleApprove = async (withdrawalId: string) => {
     setActioningId(withdrawalId);
@@ -55,9 +69,15 @@ export function WithdrawalManagement({
     }
   };
 
-  const pendingRequests = withdrawalRecords.filter((wd) => wd.status === "pending");
-  const completedRequests = withdrawalRecords.filter((wd) => wd.status === "completed");
-  const approvedRequests = withdrawalRecords.filter((wd) => wd.status === "approved");
+  const pendingRequests = withdrawalRecords.filter(
+    (wd) => wd.status === "pending",
+  );
+  const completedRequests = withdrawalRecords.filter(
+    (wd) => wd.status === "completed",
+  );
+  const approvedRequests = withdrawalRecords.filter(
+    (wd) => wd.status === "approved",
+  );
 
   const renderWithdrawalRow = (record: WithdrawalRecord, idx: number) => {
     const investor = getInvestor(record.investorId);
@@ -97,7 +117,9 @@ export function WithdrawalManagement({
         </div>
 
         <div className="text-right mr-4">
-          <p className="font-semibold text-foreground">{formatCurrency(record.amount)}</p>
+          <p className="font-semibold text-foreground">
+            {formatCurrency(record.amount)}
+          </p>
           <p className="text-xs text-muted-foreground">Month: {record.month}</p>
         </div>
 
@@ -143,11 +165,17 @@ export function WithdrawalManagement({
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
+    >
       <Card>
         <CardHeader>
           <CardTitle>Withdrawal Requests</CardTitle>
-          <CardDescription>Manage investor profit withdrawal requests</CardDescription>
+          <CardDescription>
+            Manage investor profit withdrawal requests
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="pending" className="w-full">
@@ -155,7 +183,10 @@ export function WithdrawalManagement({
               <TabsTrigger value="pending" className="relative">
                 Pending
                 {pendingRequests.length > 0 && (
-                  <Badge variant="secondary" className="ml-2 bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
+                  <Badge
+                    variant="secondary"
+                    className="ml-2 bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+                  >
                     {pendingRequests.length}
                   </Badge>
                 )}
@@ -163,7 +194,10 @@ export function WithdrawalManagement({
               <TabsTrigger value="approved" className="relative">
                 Approved
                 {approvedRequests.length > 0 && (
-                  <Badge variant="secondary" className="ml-2 bg-blue-100 text-blue-800 hover:bg-blue-100">
+                  <Badge
+                    variant="secondary"
+                    className="ml-2 bg-blue-100 text-blue-800 hover:bg-blue-100"
+                  >
                     {approvedRequests.length}
                   </Badge>
                 )}
@@ -171,7 +205,10 @@ export function WithdrawalManagement({
               <TabsTrigger value="completed" className="relative">
                 Completed
                 {completedRequests.length > 0 && (
-                  <Badge variant="secondary" className="ml-2 bg-green-100 text-green-800 hover:bg-green-100">
+                  <Badge
+                    variant="secondary"
+                    className="ml-2 bg-green-100 text-green-800 hover:bg-green-100"
+                  >
                     {completedRequests.length}
                   </Badge>
                 )}
@@ -181,11 +218,15 @@ export function WithdrawalManagement({
             <TabsContent value="pending" className="mt-4">
               {pendingRequests.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground">No pending withdrawal requests</p>
+                  <p className="text-muted-foreground">
+                    No pending withdrawal requests
+                  </p>
                 </div>
               ) : (
                 <div className="divide-y divide-border">
-                  {pendingRequests.map((record, idx) => renderWithdrawalRow(record, idx))}
+                  {pendingRequests.map((record, idx) =>
+                    renderWithdrawalRow(record, idx),
+                  )}
                 </div>
               )}
             </TabsContent>
@@ -193,11 +234,15 @@ export function WithdrawalManagement({
             <TabsContent value="approved" className="mt-4">
               {approvedRequests.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground">No approved withdrawal requests</p>
+                  <p className="text-muted-foreground">
+                    No approved withdrawal requests
+                  </p>
                 </div>
               ) : (
                 <div className="divide-y divide-border">
-                  {approvedRequests.map((record, idx) => renderWithdrawalRow(record, idx))}
+                  {approvedRequests.map((record, idx) =>
+                    renderWithdrawalRow(record, idx),
+                  )}
                 </div>
               )}
             </TabsContent>
@@ -205,11 +250,15 @@ export function WithdrawalManagement({
             <TabsContent value="completed" className="mt-4">
               {completedRequests.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground">No completed withdrawals yet</p>
+                  <p className="text-muted-foreground">
+                    No completed withdrawals yet
+                  </p>
                 </div>
               ) : (
                 <div className="divide-y divide-border">
-                  {completedRequests.map((record, idx) => renderWithdrawalRow(record, idx))}
+                  {completedRequests.map((record, idx) =>
+                    renderWithdrawalRow(record, idx),
+                  )}
                 </div>
               )}
             </TabsContent>

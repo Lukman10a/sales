@@ -2,7 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Investor, FinancialRecord } from "@/types/investorTypes";
-import { formatCurrency, calculateInvestorTotalProfit } from "@/lib/investorUtils";
+import {
+  formatCurrency,
+  calculateInvestorTotalProfit,
+} from "@/lib/investorUtils";
 import { Users, DollarSign, TrendingUp, PieChart } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -11,16 +14,27 @@ interface InvestorsStatsProps {
   financialRecords: FinancialRecord[];
 }
 
-export function InvestorsStats({ investors, financialRecords }: InvestorsStatsProps) {
-  const totalInvestment = investors.reduce((sum, inv) => sum + inv.investmentAmount, 0);
-  
+export function InvestorsStats({
+  investors,
+  financialRecords,
+}: InvestorsStatsProps) {
+  const totalInvestment = investors.reduce(
+    (sum, inv) => sum + inv.investmentAmount,
+    0,
+  );
+
   const totalProfitAccrued = investors.reduce((sum, inv) => {
     const investorProfit = calculateInvestorTotalProfit(inv, financialRecords);
     return sum + investorProfit;
   }, 0);
 
-  const activeInvestors = investors.filter((inv) => inv.status === "active").length;
-  const totalOwnershipDistributed = investors.reduce((sum, inv) => sum + inv.percentageOwnership, 0);
+  const activeInvestors = investors.filter(
+    (inv) => inv.status === "active",
+  ).length;
+  const totalOwnershipDistributed = investors.reduce(
+    (sum, inv) => sum + inv.percentageOwnership,
+    0,
+  );
 
   const stats = [
     {
@@ -66,16 +80,28 @@ export function InvestorsStats({ investors, financialRecords }: InvestorsStatsPr
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: stat.delay }}
         >
-          <Card className={stat.variant === "accent" ? "bg-gradient-accent/5 border-accent/20" : ""}>
+          <Card
+            className={
+              stat.variant === "accent"
+                ? "bg-gradient-accent/5 border-accent/20"
+                : ""
+            }
+          >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.title}
               </CardTitle>
-              <stat.icon className={`w-4 h-4 ${stat.variant === "accent" ? "text-accent" : "text-muted-foreground"}`} />
+              <stat.icon
+                className={`w-4 h-4 ${stat.variant === "accent" ? "text-accent" : "text-muted-foreground"}`}
+              />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-2">{stat.description}</p>
+              <div className="text-2xl font-bold text-foreground">
+                {stat.value}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                {stat.description}
+              </p>
             </CardContent>
           </Card>
         </motion.div>

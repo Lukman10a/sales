@@ -1,6 +1,10 @@
 import MainLayout from "@/components/layout/MainLayout";
 import { WithdrawalManagement } from "@/components/investors/WithdrawalManagement";
-import { mockWithdrawalRecords, mockInvestors, mockFinancialRecords } from "@/data/investor";
+import {
+  mockWithdrawalRecords,
+  mockInvestors,
+  mockFinancialRecords,
+} from "@/data/investor";
 
 export default function WithdrawalsPage() {
   return (

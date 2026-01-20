@@ -11,6 +11,7 @@ Your LUXA Sales application now has a complete **3-Phase Investor Management Sys
 ### Scenario 1: Login as Owner
 
 **Credentials:**
+
 ```
 Email: ahmed@luxa.com
 Password: admin123
@@ -18,6 +19,7 @@ Role: Owner
 ```
 
 **What to Test:**
+
 1. ✅ Login page shows 3 role options (Owner, Admin, Investor)
 2. ✅ Sidebar shows owner navigation including "Investors" and "Withdrawals"
 3. ✅ Regular dashboard displays (Dashboard, Inventory, Sales, Analytics, Notifications, AI Insights)
@@ -29,6 +31,7 @@ Role: Owner
 **URL:** `http://localhost:3000/investors`
 
 **What to See:**
+
 1. ✅ Header with "Add Investor" button
 2. ✅ 4 stat cards showing:
    - Active Investors: 2
@@ -50,6 +53,7 @@ Role: Owner
 **Action:** Click "Add Investor" button
 
 **Form Fields to Fill:**
+
 - First Name: `Chukwu`
 - Last Name: `Eze`
 - Email: `chukwu@investor.com`
@@ -57,6 +61,7 @@ Role: Owner
 - Ownership %: `10`
 
 **Expected Result:**
+
 - ✅ Form validates all fields
 - ✅ Success toast notification appears
 - ✅ Form closes
@@ -69,6 +74,7 @@ Role: Owner
 **URL:** `http://localhost:3000/withdrawals`
 
 **What to See:**
+
 1. ✅ Three tabs:
    - **Pending:** 1 withdrawal
    - **Approved:** 0 withdrawals
@@ -90,6 +96,7 @@ Role: Owner
 ### Scenario 5: Login as Investor
 
 **Credentials:**
+
 ```
 Email: fatima@investor.com
 Password: investor123
@@ -97,6 +104,7 @@ Role: Investor
 ```
 
 **What to Test:**
+
 1. ✅ Login shows investor role option is available
 2. ✅ Sidebar shows investor-only navigation:
    - Investment Dashboard
@@ -110,6 +118,7 @@ Role: Investor
 **URL:** `http://localhost:3000/investor-dashboard` (auto-loads after login)
 
 **What to See:**
+
 1. ✅ **Investment Overview** - 4 cards:
    - Investment Amount: ₦500,000
    - Ownership: 20%
@@ -134,6 +143,7 @@ Role: Investor
 ## Feature Testing Checklist
 
 ### Authentication
+
 - [ ] Login with Owner credentials works
 - [ ] Login with Investor credentials works
 - [ ] Role selector shows all 3 options
@@ -141,6 +151,7 @@ Role: Investor
 - [ ] Demo credentials displayed on login page
 
 ### Owner Features
+
 - [ ] Investors page loads for owner only
 - [ ] Withdrawals page loads for owner only
 - [ ] Can see all investors in table
@@ -152,6 +163,7 @@ Role: Investor
 - [ ] Tab switching works on withdrawals page
 
 ### Investor Features
+
 - [ ] Dashboard loads for investor only
 - [ ] Cannot access owner pages (redirects)
 - [ ] Can see investment overview
@@ -160,12 +172,14 @@ Role: Investor
 - [ ] Numbers calculate correctly
 
 ### Navigation
+
 - [ ] Sidebar shows correct items for each role
 - [ ] Navigation links work
 - [ ] Sidebar collapse/expand works
 - [ ] Active states highlight correctly
 
 ### UI/UX
+
 - [ ] Animations are smooth
 - [ ] Colors are correct
 - [ ] Responsive on different screen sizes
@@ -178,6 +192,7 @@ Role: Investor
 ## Mock Data Overview
 
 ### Sample Investors
+
 1. **Fatima Adeyemi**
    - Investment: ₦500,000
    - Ownership: 20%
@@ -189,11 +204,13 @@ Role: Investor
    - Active
 
 ### Financial Data
+
 - 4 months of records (Oct 2025 - Jan 2026)
 - Monthly revenue, costs, expenses tracked
 - Net profit calculated automatically
 
 ### Withdrawal Records
+
 - Some completed
 - Some pending
 - Some approved
@@ -204,21 +221,25 @@ Role: Investor
 ## Troubleshooting
 
 ### Pages not loading?
+
 - Ensure you're logged in with correct role
 - Check if you have correct role access
 - Verify URL is correct
 
 ### Numbers not calculating?
+
 - Mock data is in `src/data/investor.ts`
 - Calculations in `src/lib/investorUtils.ts`
 - Both files are hardcoded - no API calls yet
 
 ### Modals not opening?
+
 - Check browser console for errors
 - Ensure dialog component is imported
 - Verify form handlers are correct
 
 ### Sidebar not updating?
+
 - Role is determined by `user.role` from auth
 - Sidebar automatically updates based on role
 - May need to login again to see changes
@@ -228,6 +249,7 @@ Role: Investor
 ## Next Steps
 
 ### Potential Phase 4 Features:
+
 1. Investor Withdrawal Requests - Allow investors to request withdrawals
 2. Financial Reports - PDF export of investor statements
 3. Backend Integration - Replace mock data with API calls
