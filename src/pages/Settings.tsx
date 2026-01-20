@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
@@ -244,14 +246,14 @@ const Settings = () => {
                             className="hidden"
                             id="profileImageInput"
                           />
-                          <label htmlFor="profileImageInput">
-                            <Button
-                              as="span"
-                              className="cursor-pointer bg-gradient-accent text-accent-foreground mb-2 inline-flex"
-                            >
+                          <label
+                            htmlFor="profileImageInput"
+                            className="cursor-pointer"
+                          >
+                            <div className="bg-gradient-accent text-accent-foreground mb-2 inline-flex px-4 py-2 rounded-md font-medium text-sm">
                               <Upload className="w-4 h-4 mr-2" />
                               {t("Change Photo")}
-                            </Button>
+                            </div>
                           </label>
                           <p className="text-xs text-muted-foreground">
                             {t("JPG, PNG or GIF (max 2MB)")}

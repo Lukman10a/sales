@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -174,7 +176,7 @@ const AIInsights = () => {
                 transition={{ delay: 0.1 * index }}
                 className={cn(
                   "bg-card rounded-2xl border card-elevated overflow-hidden",
-                  config.borderClass
+                  config.borderClass,
                 )}
               >
                 <div className="p-6">

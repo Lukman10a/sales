@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import MainLayout from "@/components/layout/MainLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import QuickActions from "@/components/dashboard/QuickActions";

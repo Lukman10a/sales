@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
@@ -102,15 +104,15 @@ const Analytics = () => {
                     "px-4 py-2 text-sm font-medium rounded-md transition-colors capitalize",
                     dateRange === range
                       ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {t(
                     range === "today"
                       ? "Today"
                       : range === "week"
-                      ? "Week"
-                      : "Month"
+                        ? "Week"
+                        : "Month",
                   )}
                 </button>
               ))}

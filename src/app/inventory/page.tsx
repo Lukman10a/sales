@@ -39,6 +39,7 @@ import { cn } from "@/lib/utils";
 import { InventoryItem } from "@/types/inventoryTypes";
 import { toast } from "@/components/ui/sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Image from "next/image";
 
 const statusConfig = {
   "in-stock": {
@@ -88,9 +89,9 @@ export default function Inventory() {
   const filteredItems = useMemo(
     () =>
       inventory.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
-    [inventory, searchQuery]
+    [inventory, searchQuery],
   );
 
   const handleAddItem = () => {
@@ -167,7 +168,7 @@ export default function Inventory() {
                   "p-2 rounded-md transition-colors",
                   viewMode === "grid"
                     ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <Grid className="w-4 h-4" />
@@ -178,7 +179,7 @@ export default function Inventory() {
                   "p-2 rounded-md transition-colors",
                   viewMode === "list"
                     ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <List className="w-4 h-4" />
@@ -234,7 +235,7 @@ export default function Inventory() {
                   className="bg-card rounded-2xl border card-elevated card-hover overflow-hidden"
                 >
                   <div className="aspect-square relative bg-muted">
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.name}
                       className="w-full h-full object-cover"
@@ -243,7 +244,7 @@ export default function Inventory() {
                       variant="outline"
                       className={cn(
                         "absolute top-3 right-3",
-                        statusConfig[item.status].className
+                        statusConfig[item.status].className,
                       )}
                     >
                       {t(statusConfig[item.status].label)}
@@ -367,7 +368,7 @@ export default function Inventory() {
                       >
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            <img
+                            <Image
                               src={item.image}
                               alt={item.name}
                               className="w-12 h-12 rounded-lg object-cover"

@@ -22,6 +22,7 @@ import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Image from "next/image";
 
 export default function Sales() {
   const { user } = useAuth();
@@ -45,15 +46,15 @@ export default function Sales() {
         sellingPrice: item.sellingPrice,
         availableQty: item.quantity,
       })),
-    [allProducts]
+    [allProducts],
   );
 
   const filteredItems = useMemo(
     () =>
       products.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
-    [products, searchQuery]
+    [products, searchQuery],
   );
 
   const addToCart = (item: SaleItem) => {
@@ -62,8 +63,8 @@ export default function Sales() {
       if (existingItem.quantity < item.availableQty) {
         setCart(
           cart.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-          )
+            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
+          ),
         );
       }
     } else {
@@ -90,21 +91,21 @@ export default function Sales() {
           }
           return item;
         })
-        .filter(Boolean) as CartItem[]
+        .filter(Boolean) as CartItem[],
     );
   };
 
   const updatePrice = (itemId: string, price: number) => {
     setCart(
       cart.map((item) =>
-        item.id === itemId ? { ...item, actualPrice: price } : item
-      )
+        item.id === itemId ? { ...item, actualPrice: price } : item,
+      ),
     );
   };
 
   const cartTotal = cart.reduce(
     (sum, item) => sum + item.actualPrice * item.quantity,
-    0
+    0,
   );
 
   const handleCompleteSale = () => {
@@ -118,7 +119,7 @@ export default function Sales() {
       const p = allProducts.find((p) => p.id === ci.id);
       if (!p || ci.quantity > p.quantity) {
         toast(
-          t("Insufficient stock for {name}", { values: { name: ci.name } })
+          t("Insufficient stock for {name}", { values: { name: ci.name } }),
         );
         return;
       }
@@ -202,11 +203,11 @@ export default function Sales() {
                     onClick={() => addToCart(item)}
                     className={cn(
                       "bg-card rounded-xl border p-3 text-left transition-all card-hover",
-                      inCart && "border-accent ring-2 ring-accent/20"
+                      inCart && "border-accent ring-2 ring-accent/20",
                     )}
                   >
                     <div className="aspect-square rounded-lg bg-muted mb-3 overflow-hidden relative">
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
                         className="w-full h-full object-cover"
@@ -271,7 +272,7 @@ export default function Sales() {
                         className={cn(
                           sale.status === "completed"
                             ? "bg-success/10 text-success border-success/20"
-                            : "bg-warning/10 text-warning border-warning/20"
+                            : "bg-warning/10 text-warning border-warning/20",
                         )}
                       >
                         {sale.status === "completed" ? (
@@ -323,7 +324,7 @@ export default function Sales() {
                         exit={{ opacity: 0, x: -20 }}
                         className="flex gap-3 p-3 rounded-xl bg-muted/50"
                       >
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
                           className="w-16 h-16 rounded-lg object-cover"

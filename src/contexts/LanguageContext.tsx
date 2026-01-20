@@ -460,7 +460,6 @@ const translations: Record<Language, Record<string, string>> = {
     "Data-driven analysis of your investment performance":
       "تحليل قائم على البيانات لأداء استثمارك",
     "{count} High Priority Insights": "{count} من الرؤى ذات الأولوية العالية",
-    "High Priority": "أولوية عالية",
     "Medium Priority": "أولوية متوسطة",
     "Low Priority": "أولوية منخفضة",
     IMPACT: "التأثير",
@@ -484,7 +483,6 @@ const translations: Record<Language, Record<string, string>> = {
       "احصل على إشعارات حول أرباحك الشهرية",
     "Withdrawal Status": "حالة الانسحاب",
     "Updates on your withdrawal requests": "تحديثات حول طلبات السحب الخاصة بك",
-    "AI Insights": "رؤى الذكاء الاصطناعي",
     "Investment recommendations and analysis": "توصيات الاستثمار والتحليل",
     "Business Updates": "تحديثات الأعمال",
     "Important business announcements": "إعلانات الأعمال المهمة",
