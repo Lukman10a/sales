@@ -15,6 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  Users,
+  Banknote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +34,8 @@ const ownerNavigation = [
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Sales", href: "/sales", icon: ShoppingCart },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
+  { name: "Investors", href: "/investors", icon: Users },
+  { name: "Withdrawals", href: "/withdrawals", icon: Banknote },
   { name: "Notifications", href: "/notifications", icon: Bell, badge: 3 },
   { name: "AI Insights", href: "/insights", icon: Sparkles },
 ];
