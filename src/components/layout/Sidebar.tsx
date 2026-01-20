@@ -23,30 +23,39 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getNotificationsByRole } from "@/data/roleNotifications";
 
 interface SidebarProps {
   userRole?: "owner" | "apprentice" | "investor";
   onRoleChange?: (role: "owner" | "apprentice" | "investor") => void;
 }
 
-const ownerNavigation = [
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: any;
+  badge?: number;
+}
+
+const ownerNavigation: NavigationItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Sales", href: "/sales", icon: ShoppingCart },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
   { name: "Investors", href: "/investors", icon: Users },
   { name: "Withdrawals", href: "/withdrawals", icon: Banknote },
-  { name: "Notifications", href: "/notifications", icon: Bell, badge: 3 },
+  { name: "Notifications", href: "/notifications", icon: Bell },
   { name: "AI Insights", href: "/insights", icon: Sparkles },
 ];
 
-const investorNavigation = [
+const investorNavigation: NavigationItem[] = [
   {
     name: "Investment Dashboard",
     href: "/investor-dashboard",
     icon: LayoutDashboard,
   },
-  { name: "Notifications", href: "/notifications", icon: Bell, badge: 1 },
+  { name: "AI Insights", href: "/investor-insights", icon: Sparkles },
+  { name: "Notifications", href: "/notifications", icon: Bell },
 ];
 
 const getNavigation = (role: "owner" | "apprentice" | "investor" = "owner") => {
@@ -64,6 +73,11 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const userRole = user?.role || propUserRole || "owner";
   const displayName = user ? `${user.firstName} ${user.lastName}` : t("User");
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
+
+  // Get unread notification count for the current role
+  const unreadNotificationCount = getNotificationsByRole(userRole).filter(
+    (n) => !n.read,
+  ).length;
 
   return (
     <motion.aside
@@ -164,13 +178,12 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-hide">
         {getNavigation(userRole).map((item) => {
           const isActive =
             pathname === item.href ||
             (item.href === "/dashboard" && pathname === "/") ||
-            (item.href === "/investor-dashboard" &&
-              pathname === "/investor-dashboard");
+            pathname?.startsWith(item.href);
           return (
             <Link
               key={item.name}
@@ -200,14 +213,18 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                   </motion.span>
                 )}
               </AnimatePresence>
-              {item.badge && !collapsed && (
-                <Badge className="ml-auto bg-destructive text-destructive-foreground text-xs">
-                  {item.badge}
-                </Badge>
-              )}
-              {item.badge && collapsed && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
-              )}
+              {item.name === "Notifications" &&
+                unreadNotificationCount > 0 &&
+                !collapsed && (
+                  <Badge className="ml-auto bg-destructive text-destructive-foreground text-xs">
+                    {unreadNotificationCount}
+                  </Badge>
+                )}
+              {item.name === "Notifications" &&
+                unreadNotificationCount > 0 &&
+                collapsed && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
+                )}
             </Link>
           );
         })}
