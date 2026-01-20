@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeaderProps {
-  userRole: "owner" | "apprentice";
+  userRole: "owner" | "apprentice" | "investor";
   sidebarWidth: number;
 }
 

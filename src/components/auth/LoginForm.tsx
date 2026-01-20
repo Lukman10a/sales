@@ -17,8 +17,8 @@ export function LoginForm() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"owner" | "apprentice">(
-    AuthService.getLastRole()
+  const [role, setRole] = useState<"owner" | "apprentice" | "investor">(
+    AuthService.getLastRole(),
   );
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -159,6 +159,10 @@ export function LoginForm() {
           <p>
             <span className="font-medium">{t("Admin:")}</span> ibrahim@luxa.com
             / staff123
+          </p>
+          <p>
+            <span className="font-medium">{t("Investor:")}</span>{" "}
+            fatima@investor.com / investor123
           </p>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
-  requireRole?: "owner" | "apprentice";
+  requireRole?: "owner" | "apprentice" | "investor";
 }
 
 const MainLayout = ({ children, requireRole }: MainLayoutProps) => {
