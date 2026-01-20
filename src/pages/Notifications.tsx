@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,9 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { notifications } from "@/data/notification";
+import { getNotificationsByRole } from "@/data/roleNotifications";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const typeConfig = {
   inventory: {
@@ -41,9 +42,17 @@ const typeConfig = {
 };
 
 const Notifications = () => {
-  const [notifs, setNotifs] = useState(notifications);
+  const { user } = useAuth();
+  const userRole = user?.role || "owner";
+
+  const [notifs, setNotifs] = useState(getNotificationsByRole(userRole));
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const { t } = useLanguage();
+
+  // Update notifications when role changes
+  useEffect(() => {
+    setNotifs(getNotificationsByRole(userRole));
+  }, [userRole]);
 
   const unreadCount = notifs.filter((n) => !n.read).length;
   const filteredNotifs =
@@ -93,7 +102,7 @@ const Notifications = () => {
                 "px-4 py-2 text-sm font-medium rounded-md transition-colors",
                 filter === "all"
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {t("All")}
@@ -104,7 +113,7 @@ const Notifications = () => {
                 "px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2",
                 filter === "unread"
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {t("Unread")}
@@ -147,7 +156,7 @@ const Notifications = () => {
                   transition={{ delay: index * 0.05 }}
                   className={cn(
                     "bg-card rounded-2xl border p-4 transition-all card-hover",
-                    !notif.read && "border-l-4 border-l-accent"
+                    !notif.read && "border-l-4 border-l-accent",
                   )}
                 >
                   <div className="flex gap-4">

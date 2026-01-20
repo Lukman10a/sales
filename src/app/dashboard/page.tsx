@@ -22,7 +22,12 @@ export default function Dashboard() {
     if (!isLoading && !isAuthenticated) {
       router.replace("/auth/login");
     }
-  }, [isAuthenticated, isLoading, router]);
+
+    // Redirect investors to their dashboard
+    if (!isLoading && isAuthenticated && user?.role === "investor") {
+      router.replace("/investor-dashboard");
+    }
+  }, [isAuthenticated, isLoading, user, router]);
 
   // Show loading state while checking auth
   if (isLoading) {

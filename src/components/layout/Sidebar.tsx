@@ -15,26 +15,52 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  Users,
+  Banknote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getNotificationsByRole } from "@/data/roleNotifications";
 
 interface SidebarProps {
-  userRole?: "owner" | "apprentice";
-  onRoleChange?: (role: "owner" | "apprentice") => void;
+  userRole?: "owner" | "apprentice" | "investor";
+  onRoleChange?: (role: "owner" | "apprentice" | "investor") => void;
 }
 
-const navigation = [
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: any;
+  badge?: number;
+}
+
+const ownerNavigation: NavigationItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Sales", href: "/sales", icon: ShoppingCart },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Notifications", href: "/notifications", icon: Bell, badge: 3 },
+  { name: "Investors", href: "/investors", icon: Users },
+  { name: "Withdrawals", href: "/withdrawals", icon: Banknote },
+  { name: "Notifications", href: "/notifications", icon: Bell },
   { name: "AI Insights", href: "/insights", icon: Sparkles },
 ];
+
+const investorNavigation: NavigationItem[] = [
+  {
+    name: "Investment Dashboard",
+    href: "/investor-dashboard",
+    icon: LayoutDashboard,
+  },
+  { name: "AI Insights", href: "/investor-insights", icon: Sparkles },
+  { name: "Notifications", href: "/notifications", icon: Bell },
+];
+
+const getNavigation = (role: "owner" | "apprentice" | "investor" = "owner") => {
+  return role === "investor" ? investorNavigation : ownerNavigation;
+};
 
 const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -48,6 +74,11 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
   const displayName = user ? `${user.firstName} ${user.lastName}` : t("User");
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
 
+  // Get unread notification count for the current role
+  const unreadNotificationCount = getNotificationsByRole(userRole).filter(
+    (n) => !n.read,
+  ).length;
+
   return (
     <motion.aside
       initial={false}
@@ -55,7 +86,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={cn(
         "fixed top-0 h-screen bg-sidebar flex flex-col z-50",
-        isRTL ? "right-0" : "left-0"
+        isRTL ? "right-0" : "left-0",
       )}
     >
       {/* Logo */}
@@ -87,7 +118,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
             <span
               className={cn(
                 "absolute top-1 w-2 h-2 bg-destructive rounded-full",
-                isRTL ? "left-1" : "right-1"
+                isRTL ? "left-1" : "right-1",
               )}
             />
           </div>
@@ -98,7 +129,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
       <div
         className={cn(
           "p-4 border-b border-sidebar-border",
-          collapsed && "px-2"
+          collapsed && "px-2",
         )}
       >
         <AnimatePresence mode="wait">
@@ -120,7 +151,11 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                   {displayName}
                 </p>
                 <p className="text-xs text-sidebar-foreground/60 capitalize">
-                  {userRole === "owner" ? t("Owner") : t("Admin")}
+                  {userRole === "owner"
+                    ? t("Owner")
+                    : userRole === "investor"
+                      ? t("Investor")
+                      : t("Admin")}
                 </p>
               </div>
             </motion.div>
@@ -143,11 +178,12 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-        {navigation.map((item) => {
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-hide">
+        {getNavigation(userRole).map((item) => {
           const isActive =
             pathname === item.href ||
-            (item.href === "/dashboard" && pathname === "/");
+            (item.href === "/dashboard" && pathname === "/") ||
+            pathname?.startsWith(item.href);
           return (
             <Link
               key={item.name}
@@ -156,13 +192,13 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                 "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
                 isActive
                   ? "bg-sidebar-accent text-sidebar-primary"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
               )}
             >
               <item.icon
                 className={cn(
                   "w-5 h-5 flex-shrink-0",
-                  isActive && "text-sidebar-primary"
+                  isActive && "text-sidebar-primary",
                 )}
               />
               <AnimatePresence mode="wait">
@@ -177,14 +213,18 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
                   </motion.span>
                 )}
               </AnimatePresence>
-              {item.badge && !collapsed && (
-                <Badge className="ml-auto bg-destructive text-destructive-foreground text-xs">
-                  {item.badge}
-                </Badge>
-              )}
-              {item.badge && collapsed && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
-              )}
+              {item.name === "Notifications" &&
+                unreadNotificationCount > 0 &&
+                !collapsed && (
+                  <Badge className="ml-auto bg-destructive text-destructive-foreground text-xs">
+                    {unreadNotificationCount}
+                  </Badge>
+                )}
+              {item.name === "Notifications" &&
+                unreadNotificationCount > 0 &&
+                collapsed && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
+                )}
             </Link>
           );
         })}
@@ -199,7 +239,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
             isSettingsActive
               ? "bg-sidebar-accent text-sidebar-primary"
               : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
-            collapsed && "justify-center"
+            collapsed && "justify-center",
           )}
         >
           <Settings className="w-5 h-5" />
@@ -211,7 +251,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
           onClick={logout}
           className={cn(
             "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sidebar-foreground/70 hover:bg-destructive/10 hover:text-destructive transition-all",
-            collapsed && "justify-center"
+            collapsed && "justify-center",
           )}
         >
           <LogOut className="w-5 h-5" />
@@ -226,7 +266,7 @@ const Sidebar = ({ userRole: propUserRole, onRoleChange }: SidebarProps) => {
         onClick={() => setCollapsed(!collapsed)}
         className={cn(
           "absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-card border border-border rounded-full flex items-center justify-center shadow-md hover:bg-muted transition-colors",
-          isRTL ? "-left-3" : "-right-3"
+          isRTL ? "-left-3" : "-right-3",
         )}
       >
         {collapsed ? (

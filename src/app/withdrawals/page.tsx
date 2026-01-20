@@ -1,0 +1,32 @@
+import MainLayout from "@/components/layout/MainLayout";
+import { WithdrawalManagement } from "@/components/investors/WithdrawalManagement";
+import {
+  mockWithdrawalRecords,
+  mockInvestors,
+  mockFinancialRecords,
+} from "@/data/investor";
+
+export default function WithdrawalsPage() {
+  return (
+    <MainLayout requireRole="owner">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="font-display text-3xl font-bold text-foreground mb-2">
+            Withdrawal Requests
+          </h1>
+          <p className="text-muted-foreground">
+            Manage and approve investor withdrawal requests
+          </p>
+        </div>
+
+        {/* Withdrawal Management */}
+        <WithdrawalManagement
+          withdrawalRecords={mockWithdrawalRecords}
+          investors={mockInvestors}
+          financialRecords={mockFinancialRecords}
+        />
+      </div>
+    </MainLayout>
+  );
+}

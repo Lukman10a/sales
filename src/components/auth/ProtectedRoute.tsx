@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requireRole?: "owner" | "apprentice";
+  requireRole?: "owner" | "apprentice" | "investor";
 }
 
 export function ProtectedRoute({ children, requireRole }: ProtectedRouteProps) {

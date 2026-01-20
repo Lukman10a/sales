@@ -17,9 +17,11 @@ import {
   HelpCircle,
   Users,
   ChevronRight,
+  Upload,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
 
 const settingSections = [
   {
@@ -78,6 +80,11 @@ const Settings = () => {
   const [activeSection, setActiveSection] = useState("profile");
   const { user } = useAuth();
   const userRole = user?.role || "owner";
+  const [profileImage, setProfileImage] = useState(user?.avatar || "");
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "dark";
+    return localStorage.getItem("luxa_theme") || "dark";
+  });
   const [staff, setStaff] = useState<StaffMember[]>([
     {
       id: "1",
@@ -97,7 +104,7 @@ const Settings = () => {
   const [newStaffName, setNewStaffName] = useState("");
   const [newStaffEmail, setNewStaffEmail] = useState("");
   const [inviteError, setInviteError] = useState("");
-  const { t } = useLanguage();
+  const { t, language, toggleLanguage } = useLanguage();
 
   const handleInviteStaff = () => {
     if (userRole !== "owner") return;
@@ -126,6 +133,28 @@ const Settings = () => {
     setNewStaffEmail("");
   };
 
+  const handleProfileImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const imageData = reader.result as string;
+        setProfileImage(imageData);
+        // In a real app, this would be saved to backend
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("luxa_theme", newTheme);
+  };
+
+  const userDisplayName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const userInitials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
+
   return (
     <MainLayout>
       <div className="max-w-5xl mx-auto">
@@ -141,29 +170,36 @@ const Settings = () => {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <nav className="space-y-1">
-              {settingSections.map((section) => (
-                <button
-                  key={section.id}
-                  onClick={() => setActiveSection(section.id)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left",
-                    activeSection === section.id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <section.icon className="w-5 h-5" />
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{t(section.title)}</p>
-                  </div>
-                  <ChevronRight
+              {settingSections
+                .filter(
+                  (s) =>
+                    userRole === "owner" ||
+                    !["staff", "data", "help"].includes(s.id),
+                )
+                .map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
                     className={cn(
-                      "w-4 h-4",
-                      activeSection === section.id && "text-primary-foreground"
+                      "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left",
+                      activeSection === section.id
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
                     )}
-                  />
-                </button>
-              ))}
+                  >
+                    <section.icon className="w-5 h-5" />
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{t(section.title)}</p>
+                    </div>
+                    <ChevronRight
+                      className={cn(
+                        "w-4 h-4",
+                        activeSection === section.id &&
+                          "text-primary-foreground",
+                      )}
+                    />
+                  </button>
+                ))}
             </nav>
           </div>
 
@@ -185,6 +221,44 @@ const Settings = () => {
                     <p className="text-sm text-muted-foreground">
                       {t("Update your personal information")}
                     </p>
+                  </div>
+                  <Separator />
+                  {/* Profile Picture */}
+                  <div className="space-y-4">
+                    <div>
+                      <p className="font-medium text-foreground mb-3">
+                        {t("Profile Picture")}
+                      </p>
+                      <div className="flex items-center gap-6">
+                        <Avatar className="w-20 h-20 border-2 border-accent/30">
+                          <AvatarImage src={profileImage || ""} />
+                          <AvatarFallback className="bg-gradient-accent text-accent-foreground font-bold text-xl">
+                            {userInitials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageUpload}
+                            className="hidden"
+                            id="profileImageInput"
+                          />
+                          <label htmlFor="profileImageInput">
+                            <Button
+                              as="span"
+                              className="cursor-pointer bg-gradient-accent text-accent-foreground mb-2 inline-flex"
+                            >
+                              <Upload className="w-4 h-4 mr-2" />
+                              {t("Change Photo")}
+                            </Button>
+                          </label>
+                          <p className="text-xs text-muted-foreground">
+                            {t("JPG, PNG or GIF (max 2MB)")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <Separator />
                   <div className="grid gap-6">
@@ -231,6 +305,92 @@ const Settings = () => {
                 </div>
               )}
 
+              {activeSection === "appearance" && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="font-display font-semibold text-xl text-foreground mb-1">
+                      {t("Appearance Settings")}
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      {t("Customize the app appearance and theme")}
+                    </p>
+                  </div>
+                  <Separator />
+                  <div className="space-y-8">
+                    {/* Theme Selection */}
+                    <div className="space-y-4">
+                      <div>
+                        <p className="font-medium text-foreground mb-4">
+                          {t("Theme")}
+                        </p>
+                        <div className="grid grid-cols-3 gap-4">
+                          {[
+                            { id: "light", name: t("Light") },
+                            { id: "dark", name: t("Dark") },
+                            { id: "auto", name: t("Auto") },
+                          ].map((themeOption) => (
+                            <button
+                              key={themeOption.id}
+                              onClick={() => handleThemeChange(themeOption.id)}
+                              className={cn(
+                                "p-4 rounded-xl border-2 transition-all",
+                                theme === themeOption.id
+                                  ? "border-accent bg-accent/10"
+                                  : "border-border hover:border-accent/50",
+                              )}
+                            >
+                              <div className="flex items-center justify-center mb-2">
+                                {themeOption.id === "light" && (
+                                  <div className="w-8 h-8 rounded bg-white border border-gray-300" />
+                                )}
+                                {themeOption.id === "dark" && (
+                                  <div className="w-8 h-8 rounded bg-gray-900 border border-gray-700" />
+                                )}
+                                {themeOption.id === "auto" && (
+                                  <div className="w-8 h-8 rounded bg-gradient-to-r from-white to-gray-900 border border-gray-400" />
+                                )}
+                              </div>
+                              <p className="text-sm font-medium">
+                                {themeOption.name}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Language Selection */}
+                    <div className="space-y-4">
+                      <div>
+                        <p className="font-medium text-foreground mb-4">
+                          {t("Language")}
+                        </p>
+                        <div className="flex gap-4">
+                          <Button
+                            variant={language === "en" ? "default" : "outline"}
+                            className="flex-1"
+                            onClick={() => {
+                              if (language !== "en") toggleLanguage();
+                            }}
+                          >
+                            English
+                          </Button>
+                          <Button
+                            variant={language === "ar" ? "default" : "outline"}
+                            className="flex-1"
+                            onClick={() => {
+                              if (language !== "ar") toggleLanguage();
+                            }}
+                          >
+                            العربية
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {activeSection === "notifications" && (
                 <div className="space-y-6">
                   <div>
@@ -243,61 +403,159 @@ const Settings = () => {
                   </div>
                   <Separator />
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {t("Sales Alerts")}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t("Get notified when a sale is recorded")}
-                        </p>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {t("Low Stock Warnings")}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t("Alert when items are running low")}
-                        </p>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {t("Discrepancy Alerts")}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t("Immediate alert for stock mismatches")}
-                        </p>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {t("AI Insights")}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t("Receive smart business recommendations")}
-                        </p>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {t("Daily Summary")}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {t("End of day sales summary")}
-                        </p>
-                      </div>
-                      <Switch />
-                    </div>
+                    {userRole === "investor" ? (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Profit Updates")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Get notified about your monthly earnings")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Withdrawal Status")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Updates on your withdrawal requests")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("AI Insights")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Investment recommendations and analysis")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Business Updates")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Important business announcements")}
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                      </>
+                    ) : userRole === "apprentice" ? (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Product Additions")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Owner added new items to sell")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Price Updates")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Pricing changes for products")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Stock Discrepancies")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Alerts for inventory mismatches")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Sales Targets")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Your weekly sales performance")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Sales Alerts")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Get notified when a sale is recorded")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Low Stock Warnings")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Alert when items are running low")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Discrepancy Alerts")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Immediate alert for stock mismatches")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("AI Insights")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("Receive smart business recommendations")}
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {t("Daily Summary")}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {t("End of day sales summary")}
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               )}
@@ -387,7 +645,7 @@ const Settings = () => {
                       {userRole !== "owner" && (
                         <p className="text-xs text-muted-foreground">
                           {t(
-                            "Only owners can invite staff. Contact your owner to get access."
+                            "Only owners can invite staff. Contact your owner to get access.",
                           )}
                         </p>
                       )}
@@ -430,7 +688,7 @@ const Settings = () => {
                       {staff.length === 0 && (
                         <div className="p-4 border rounded-xl bg-muted/40 text-sm text-muted-foreground">
                           {t(
-                            "No staff members yet. Invite your first admin to get started."
+                            "No staff members yet. Invite your first admin to get started.",
                           )}
                         </div>
                       )}
@@ -439,9 +697,7 @@ const Settings = () => {
                 </div>
               )}
 
-              {(activeSection === "appearance" ||
-                activeSection === "data" ||
-                activeSection === "help") && (
+              {(activeSection === "data" || activeSection === "help") && (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
                     {t("This section will be available soon.")}

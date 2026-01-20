@@ -2,12 +2,12 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Shield, User } from "lucide-react";
+import { Shield, User, TrendingUp } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RoleToggleProps {
-  value: "owner" | "apprentice";
-  onChange: (role: "owner" | "apprentice") => void;
+  value: "owner" | "apprentice" | "investor";
+  onChange: (role: "owner" | "apprentice" | "investor") => void;
 }
 
 export function RoleToggle({ value, onChange }: RoleToggleProps) {
@@ -18,29 +18,20 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
       <label className="text-sm font-medium text-foreground">
         {t("Login as")}
       </label>
-      <div className="relative flex items-center bg-muted rounded-xl p-1">
-        {/* Animated background */}
-        <motion.div
-          className="absolute inset-y-1 w-[calc(50%-4px)] bg-gradient-accent rounded-lg"
-          animate={{
-            x: value === "owner" ? 4 : "calc(100% + 4px)",
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        />
-
+      <div className="grid grid-cols-3 gap-2">
         {/* Admin option */}
         <button
           type="button"
           onClick={() => onChange("apprentice")}
           className={cn(
-            "relative flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-colors z-10",
+            "flex items-center justify-center gap-2 py-3 px-2 rounded-lg transition-all border-2 font-medium text-sm",
             value === "apprentice"
-              ? "text-accent-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              ? "border-accent bg-accent/10 text-accent"
+              : "border-muted bg-muted/50 text-muted-foreground hover:border-accent/50",
           )}
         >
           <User className="w-4 h-4" />
-          <span className="font-medium text-sm">{t("Admin")}</span>
+          <span className="truncate">{t("Admin")}</span>
         </button>
 
         {/* Owner option */}
@@ -48,14 +39,29 @@ export function RoleToggle({ value, onChange }: RoleToggleProps) {
           type="button"
           onClick={() => onChange("owner")}
           className={cn(
-            "relative flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-colors z-10",
+            "flex items-center justify-center gap-2 py-3 px-2 rounded-lg transition-all border-2 font-medium text-sm",
             value === "owner"
-              ? "text-accent-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              ? "border-accent bg-accent/10 text-accent"
+              : "border-muted bg-muted/50 text-muted-foreground hover:border-accent/50",
           )}
         >
           <Shield className="w-4 h-4" />
-          <span className="font-medium text-sm">{t("Owner")}</span>
+          <span className="truncate">{t("Owner")}</span>
+        </button>
+
+        {/* Investor option */}
+        <button
+          type="button"
+          onClick={() => onChange("investor")}
+          className={cn(
+            "flex items-center justify-center gap-2 py-3 px-2 rounded-lg transition-all border-2 font-medium text-sm",
+            value === "investor"
+              ? "border-accent bg-accent/10 text-accent"
+              : "border-muted bg-muted/50 text-muted-foreground hover:border-accent/50",
+          )}
+        >
+          <TrendingUp className="w-4 h-4" />
+          <span className="truncate">{t("Investor")}</span>
         </button>
       </div>
     </div>

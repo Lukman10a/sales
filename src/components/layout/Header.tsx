@@ -8,14 +8,25 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface HeaderProps {
-  userRole: "owner" | "apprentice";
+  userRole: "owner" | "apprentice" | "investor";
   sidebarWidth: number;
 }
 
 const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
   const { t, language, toggleLanguage, isRTL } = useLanguage();
+  const { user } = useAuth();
+
+  const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
+  const roleLabel =
+    userRole === "owner"
+      ? t("Owner")
+      : userRole === "investor"
+        ? t("Investor")
+        : t("Admin");
 
   return (
     <motion.header
@@ -68,30 +79,24 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
         {/* Profile */}
         <div className="flex items-center gap-3 pl-4 border-l border-border">
           <div className="text-right">
-            <p className="text-sm font-medium text-foreground">
-              {userRole === "owner" ? "Ahmed Hassan" : "Ibrahim Musa"}
-            </p>
+            <p className="text-sm font-medium text-foreground">{displayName}</p>
             <Badge
               variant="secondary"
               className={
                 userRole === "owner"
                   ? "bg-accent/10 text-accent text-xs"
-                  : "bg-primary/10 text-primary text-xs"
+                  : userRole === "investor"
+                    ? "bg-green-500/10 text-green-500 text-xs"
+                    : "bg-primary/10 text-primary text-xs"
               }
             >
-              {userRole === "owner" ? t("Owner") : t("Admin")}
+              {roleLabel}
             </Badge>
           </div>
           <Avatar className="w-10 h-10 border-2 border-accent/30">
-            <AvatarImage
-              src={
-                userRole === "owner"
-                  ? "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
-                  : "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
-              }
-            />
-            <AvatarFallback>
-              {userRole === "owner" ? "AH" : "IM"}
+            <AvatarImage src={user?.avatar} />
+            <AvatarFallback className="bg-gradient-accent text-accent-foreground font-semibold">
+              {initials}
             </AvatarFallback>
           </Avatar>
         </div>

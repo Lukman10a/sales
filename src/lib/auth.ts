@@ -6,15 +6,16 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  role: "owner" | "apprentice";
+  role: "owner" | "apprentice" | "investor";
   businessName: string;
   avatar?: string;
+  investorId?: string; // For investors, link to their profile
 }
 
 export interface LoginCredentials {
   email: string;
   password: string;
-  role: "owner" | "apprentice";
+  role: "owner" | "apprentice" | "investor";
 }
 
 // Mock users database
@@ -28,7 +29,7 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
       lastName: "Hassan",
       role: "owner",
       businessName: "Prime Store",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      avatar: "",
     },
   },
   "ibrahim@luxa.com": {
@@ -40,7 +41,33 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
       lastName: "Musa",
       role: "apprentice",
       businessName: "Hassan Electronics",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      avatar: "",
+    },
+  },
+  "fatima@investor.com": {
+    password: "investor123",
+    user: {
+      id: "inv-1",
+      email: "fatima@investor.com",
+      firstName: "Fatima",
+      lastName: "Adeyemi",
+      role: "investor",
+      businessName: "Prime Store",
+      avatar: "",
+      investorId: "inv-1",
+    },
+  },
+  "karim@investor.com": {
+    password: "investor123",
+    user: {
+      id: "inv-2",
+      email: "karim@investor.com",
+      firstName: "Karim",
+      lastName: "Okafor",
+      role: "investor",
+      businessName: "Prime Store",
+      avatar: "",
+      investorId: "inv-2",
     },
   },
 };
@@ -107,18 +134,18 @@ export class AuthService {
   }
 
   // Get last selected role
-  static getLastRole(): "owner" | "apprentice" {
+  static getLastRole(): "owner" | "apprentice" | "investor" {
     if (typeof window === "undefined") return "owner";
-    return (localStorage.getItem(ROLE_STORAGE_KEY) as "owner" | "apprentice") || "owner";
+    return (localStorage.getItem(ROLE_STORAGE_KEY) as "owner" | "apprentice" | "investor") || "owner";
   }
 
   // Set last selected role
-  static setLastRole(role: "owner" | "apprentice"): void {
+  static setLastRole(role: "owner" | "apprentice" | "investor"): void {
     localStorage.setItem(ROLE_STORAGE_KEY, role);
   }
 
   // Check if user has specific role
-  static hasRole(role: "owner" | "apprentice"): boolean {
+  static hasRole(role: "owner" | "apprentice" | "investor"): boolean {
     const user = this.getUser();
     return user?.role === role;
   }
