@@ -7,7 +7,7 @@ export const mockInvestors: Investor[] = [
     email: "fatima@investor.com",
     firstName: "Fatima",
     lastName: "Adeyemi",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    avatar: "",
     investmentAmount: 500000, // ₦500,000
     dateInvested: "2025-10-15",
     percentageOwnership: 0.2, // 20%
@@ -18,7 +18,7 @@ export const mockInvestors: Investor[] = [
     email: "karim@investor.com",
     firstName: "Karim",
     lastName: "Okafor",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+    avatar: "",
     investmentAmount: 300000, // ₦300,000
     dateInvested: "2025-11-01",
     percentageOwnership: 0.12, // 12%
