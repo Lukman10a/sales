@@ -8,15 +8,20 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 
 export default function LandingPage() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
   const { t, language, toggleLanguage } = useLanguage();
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace("/dashboard");
+      // Redirect based on user role
+      if (user?.role === "investor") {
+        router.replace("/investor-dashboard");
+      } else {
+        router.replace("/dashboard");
+      }
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, user, router]);
 
   // Show nothing while checking auth
   if (isLoading) {

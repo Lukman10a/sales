@@ -29,7 +29,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (credentials: LoginCredentials) => {
     const user = await AuthService.login(credentials);
     setUser(user);
-    router.push("/dashboard");
+
+    // Redirect based on user role
+    if (user.role === "investor") {
+      router.push("/investor-dashboard");
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   const logout = () => {
@@ -47,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isLoading,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user, isLoading]
+    [user, isLoading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
