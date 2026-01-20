@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface InvestorsListProps {
   investors: Investor[];
@@ -40,6 +41,19 @@ export function InvestorsList({
   financialRecords,
   withdrawalRecords,
 }: InvestorsListProps) {
+  const router = useRouter();
+
+  const handleEditInvestor = (investorId: string) => {
+    router.push(`/investors/${investorId}/edit`);
+  };
+
+  const handleViewDetails = (investorId: string) => {
+    router.push(`/investors/${investorId}`);
+  };
+
+  const handleViewWithdrawals = (investorId: string) => {
+    router.push(`/investors/${investorId}/withdrawals`);
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -171,12 +185,20 @@ export function InvestorsList({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleEditInvestor(investor.id)}
+                            >
                               <Edit2 className="w-4 h-4 mr-2" />
                               Edit Investor
                             </DropdownMenuItem>
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleViewDetails(investor.id)}
+                            >
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleViewWithdrawals(investor.id)}
+                            >
                               View Withdrawals
                             </DropdownMenuItem>
                           </DropdownMenuContent>

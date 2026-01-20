@@ -236,6 +236,8 @@ export default function Inventory() {
                 >
                   <div className="aspect-square relative bg-muted">
                     <Image
+                      width={100}
+                      height={100}
                       src={item.image}
                       alt={item.name}
                       className="w-full h-full object-cover"
@@ -369,6 +371,8 @@ export default function Inventory() {
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             <Image
+                              width={20}
+                              height={20}
                               src={item.image}
                               alt={item.name}
                               className="w-12 h-12 rounded-lg object-cover"

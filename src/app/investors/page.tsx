@@ -2,6 +2,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import { InvestorsList } from "@/components/investors/InvestorsList";
 import { InvestorsStats } from "@/components/investors/InvestorsStats";
 import { AddInvestorButton } from "@/components/investors/AddInvestorButton";
+import Link from "next/link";
 import {
   mockInvestors,
   mockFinancialRecords,
@@ -22,7 +23,14 @@ export default function InvestorsPage() {
               Manage your investors, track investments, and approve withdrawals
             </p>
           </div>
-          <AddInvestorButton />
+          <div className="flex gap-2">
+            <AddInvestorButton />
+            <Link href="/investors/overview">
+              <button className="px-4 py-2 rounded-lg bg-muted text-foreground hover:bg-muted/80 transition-colors font-medium text-sm">
+                View Overview
+              </button>
+            </Link>
+          </div>
         </div>
 
         {/* Stats */}
