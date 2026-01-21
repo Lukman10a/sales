@@ -8,6 +8,7 @@ interface AuthContextType {
   user: User | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
+  updateUser: (updates: Partial<User>) => void;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -44,11 +45,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/auth/login");
   };
 
+  const updateUser = (updates: Partial<User>) => {
+    try {
+      const updatedUser = AuthService.updateUser(updates);
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Failed to update user:", error);
+    }
+  };
+
   const value = React.useMemo(
     () => ({
       user,
       login,
       logout,
+      updateUser,
       isAuthenticated: !!user,
       isLoading,
     }),

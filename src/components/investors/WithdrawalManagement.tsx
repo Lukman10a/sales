@@ -24,6 +24,7 @@ import { motion } from "framer-motion";
 import { CheckCircle2, XCircle, Clock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useData } from "@/contexts/DataContext";
 
 interface WithdrawalManagementProps {
   withdrawalRecords: WithdrawalRecord[];
@@ -37,6 +38,7 @@ export function WithdrawalManagement({
   financialRecords,
 }: WithdrawalManagementProps) {
   const { toast } = useToast();
+  const { updateWithdrawal } = useData();
   const [actioningId, setActioningId] = useState<string | null>(null);
 
   const getInvestor = (investorId: string) =>
@@ -46,6 +48,10 @@ export function WithdrawalManagement({
     setActioningId(withdrawalId);
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
+      updateWithdrawal(withdrawalId, {
+        status: "approved",
+        approvalDate: new Date().toISOString(),
+      });
       toast({
         title: "Success",
         description: "Withdrawal request approved successfully",
@@ -59,6 +65,7 @@ export function WithdrawalManagement({
     setActioningId(withdrawalId);
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
+      updateWithdrawal(withdrawalId, { status: "pending" });
       toast({
         title: "Success",
         description: "Withdrawal request rejected",
