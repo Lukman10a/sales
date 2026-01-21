@@ -43,6 +43,9 @@ import {
   hourlyData,
   categoryData,
   topProducts,
+  dailyAnalyticsData,
+  weeklySalesData,
+  monthlyAnalyticsData,
 } from "@/data/analytics";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -68,6 +71,42 @@ const Analytics = () => {
   >("week");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { t, formatCurrency } = useLanguage();
+
+  // Get the appropriate data based on selected period
+  const currentChartData =
+    dateRange === "today"
+      ? dailyAnalyticsData
+      : dateRange === "month"
+        ? monthlyAnalyticsData
+        : salesData;
+
+  const chartTitle =
+    dateRange === "today"
+      ? t("Today's Performance")
+      : dateRange === "month"
+        ? t("Monthly Performance")
+        : t("Weekly Performance");
+
+  const xAxisKey =
+    dateRange === "today" ? "time" : dateRange === "month" ? "time" : "day";
+
+  // Get data for area chart
+  const areaChartData =
+    dateRange === "today"
+      ? dailyAnalyticsData
+      : dateRange === "month"
+        ? monthlyAnalyticsData
+        : salesData;
+
+  const areaChartTitle =
+    dateRange === "today"
+      ? t("Today's Sales Trend")
+      : dateRange === "month"
+        ? t("Monthly Sales Trend")
+        : t("Weekly Sales Trend");
+
+  const areaChartXAxisKey =
+    dateRange === "today" ? "time" : dateRange === "month" ? "time" : "day";
 
   const formatCompact = (value: number) =>
     formatCurrency(value, {
@@ -242,18 +281,18 @@ const Analytics = () => {
             className="bg-card rounded-2xl border card-elevated p-6"
           >
             <h3 className="font-display font-semibold text-lg text-foreground mb-6">
-              {t("Weekly Performance")}
+              {chartTitle}
             </h3>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={salesData}>
+                <BarChart data={currentChartData} key={dateRange}>
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="hsl(var(--border))"
                     vertical={false}
                   />
                   <XAxis
-                    dataKey="day"
+                    dataKey={xAxisKey}
                     axisLine={false}
                     tickLine={false}
                     tick={{
@@ -299,11 +338,11 @@ const Analytics = () => {
             className="bg-card rounded-2xl border card-elevated p-6"
           >
             <h3 className="font-display font-semibold text-lg text-foreground mb-6">
-              {t("Hourly Sales Trend")}
+              {areaChartTitle}
             </h3>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={hourlyData}>
+                <AreaChart data={areaChartData} key={dateRange}>
                   <defs>
                     <linearGradient
                       id="salesGradient"
@@ -330,7 +369,7 @@ const Analytics = () => {
                     vertical={false}
                   />
                   <XAxis
-                    dataKey="hour"
+                    dataKey={areaChartXAxisKey}
                     axisLine={false}
                     tickLine={false}
                     tick={{

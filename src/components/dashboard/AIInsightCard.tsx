@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
 
 interface Insight {
   id: string;
@@ -81,18 +82,27 @@ const AIInsightCard = () => {
       transition={{ duration: 0.4, delay: 0.5 }}
       className="bg-card rounded-2xl border card-elevated p-6"
     >
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg bg-gradient-accent">
-          <Sparkles className="w-5 h-5 text-accent-foreground" />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-accent">
+            <Sparkles className="w-5 h-5 text-accent-foreground" />
+          </div>
+          <div>
+            <h3 className="font-display font-semibold text-lg text-foreground">
+              {t("AI Insights")}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t("Smart recommendations for your business")}
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 className="font-display font-semibold text-lg text-foreground">
-            {t("AI Insights")}
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            {t("Smart recommendations for your business")}
-          </p>
-        </div>
+        <Link
+          href="/insights"
+          className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors"
+        >
+          {t("View All")}
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
 
       <div className="space-y-4">
@@ -108,7 +118,7 @@ const AIInsightCard = () => {
               className={cn(
                 "p-4 rounded-xl border",
                 config.bgClass,
-                config.borderClass
+                config.borderClass,
               )}
             >
               <div className="flex items-start gap-3">

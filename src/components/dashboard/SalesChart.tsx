@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -9,20 +10,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-const hourlyData = [
-  { time: "8AM", sales: 12000 },
-  { time: "9AM", sales: 45000 },
-  { time: "10AM", sales: 78000 },
-  { time: "11AM", sales: 52000 },
-  { time: "12PM", sales: 95000 },
-  { time: "1PM", sales: 62000 },
-  { time: "2PM", sales: 88000 },
-  { time: "3PM", sales: 125000 },
-  { time: "4PM", sales: 98000 },
-  { time: "5PM", sales: 145000 },
-  { time: "6PM", sales: 112000 },
-];
+import {
+  dailySalesData,
+  weeklySalesData,
+  monthlySalesData,
+} from "@/data/analytics";
+import { cn } from "@/lib/utils";
 
 const CustomTooltip = ({ active, payload, label, formatCurrency }: any) => {
   if (active && payload && payload.length) {
@@ -40,6 +33,28 @@ const CustomTooltip = ({ active, payload, label, formatCurrency }: any) => {
 
 const SalesChart = () => {
   const { t, formatCurrency } = useLanguage();
+  const [period, setPeriod] = useState<"today" | "week" | "month">("today");
+
+  const chartData =
+    period === "today"
+      ? dailySalesData
+      : period === "week"
+        ? weeklySalesData
+        : monthlySalesData;
+
+  const chartTitle =
+    period === "today"
+      ? t("Today's Sales")
+      : period === "week"
+        ? t("This Week's Sales")
+        : t("This Month's Sales");
+
+  const chartSubtitle =
+    period === "today"
+      ? t("Hourly breakdown")
+      : period === "week"
+        ? t("Daily breakdown")
+        : t("Weekly breakdown");
 
   const formatCompactCurrency = (value: number) =>
     formatCurrency(value, {
@@ -59,20 +74,42 @@ const SalesChart = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="font-display font-semibold text-lg text-foreground">
-            {t("Today's Sales")}
+            {chartTitle}
           </h3>
-          <p className="text-sm text-muted-foreground">
-            {t("Hourly breakdown")}
-          </p>
+          <p className="text-sm text-muted-foreground">{chartSubtitle}</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg">
+          <button
+            onClick={() => setPeriod("today")}
+            className={cn(
+              "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors",
+              period === "today"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted",
+            )}
+          >
             {t("Today")}
           </button>
-          <button className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg transition-colors">
+          <button
+            onClick={() => setPeriod("week")}
+            className={cn(
+              "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors",
+              period === "week"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted",
+            )}
+          >
             {t("Week")}
           </button>
-          <button className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg transition-colors">
+          <button
+            onClick={() => setPeriod("month")}
+            className={cn(
+              "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors",
+              period === "month"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted",
+            )}
+          >
             {t("Month")}
           </button>
         </div>
@@ -80,7 +117,7 @@ const SalesChart = () => {
 
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={hourlyData}>
+          <AreaChart data={chartData} key={period}>
             <defs>
               <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop

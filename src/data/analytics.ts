@@ -1,3 +1,38 @@
+// Daily sales data (Today's hourly breakdown)
+export const dailySalesData = [
+  { time: "8AM", sales: 45000 },
+  { time: "9AM", sales: 78000 },
+  { time: "10AM", sales: 125000 },
+  { time: "11AM", sales: 98000 },
+  { time: "12PM", sales: 145000 },
+  { time: "1PM", sales: 88000 },
+  { time: "2PM", sales: 112000 },
+  { time: "3PM", sales: 165000 },
+  { time: "4PM", sales: 134000 },
+  { time: "5PM", sales: 189000 },
+  { time: "6PM", sales: 156000 },
+];
+
+// Weekly sales data
+export const weeklySalesData = [
+  { time: "Mon", sales: 450000 },
+  { time: "Tue", sales: 380000 },
+  { time: "Wed", sales: 520000 },
+  { time: "Thu", sales: 410000 },
+  { time: "Fri", sales: 680000 },
+  { time: "Sat", sales: 890000 },
+  { time: "Sun", sales: 320000 },
+];
+
+// Monthly sales data
+export const monthlySalesData = [
+  { time: "Week 1", sales: 1250000 },
+  { time: "Week 2", sales: 1450000 },
+  { time: "Week 3", sales: 1820000 },
+  { time: "Week 4", sales: 2130000 },
+];
+
+// For analytics page - weekly performance
 export const salesData = [
   { day: "Mon", sales: 450000, profit: 95000 },
   { day: "Tue", sales: 380000, profit: 78000 },
@@ -8,19 +43,30 @@ export const salesData = [
   { day: "Sun", sales: 320000, profit: 68000 },
 ];
 
- const hourlyData = [
-  { hour: "8AM", sales: 45000 },
-  { hour: "9AM", sales: 78000 },
-  { hour: "10AM", sales: 125000 },
-  { hour: "11AM", sales: 98000 },
-  { hour: "12PM", sales: 145000 },
-  { hour: "1PM", sales: 88000 },
-  { hour: "2PM", sales: 112000 },
-  { hour: "3PM", sales: 165000 },
-  { hour: "4PM", sales: 134000 },
-  { hour: "5PM", sales: 189000 },
-  { hour: "6PM", sales: 156000 },
+// Daily data for analytics
+export const dailyAnalyticsData = [
+  { time: "8AM", sales: 45000, profit: 9500 },
+  { time: "9AM", sales: 78000, profit: 16400 },
+  { time: "10AM", sales: 125000, profit: 26300 },
+  { time: "11AM", sales: 98000, profit: 20600 },
+  { time: "12PM", sales: 145000, profit: 30500 },
+  { time: "1PM", sales: 88000, profit: 18500 },
+  { time: "2PM", sales: 112000, profit: 23500 },
+  { time: "3PM", sales: 165000, profit: 34700 },
+  { time: "4PM", sales: 134000, profit: 28200 },
+  { time: "5PM", sales: 189000, profit: 39700 },
+  { time: "6PM", sales: 156000, profit: 32800 },
 ];
+
+// Monthly data for analytics
+export const monthlyAnalyticsData = [
+  { time: "Week 1", sales: 1250000, profit: 262500 },
+  { time: "Week 2", sales: 1450000, profit: 304500 },
+  { time: "Week 3", sales: 1820000, profit: 382200 },
+  { time: "Week 4", sales: 2130000, profit: 447300 },
+];
+
+const hourlyData = dailySalesData;
 
 const categoryData = [
   { name: "Phones", value: 45, color: "hsl(160, 60%, 45%)" },

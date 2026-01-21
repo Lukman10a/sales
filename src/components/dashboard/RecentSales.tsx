@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Clock, Package, ArrowRight } from "lucide-react";
 import { useData } from "@/contexts/DataContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
 
 const RecentSales = () => {
   const { recentSales } = useData();
@@ -28,10 +29,13 @@ const RecentSales = () => {
             })}
           </p>
         </div>
-        <button className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
+        <Link
+          href="/sales"
+          className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors"
+        >
           {t("View All")}
           <ArrowRight className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
 
       <div className="space-y-4">

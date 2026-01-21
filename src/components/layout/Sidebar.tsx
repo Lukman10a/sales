@@ -94,7 +94,15 @@ const Sidebar = ({
 
   // Close mobile sidebar on navigation (only on mobile)
   React.useEffect(() => {
-    if (mobileOpen && onMobileClose && !isLargeScreen) {
+    // if (mobileOpen && onMobileClose && !isLargeScreen) {
+    //   onMobileClose();
+    // }
+
+    // Don't do anything on large screens
+    if (isLargeScreen) return;
+
+    // Only close if mobile sidebar is open
+    if (mobileOpen && onMobileClose) {
       onMobileClose();
     }
   }, [pathname, mobileOpen, onMobileClose, isLargeScreen]);

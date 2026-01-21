@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useData } from "@/contexts/DataContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
 
 const statusConfig = {
   critical: {
@@ -24,7 +25,7 @@ const InventoryAlert = () => {
 
   // Get low and out of stock items
   const alertItems = inventory.filter(
-    (item) => item.status === "low-stock" || item.status === "out-of-stock"
+    (item) => item.status === "low-stock" || item.status === "out-of-stock",
   );
 
   return (
@@ -50,10 +51,13 @@ const InventoryAlert = () => {
             </p>
           </div>
         </div>
-        <button className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
+        <Link
+          href="/inventory"
+          className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors"
+        >
           {t("View All")}
           <ArrowRight className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
 
       <div className="space-y-3">
@@ -72,7 +76,7 @@ const InventoryAlert = () => {
                 "flex items-center justify-between p-4 rounded-xl border",
                 item.status === "out-of-stock"
                   ? "bg-destructive/5 border-destructive/20"
-                  : "bg-muted/30 border-border"
+                  : "bg-muted/30 border-border",
               )}
             >
               <div className="flex items-center gap-3">
@@ -94,7 +98,7 @@ const InventoryAlert = () => {
                   "font-medium",
                   item.status === "out-of-stock"
                     ? "bg-destructive/10 text-destructive border-destructive/20"
-                    : statusConfig["low-stock"].className
+                    : statusConfig["low-stock"].className,
                 )}
               >
                 {item.status === "out-of-stock"
