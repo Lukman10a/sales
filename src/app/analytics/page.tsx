@@ -15,7 +15,12 @@ import {
   Calendar,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { salesData, hourlyData, categoryData, topProducts } from "@/data/analytics";
+import {
+  salesData,
+  hourlyData,
+  categoryData,
+  topProducts,
+} from "@/data/analytics";
 import { cn } from "@/lib/utils";
 import {
   LineChart,
@@ -110,8 +115,7 @@ export default function Analytics() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
-            const TrendIcon =
-              stat.trend === "up" ? TrendingUp : TrendingDown;
+            const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
             return (
               <motion.div
                 key={stat.title}
