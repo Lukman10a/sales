@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,6 +15,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -56,14 +66,6 @@ const statusConfig = {
   },
 };
 
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
-
 const emptyNewItem: Omit<InventoryItem, "id"> = {
   name: "",
   image: "",
@@ -92,6 +94,7 @@ export default function Inventory() {
     InventoryItem,
     "id"
   > | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<InventoryItem | null>(null);
   const [newItem, setNewItem] =
     useState<Omit<InventoryItem, "id">>(emptyNewItem);
   const { t, formatCurrency, isRTL } = useLanguage();
@@ -153,30 +156,35 @@ export default function Inventory() {
     toast(t("Item updated successfully"));
   };
 
-  const handleDeleteItem = (id: string) => {
-    if (window.confirm(t("Are you sure you want to delete this item?"))) {
-      deleteInventoryItem(id);
-      toast(t("Item deleted successfully"));
-    }
+  const handleRequestDelete = (item: InventoryItem) => {
+    setDeleteTarget(item);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return;
+    deleteInventoryItem(deleteTarget.id);
+    toast(t("Item deleted successfully"));
+    setDeleteTarget(null);
   };
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="font-display text-3xl font-bold text-foreground mb-2">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
               {t("Inventory")}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               {t("Manage your products and stock levels")}
             </p>
           </div>
           {userRole === "owner" && (
             <Button
               onClick={() => setIsAddOpen(true)}
-              className="bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent"
+              className="bg-gradient-accent text-accent-foreground hover:opacity-90 glow-accent w-full sm:w-auto"
+              size="sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("Add New Item")}
@@ -185,8 +193,8 @@ export default function Inventory() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-          <div className="relative flex-1 max-w-md">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-between">
+          <div className="relative flex-1 max-w-full sm:max-w-md">
             <Search
               className={
                 isRTL
@@ -201,8 +209,8 @@ export default function Inventory() {
               className={isRTL ? "pr-10" : "pl-10"}
             />
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon">
+          <div className="flex items-center gap-2 justify-end">
+            <Button variant="outline" size="icon" className="flex-shrink-0">
               <Filter className="w-4 h-4" />
             </Button>
             <div className="flex items-center border rounded-lg p-1">
@@ -233,28 +241,36 @@ export default function Inventory() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">{t("Total Items")}</p>
-            <p className="text-2xl font-display font-bold text-foreground">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("Total Items")}
+            </p>
+            <p className="text-xl sm:text-2xl font-display font-bold text-foreground">
               {inventory.length}
             </p>
           </div>
-          <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">{t("In Stock")}</p>
-            <p className="text-2xl font-display font-bold text-success">
+          <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("In Stock")}
+            </p>
+            <p className="text-xl sm:text-2xl font-display font-bold text-success">
               {inventory.filter((i) => i.status === "in-stock").length}
             </p>
           </div>
-          <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">{t("Low Stock")}</p>
-            <p className="text-2xl font-display font-bold text-warning">
+          <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("Low Stock")}
+            </p>
+            <p className="text-xl sm:text-2xl font-display font-bold text-warning">
               {inventory.filter((i) => i.status === "low-stock").length}
             </p>
           </div>
-          <div className="bg-card rounded-xl border p-4 card-elevated">
-            <p className="text-sm text-muted-foreground">{t("Out of Stock")}</p>
-            <p className="text-2xl font-display font-bold text-destructive">
+          <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("Out of Stock")}
+            </p>
+            <p className="text-xl sm:text-2xl font-display font-bold text-destructive">
               {inventory.filter((i) => i.status === "out-of-stock").length}
             </p>
           </div>
@@ -268,7 +284,7 @@ export default function Inventory() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4"
             >
               {filteredItems.map((item, index) => (
                 <motion.div
@@ -365,7 +381,7 @@ export default function Inventory() {
                           variant="outline"
                           size="sm"
                           className="text-destructive hover:bg-destructive/10"
-                          onClick={() => handleDeleteItem(item.id)}
+                          onClick={() => handleRequestDelete(item)}
                         >
                           <Trash2 className="w-3 h-3" />
                         </Button>
@@ -475,9 +491,8 @@ export default function Inventory() {
                                 </Button>
                                 <Button
                                   variant="ghost"
-                                  size="icon"
+                                  onClick={() => handleRequestDelete(item)}
                                   className="text-destructive"
-                                  onClick={() => handleDeleteItem(item.id)}
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -644,7 +659,7 @@ export default function Inventory() {
                 <Input
                   id="edit-name"
                   placeholder={t("e.g. Bluetooth Speaker")}
-                  value={editingItem.name}
+                  value={editingItem?.name ?? ""}
                   onChange={(e) =>
                     setEditingItem((prev) =>
                       prev ? { ...prev, name: e.target.value } : null,
@@ -657,7 +672,7 @@ export default function Inventory() {
                 <Input
                   id="edit-image"
                   placeholder="https://..."
-                  value={editingItem.image}
+                  value={editingItem?.image ?? ""}
                   onChange={(e) =>
                     setEditingItem((prev) =>
                       prev ? { ...prev, image: e.target.value } : null,
@@ -674,7 +689,7 @@ export default function Inventory() {
                     id="edit-wholesale"
                     type="number"
                     min={0}
-                    value={editingItem.wholesalePrice}
+                    value={editingItem?.wholesalePrice ?? 0}
                     onChange={(e) =>
                       setEditingItem((prev) =>
                         prev
@@ -695,7 +710,7 @@ export default function Inventory() {
                     id="edit-selling"
                     type="number"
                     min={0}
-                    value={editingItem.sellingPrice}
+                    value={editingItem?.sellingPrice ?? 0}
                     onChange={(e) =>
                       setEditingItem((prev) =>
                         prev
@@ -716,7 +731,7 @@ export default function Inventory() {
                     id="edit-qty"
                     type="number"
                     min={0}
-                    value={editingItem.quantity}
+                    value={editingItem?.quantity ?? 0}
                     onChange={(e) =>
                       setEditingItem((prev) =>
                         prev
@@ -732,7 +747,7 @@ export default function Inventory() {
                 <div className="grid gap-2">
                   <Label>{t("Status")}</Label>
                   <Select
-                    value={editingItem.status}
+                    value={editingItem?.status ?? "in-stock"}
                     onValueChange={(value) =>
                       setEditingItem((prev) =>
                         prev
@@ -773,13 +788,43 @@ export default function Inventory() {
             </Button>
             <Button
               onClick={handleSaveEdit}
-              disabled={!editingItem?.name.trim()}
+              disabled={!editingItem?.name?.trim()}
             >
               {t("Save Changes")}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("Delete item")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t(
+                "This action cannot be undone. You are about to delete {item} from inventory.",
+                { values: { item: deleteTarget?.name || t("this item") } },
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setDeleteTarget(null)}>
+              {t("Cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleConfirmDelete}
+            >
+              {t("Delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 }

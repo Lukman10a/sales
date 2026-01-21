@@ -65,7 +65,7 @@ export function WithdrawalManagement({
     setActioningId(withdrawalId);
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
-      updateWithdrawal(withdrawalId, { status: "rejected" });
+      updateWithdrawal(withdrawalId, { status: "pending" });
       toast({
         title: "Success",
         description: "Withdrawal request rejected",

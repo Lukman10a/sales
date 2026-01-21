@@ -20,7 +20,7 @@ const QuickActions = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="grid grid-cols-2 md:grid-cols-4 gap-4"
+      className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
     >
       {actions.map((action, index) => (
         <Link key={action.id} href={action.href}>
@@ -31,15 +31,17 @@ const QuickActions = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={cn(
-              "p-4 rounded-xl transition-all duration-300 cursor-pointer",
+              "p-3 sm:p-4 rounded-xl transition-all duration-300 cursor-pointer touch-manipulation",
               variantStyles[action.variant],
             )}
           >
-            <action.icon className="w-6 h-6 mb-3" />
-            <h4 className="font-semibold text-sm mb-1">{t(action.title)}</h4>
+            <action.icon className="w-5 h-5 sm:w-6 sm:h-6 mb-2 sm:mb-3" />
+            <h4 className="font-semibold text-xs sm:text-sm mb-1">
+              {t(action.title)}
+            </h4>
             <p
               className={cn(
-                "text-xs",
+                "text-[10px] sm:text-xs line-clamp-2",
                 action.variant === "secondary"
                   ? "text-muted-foreground"
                   : "opacity-80",

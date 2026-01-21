@@ -12,7 +12,7 @@ export default function AuthLayout({
   const { t, toggleLanguage, language, isRTL } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 flex items-center justify-center p-3 sm:p-4">
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
@@ -25,23 +25,23 @@ export default function AuthLayout({
           size="sm"
           variant="outline"
           onClick={toggleLanguage}
-          className="absolute top-4"
+          className="absolute top-2 sm:top-4 z-10"
           style={
-            isRTL ? { left: 16, right: "auto" } : { right: 16, left: "auto" }
+            isRTL ? { left: 8, right: "auto" } : { right: 8, left: "auto" }
           }
         >
           {language === "en" ? "AR" : "EN"}
         </Button>
-        <div className="bg-card/80 backdrop-blur-xl rounded-3xl shadow-lg border border-border p-8">
+        <div className="bg-card/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-lg border border-border p-6 sm:p-8">
           {/* Logo & Title */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-accent rounded-2xl mb-4">
-              <Package className="w-8 h-8 text-accent-foreground" />
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-accent rounded-2xl mb-3 sm:mb-4">
+              <Package className="w-7 h-7 sm:w-8 sm:h-8 text-accent-foreground" />
             </div>
-            <h1 className="font-display text-3xl font-bold text-foreground mb-2">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
               {t("Welcome to LUXA")}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               {t("Sign in to manage your business")}
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function AuthLayout({
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-muted-foreground mt-6">
+        <p className="text-center text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6">
           © 2026 LUXA Sales. {t("All rights reserved.")}
         </p>
       </div>

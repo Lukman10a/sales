@@ -43,51 +43,53 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [inventory, setInventory] = useState<InventoryItem[]>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("luxa_inventory");
-      return stored ? JSON.parse(stored) : inventoryItems;
-    }
-    return inventoryItems;
-  });
-  const [recentSales, setRecentSales] = useState<SaleRecord[]>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("luxa_sales");
-      return stored ? JSON.parse(stored) : recentSalesData;
-    }
-    return recentSalesData;
-  });
-  const [investors, setInvestors] = useState<Investor[]>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("luxa_investors");
-      return stored ? JSON.parse(stored) : mockInvestors;
-    }
-    return mockInvestors;
-  });
-  const [withdrawals, setWithdrawals] = useState<WithdrawalRecord[]>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("luxa_withdrawals");
-      return stored ? JSON.parse(stored) : mockWithdrawalRecords;
-    }
-    return mockWithdrawalRecords;
-  });
+  const [inventory, setInventory] = useState<InventoryItem[]>(inventoryItems);
+  const [recentSales, setRecentSales] = useState<SaleRecord[]>(recentSalesData);
+  const [investors, setInvestors] = useState<Investor[]>(mockInvestors);
+  const [withdrawals, setWithdrawals] = useState<WithdrawalRecord[]>(
+    mockWithdrawalRecords,
+  );
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Persist to localStorage
+  // Load from localStorage on mount (client-only)
   React.useEffect(() => {
-    localStorage.setItem("luxa_inventory", JSON.stringify(inventory));
-  }, [inventory]);
+    const storedInventory = localStorage.getItem("luxa_inventory");
+    const storedSales = localStorage.getItem("luxa_sales");
+    const storedInvestors = localStorage.getItem("luxa_investors");
+    const storedWithdrawals = localStorage.getItem("luxa_withdrawals");
+
+    if (storedInventory) setInventory(JSON.parse(storedInventory));
+    if (storedSales) setRecentSales(JSON.parse(storedSales));
+    if (storedInvestors) setInvestors(JSON.parse(storedInvestors));
+    if (storedWithdrawals) setWithdrawals(JSON.parse(storedWithdrawals));
+
+    setIsHydrated(true);
+  }, []);
+
+  // Persist to localStorage (only after hydration)
+  React.useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem("luxa_inventory", JSON.stringify(inventory));
+    }
+  }, [inventory, isHydrated]);
 
   React.useEffect(() => {
-    localStorage.setItem("luxa_sales", JSON.stringify(recentSales));
-  }, [recentSales]);
+    if (isHydrated) {
+      localStorage.setItem("luxa_sales", JSON.stringify(recentSales));
+    }
+  }, [recentSales, isHydrated]);
 
   React.useEffect(() => {
-    localStorage.setItem("luxa_investors", JSON.stringify(investors));
-  }, [investors]);
+    if (isHydrated) {
+      localStorage.setItem("luxa_investors", JSON.stringify(investors));
+    }
+  }, [investors, isHydrated]);
 
   React.useEffect(() => {
-    localStorage.setItem("luxa_withdrawals", JSON.stringify(withdrawals));
-  }, [withdrawals]);
+    if (isHydrated) {
+      localStorage.setItem("luxa_withdrawals", JSON.stringify(withdrawals));
+    }
+  }, [withdrawals, isHydrated]);
 
   const addInventoryItem = (item: InventoryItem) => {
     setInventory((prev) => [item, ...prev]);

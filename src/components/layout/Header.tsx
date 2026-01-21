@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Bell, Search, Moon, Sun } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Bell, Search, Moon, Sun, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,11 +13,30 @@ import { useAuth } from "@/contexts/AuthContext";
 interface HeaderProps {
   userRole: "owner" | "apprentice" | "investor";
   sidebarWidth: number;
+  onMobileMenuToggle?: () => void;
 }
 
-const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
+const Header = ({
+  userRole,
+  sidebarWidth,
+  onMobileMenuToggle,
+}: HeaderProps) => {
   const { t, language, toggleLanguage, isRTL } = useLanguage();
   const { user } = useAuth();
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Listen for resize
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : "U";
@@ -32,15 +51,25 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
     <motion.header
       initial={false}
       animate={false}
-      className="fixed top-0 h-16 bg-card/80 backdrop-blur-xl border-b border-border z-40 flex items-center justify-between px-6"
+      className="fixed top-0 h-16 lg:h-20 bg-card/80 backdrop-blur-xl border-b border-border z-40 flex items-center justify-between px-4 sm:px-6"
       style={{
-        left: isRTL ? 0 : sidebarWidth,
-        right: isRTL ? sidebarWidth : 0,
+        left: isLargeScreen ? (isRTL ? 0 : sidebarWidth) : 0,
+        right: isLargeScreen ? (isRTL ? sidebarWidth : 0) : 0,
         transition: "left 0.3s ease-in-out, right 0.3s ease-in-out",
       }}
     >
+      {/* Mobile Menu Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onMobileMenuToggle}
+        className="lg:hidden"
+      >
+        <Menu className="w-5 h-5" />
+      </Button>
+
       {/* Search */}
-      <div className="relative w-80">
+      <div className="relative hidden md:block md:w-64 lg:w-80">
         <Search
           className={
             isRTL
@@ -59,12 +88,12 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4 ml-auto">
         <Button
           variant="outline"
           size="sm"
           onClick={toggleLanguage}
-          className="text-xs font-semibold"
+          className="text-xs font-semibold hidden sm:flex"
         >
           {language === "en" ? "AR" : "EN"}
         </Button>
@@ -77,8 +106,8 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
         </Button>
 
         {/* Profile */}
-        <div className="flex items-center gap-3 pl-4 border-l border-border">
-          <div className="text-right">
+        <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 border-l border-border">
+          <div className="text-right hidden sm:block">
             <p className="text-sm font-medium text-foreground">{displayName}</p>
             <Badge
               variant="secondary"
@@ -93,9 +122,9 @@ const Header = ({ userRole, sidebarWidth }: HeaderProps) => {
               {roleLabel}
             </Badge>
           </div>
-          <Avatar className="w-10 h-10 border-2 border-accent/30">
+          <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-accent/30">
             <AvatarImage src={user?.avatar} />
-            <AvatarFallback className="bg-gradient-accent text-accent-foreground font-semibold">
+            <AvatarFallback className="bg-gradient-accent text-accent-foreground font-semibold text-xs sm:text-sm">
               {initials}
             </AvatarFallback>
           </Avatar>

@@ -1,18 +1,48 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import { useData } from "@/contexts/DataContext";
 import QuickActions from "@/components/dashboard/QuickActions";
-import SalesChart from "@/components/dashboard/SalesChart";
-import RecentSales from "@/components/dashboard/RecentSales";
-import InventoryAlert from "@/components/dashboard/InventoryAlert";
-import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+// Dynamically import heavy components
+const SalesChart = dynamic(() => import("@/components/dashboard/SalesChart"), {
+  loading: () => <div className="h-[300px] bg-card rounded-xl animate-pulse" />,
+  ssr: false,
+});
+const RecentSales = dynamic(
+  () => import("@/components/dashboard/RecentSales"),
+  {
+    loading: () => (
+      <div className="h-[300px] bg-card rounded-xl animate-pulse" />
+    ),
+    ssr: false,
+  },
+);
+const InventoryAlert = dynamic(
+  () => import("@/components/dashboard/InventoryAlert"),
+  {
+    loading: () => (
+      <div className="h-[200px] bg-card rounded-xl animate-pulse" />
+    ),
+    ssr: false,
+  },
+);
+const AIInsightCard = dynamic(
+  () => import("@/components/dashboard/AIInsightCard"),
+  {
+    loading: () => (
+      <div className="h-[200px] bg-card rounded-xl animate-pulse" />
+    ),
+    ssr: false,
+  },
+);
 
 export default function Dashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -49,7 +79,7 @@ export default function Dashboard() {
   return <DashboardContent />;
 }
 
-function DashboardContent() {
+const DashboardContent = memo(function DashboardContent() {
   const { user } = useAuth();
   const { totalItemsInStock, totalItemsSold, totalSalesAmount, lowStockItems } =
     useData();
@@ -57,15 +87,15 @@ function DashboardContent() {
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold text-foreground mb-2">
+        <div className="mb-4 sm:mb-8">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
             {t("Welcome back, {name}!", {
               values: { name: user?.firstName || "" },
             })}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground">
             {t("Here's what's happening with your business today.")}
           </p>
         </div>
@@ -74,7 +104,7 @@ function DashboardContent() {
         <QuickActions />
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatCard
             title={t("Today's Sales")}
             value={formatCurrency(totalSalesAmount)}
@@ -112,7 +142,7 @@ function DashboardContent() {
         </div>
 
         {/* Charts and Sales */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="lg:col-span-2">
             <SalesChart />
           </div>
@@ -122,11 +152,11 @@ function DashboardContent() {
         </div>
 
         {/* Alerts and Insights */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <InventoryAlert />
           <AIInsightCard />
         </div>
       </div>
     </MainLayout>
   );
-}
+});
