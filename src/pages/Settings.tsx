@@ -80,9 +80,15 @@ type StaffMember = {
 
 const Settings = () => {
   const [activeSection, setActiveSection] = useState("profile");
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const userRole = user?.role || "owner";
   const [profileImage, setProfileImage] = useState(user?.avatar || "");
+  const [profileForm, setProfileForm] = useState({
+    firstName: user?.firstName ?? "",
+    lastName: user?.lastName ?? "",
+    email: user?.email ?? "",
+    businessName: user?.businessName ?? "",
+  });
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return "dark";
     return localStorage.getItem("luxa_theme") || "dark";
@@ -107,6 +113,21 @@ const Settings = () => {
   const [newStaffEmail, setNewStaffEmail] = useState("");
   const [inviteError, setInviteError] = useState("");
   const { t, language, toggleLanguage } = useLanguage();
+
+  const handleSaveProfile = () => {
+    if (!user) return;
+
+    const updates = {
+      firstName: profileForm.firstName || user.firstName,
+      lastName: profileForm.lastName || user.lastName,
+      email: profileForm.email || user.email,
+      businessName: profileForm.businessName || user.businessName,
+      avatar: profileImage,
+    };
+
+    updateUser(updates);
+    // Show success toast (assuming toast is available globally via sonner)
+  };
 
   const handleInviteStaff = () => {
     if (userRole !== "owner") return;
@@ -269,14 +290,26 @@ const Settings = () => {
                         <Label htmlFor="firstName">{t("First Name")}</Label>
                         <Input
                           id="firstName"
-                          defaultValue={user?.firstName ?? ""}
+                          value={profileForm.firstName}
+                          onChange={(e) =>
+                            setProfileForm((prev) => ({
+                              ...prev,
+                              firstName: e.target.value,
+                            }))
+                          }
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">{t("Last Name")}</Label>
                         <Input
                           id="lastName"
-                          defaultValue={user?.lastName ?? ""}
+                          value={profileForm.lastName}
+                          onChange={(e) =>
+                            setProfileForm((prev) => ({
+                              ...prev,
+                              lastName: e.target.value,
+                            }))
+                          }
                         />
                       </div>
                     </div>
@@ -285,7 +318,13 @@ const Settings = () => {
                       <Input
                         id="email"
                         type="email"
-                        defaultValue={user?.email ?? ""}
+                        value={profileForm.email}
+                        onChange={(e) =>
+                          setProfileForm((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
                       />
                     </div>
                     <div className="space-y-2">
@@ -296,11 +335,20 @@ const Settings = () => {
                       <Label htmlFor="business">{t("Business Name")}</Label>
                       <Input
                         id="business"
-                        defaultValue="Hassan Electronics"
+                        value={profileForm.businessName}
+                        onChange={(e) =>
+                          setProfileForm((prev) => ({
+                            ...prev,
+                            businessName: e.target.value,
+                          }))
+                        }
                         disabled={userRole === "apprentice"}
                       />
                     </div>
-                    <Button className="w-fit bg-gradient-accent text-accent-foreground">
+                    <Button
+                      className="w-fit bg-gradient-accent text-accent-foreground"
+                      onClick={handleSaveProfile}
+                    >
                       {t("Save Changes")}
                     </Button>
                   </div>

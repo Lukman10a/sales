@@ -109,23 +109,14 @@ export class AuthService {
     // Keep last role for convenience
   }
 
-  // Get current user
-  static getUser(): User | null {
-    if (typeof window === "undefined") return null;
+  // Update current user
+  static updateUser(updates: Partial<User>): User {
+    const user = this.getUser();
+    if (!user) throw new Error("No user logged in");
     
-    const userJson = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (!userJson) return null;
-
-    try {
-      return JSON.parse(userJson);
-    } catch {
-      return null;
-    }
-  }
-
-  // Set current user
-  static setUser(user: User): void {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+    const updatedUser = { ...user, ...updates };
+    this.setUser(updatedUser);
+    return updatedUser;
   }
 
   // Check if user is authenticated
@@ -142,6 +133,27 @@ export class AuthService {
   // Set last selected role
   static setLastRole(role: "owner" | "apprentice" | "investor"): void {
     localStorage.setItem(ROLE_STORAGE_KEY, role);
+  }
+
+  // Persist user session in localStorage
+  static setUser(user: User): void {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+  }
+
+  // Retrieve current user from localStorage
+  static getUser(): User | null {
+    if (typeof window === "undefined") return null;
+    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!stored) return null;
+
+    try {
+      return JSON.parse(stored) as User;
+    } catch (error) {
+      // Clear bad data to avoid repeated failures
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      return null;
+    }
   }
 
   // Check if user has specific role

@@ -203,6 +203,8 @@ const Sales = () => {
                   >
                     <div className="aspect-square rounded-lg bg-muted mb-3 overflow-hidden relative">
                       <Image
+                        width={400}
+                        height={400}
                         src={item.image}
                         alt={item.name}
                         className="w-full h-full object-cover"
@@ -318,6 +320,8 @@ const Sales = () => {
                         className="flex gap-3 p-3 rounded-xl bg-muted/50"
                       >
                         <Image
+                          width={64}
+                          height={64}
                           src={item.image}
                           alt={item.name}
                           className="w-16 h-16 rounded-lg object-cover"

@@ -77,11 +77,21 @@ const emptyNewItem: Omit<InventoryItem, "id"> = {
 
 export default function Inventory() {
   const { user } = useAuth();
-  const { inventory, addInventoryItem } = useData();
+  const {
+    inventory,
+    addInventoryItem,
+    updateInventoryItem,
+    deleteInventoryItem,
+  } = useData();
   const userRole = user?.role || "owner";
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingItem, setEditingItem] = useState<Omit<
+    InventoryItem,
+    "id"
+  > | null>(null);
   const [newItem, setNewItem] =
     useState<Omit<InventoryItem, "id">>(emptyNewItem);
   const { t, formatCurrency, isRTL } = useLanguage();
@@ -114,6 +124,40 @@ export default function Inventory() {
     setNewItem(emptyNewItem);
     setIsAddOpen(false);
     toast(t("Item added successfully"));
+  };
+
+  const handleEditItem = (item: InventoryItem) => {
+    setEditingId(item.id);
+    setEditingItem({
+      name: item.name,
+      image: item.image,
+      wholesalePrice: item.wholesalePrice,
+      sellingPrice: item.sellingPrice,
+      quantity: item.quantity,
+      sold: item.sold,
+      status: item.status,
+      confirmedByApprentice: item.confirmedByApprentice,
+    });
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingId || !editingItem) return;
+    const trimmedName = editingItem.name.trim();
+    if (!trimmedName) {
+      toast(t("Please enter an item name"));
+      return;
+    }
+    updateInventoryItem(editingId, { ...editingItem, name: trimmedName });
+    setEditingId(null);
+    setEditingItem(null);
+    toast(t("Item updated successfully"));
+  };
+
+  const handleDeleteItem = (id: string) => {
+    if (window.confirm(t("Are you sure you want to delete this item?"))) {
+      deleteInventoryItem(id);
+      toast(t("Item deleted successfully"));
+    }
   };
 
   return (
@@ -308,7 +352,12 @@ export default function Inventory() {
                     </div>
                     {userRole === "owner" && (
                       <div className="flex gap-2 mt-4 pt-4 border-t">
-                        <Button variant="outline" size="sm" className="flex-1">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleEditItem(item)}
+                        >
                           <Edit className="w-3 h-3 mr-1" />
                           {t("Edit")}
                         </Button>
@@ -316,6 +365,7 @@ export default function Inventory() {
                           variant="outline"
                           size="sm"
                           className="text-destructive hover:bg-destructive/10"
+                          onClick={() => handleDeleteItem(item.id)}
                         >
                           <Trash2 className="w-3 h-3" />
                         </Button>
@@ -416,13 +466,18 @@ export default function Inventory() {
                           <div className="flex justify-end gap-2">
                             {userRole === "owner" ? (
                               <>
-                                <Button variant="ghost" size="icon">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleEditItem(item)}
+                                >
                                   <Edit className="w-4 h-4" />
                                 </Button>
                                 <Button
                                   variant="ghost"
                                   size="icon"
                                   className="text-destructive"
+                                  onClick={() => handleDeleteItem(item.id)}
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -563,6 +618,164 @@ export default function Inventory() {
             </Button>
             <Button onClick={handleAddItem} disabled={!newItem.name.trim()}>
               {t("Add Item")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Item Dialog */}
+      <Dialog
+        open={editingId !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditingId(null);
+            setEditingItem(null);
+          }
+        }}
+      >
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{t("Edit Item")}</DialogTitle>
+          </DialogHeader>
+          {editingItem && (
+            <div className="grid gap-4 py-2">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-name">{t("Item Name")}</Label>
+                <Input
+                  id="edit-name"
+                  placeholder={t("e.g. Bluetooth Speaker")}
+                  value={editingItem.name}
+                  onChange={(e) =>
+                    setEditingItem((prev) =>
+                      prev ? { ...prev, name: e.target.value } : null,
+                    )
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-image">{t("Image URL")}</Label>
+                <Input
+                  id="edit-image"
+                  placeholder="https://..."
+                  value={editingItem.image}
+                  onChange={(e) =>
+                    setEditingItem((prev) =>
+                      prev ? { ...prev, image: e.target.value } : null,
+                    )
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-wholesale">
+                    {t("Cost Price (NGN)")}
+                  </Label>
+                  <Input
+                    id="edit-wholesale"
+                    type="number"
+                    min={0}
+                    value={editingItem.wholesalePrice}
+                    onChange={(e) =>
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              wholesalePrice: Number(e.target.value) || 0,
+                            }
+                          : null,
+                      )
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-selling">
+                    {t("Selling Price (NGN)")}
+                  </Label>
+                  <Input
+                    id="edit-selling"
+                    type="number"
+                    min={0}
+                    value={editingItem.sellingPrice}
+                    onChange={(e) =>
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              sellingPrice: Number(e.target.value) || 0,
+                            }
+                          : null,
+                      )
+                    }
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-qty">{t("Quantity")}</Label>
+                  <Input
+                    id="edit-qty"
+                    type="number"
+                    min={0}
+                    value={editingItem.quantity}
+                    onChange={(e) =>
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              quantity: Number(e.target.value) || 0,
+                            }
+                          : null,
+                      )
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>{t("Status")}</Label>
+                  <Select
+                    value={editingItem.status}
+                    onValueChange={(value) =>
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              status: value as InventoryItem["status"],
+                            }
+                          : null,
+                      )
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("Select status")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="in-stock">{t("In Stock")}</SelectItem>
+                      <SelectItem value="low-stock">
+                        {t("Low Stock")}
+                      </SelectItem>
+                      <SelectItem value="out-of-stock">
+                        {t("Out of Stock")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setEditingId(null);
+                setEditingItem(null);
+              }}
+            >
+              {t("Cancel")}
+            </Button>
+            <Button
+              onClick={handleSaveEdit}
+              disabled={!editingItem?.name.trim()}
+            >
+              {t("Save Changes")}
             </Button>
           </DialogFooter>
         </DialogContent>
