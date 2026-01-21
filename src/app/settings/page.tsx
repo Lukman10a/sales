@@ -506,9 +506,7 @@ export default function Settings() {
                           )}
                         >
                           <div className="w-full h-16 bg-white rounded-lg mb-2 border" />
-                          <p className="text-sm font-medium">
-                            {t("Light")}
-                          </p>
+                          <p className="text-sm font-medium">{t("Light")}</p>
                         </button>
                         <button
                           onClick={() => handleThemeChange("dark")}
