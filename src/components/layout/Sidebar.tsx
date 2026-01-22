@@ -17,6 +17,9 @@ import {
   LogOut,
   Users,
   Banknote,
+  UserCircle,
+  FileText,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -46,7 +49,10 @@ const ownerNavigation: NavigationItem[] = [
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Sales", href: "/sales", icon: ShoppingCart },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Investors", href: "/investors", icon: Users },
+  { name: "Team", href: "/team", icon: Users },
+  { name: "Reports", href: "/reports", icon: FileText },
+  { name: "Data", href: "/data", icon: Database },
+  { name: "Investors", href: "/investors", icon: Banknote },
   { name: "Withdrawals", href: "/withdrawals", icon: Banknote },
   { name: "Notifications", href: "/notifications", icon: Bell },
   { name: "AI Insights", href: "/insights", icon: Sparkles },
@@ -108,6 +114,7 @@ const Sidebar = ({
   }, [pathname, mobileOpen, onMobileClose, isLargeScreen]);
 
   const isSettingsActive = pathname?.startsWith("/settings");
+  const isProfileActive = pathname?.startsWith("/profile");
 
   const userRole = user?.role || propUserRole || "owner";
   const displayName = user ? `${user.firstName} ${user.lastName}` : t("User");
@@ -312,6 +319,24 @@ const Sidebar = ({
 
         {/* Bottom Actions */}
         <div className="p-4 border-t border-sidebar-border space-y-2">
+          {userRole === "owner" && (
+            <Link
+              href="/profile"
+              prefetch={true}
+              className={cn(
+                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
+                isProfileActive
+                  ? "bg-sidebar-accent text-sidebar-primary"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
+                collapsed && "justify-center",
+              )}
+            >
+              <UserCircle className="w-5 h-5" />
+              {!collapsed && (
+                <span className="font-medium text-sm">{t("Profile")}</span>
+              )}
+            </Link>
+          )}
           <Link
             href="/settings"
             prefetch={true}

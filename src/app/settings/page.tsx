@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "@/components/ui/sonner";
 import {
   User,
   Bell,
@@ -20,23 +21,32 @@ import {
   Users,
   ChevronRight,
   Upload,
+  Layout,
 } from "lucide-react";
+import {
+  dashboardLayouts,
+  widgetCatalog,
+  userPreferences,
+  defaultQuickActions,
+  savedViews,
+} from "@/data/dashboardCustomization";
+import { QuickAction } from "@/types/dashboardCustomizationTypes";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
 const settingSections = [
   {
-    id: "profile",
-    title: "Profile Settings",
-    description: "Manage your account information",
-    icon: User,
-  },
-  {
     id: "notifications",
     title: "Notifications",
     description: "Configure alert preferences",
     icon: Bell,
+  },
+  {
+    id: "dashboard",
+    title: "Dashboard",
+    description: "Customize your dashboard",
+    icon: Layout,
   },
   {
     id: "security",
@@ -80,7 +90,7 @@ type StaffMember = {
 
 export default function Settings() {
   const { t, language, toggleLanguage } = useLanguage();
-  const [activeSection, setActiveSection] = useState("profile");
+  const [activeSection, setActiveSection] = useState("notifications");
   const { user } = useAuth();
   const userRole = user?.role || "owner";
   const [profileImage, setProfileImage] = useState(user?.avatar || "");
@@ -106,6 +116,19 @@ export default function Settings() {
   ]);
   const [newStaffName, setNewStaffName] = useState("");
   const [newStaffEmail, setNewStaffEmail] = useState("");
+  const [selectedLayout, setSelectedLayout] = useState(
+    userPreferences.defaultView,
+  );
+  const [welcomeMessage, setWelcomeMessage] = useState(
+    userPreferences.showWelcomeMessage,
+  );
+  const [showTips, setShowTips] = useState(userPreferences.showTips);
+  const [autoRefresh, setAutoRefresh] = useState(userPreferences.autoRefresh);
+  const [refreshInterval, setRefreshInterval] = useState(
+    userPreferences.refreshInterval,
+  );
+  const [quickActions, setQuickActions] =
+    useState<QuickAction[]>(defaultQuickActions);
 
   const handleProfileImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -123,6 +146,18 @@ export default function Settings() {
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("luxa_theme", newTheme);
+  };
+
+  const handleSaveDashboardSettings = () => {
+    toast(t("Dashboard settings saved locally (no backend yet)"));
+  };
+
+  const handleExportAll = () => {
+    toast(t("Export started (mock)"));
+  };
+
+  const handleBackup = () => {
+    toast(t("Backup triggered (mock)"));
   };
 
   const userDisplayName = user ? `${user.firstName} ${user.lastName}` : "User";
@@ -186,95 +221,6 @@ export default function Settings() {
               transition={{ duration: 0.2 }}
               className="bg-card rounded-2xl border card-elevated p-6"
             >
-              {activeSection === "profile" && (
-                <div className="space-y-6">
-                  <div>
-                    <h2 className="font-display font-semibold text-xl text-foreground mb-1">
-                      {t("Profile Settings")}
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                      {t("Update your personal information")}
-                    </p>
-                  </div>
-                  <Separator />
-                  {/* Profile Picture */}
-                  <div className="space-y-4">
-                    <div>
-                      <p className="font-medium text-foreground mb-3">
-                        {t("Profile Picture")}
-                      </p>
-                      <div className="flex items-center gap-6">
-                        <Avatar className="w-20 h-20 border-2 border-accent/30">
-                          <AvatarImage src={profileImage || ""} />
-                          <AvatarFallback className="bg-gradient-accent text-accent-foreground font-bold text-xl">
-                            {userInitials}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleProfileImageUpload}
-                            className="hidden"
-                            id="profileImageInput"
-                          />
-                          <label
-                            htmlFor="profileImageInput"
-                            className="cursor-pointer"
-                          >
-                            <div className="bg-gradient-accent text-accent-foreground mb-2 inline-flex px-4 py-2 rounded-md font-medium text-sm">
-                              <Upload className="w-4 h-4 mr-2" />
-                              {t("Change Photo")}
-                            </div>
-                          </label>
-                          <p className="text-xs text-muted-foreground">
-                            {t("JPG, PNG or GIF (max 2MB)")}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <Separator />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">{t("First Name")}</Label>
-                        <Input id="firstName" defaultValue={user?.firstName} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName">{t("Last Name")}</Label>
-                        <Input id="lastName" defaultValue={user?.lastName} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">{t("Email")}</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          defaultValue={user?.email}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">{t("Phone Number")}</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="+234 XXX XXX XXXX"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="business">{t("Business Name")}</Label>
-                      <Input
-                        id="business"
-                        defaultValue="LUXA Sales"
-                        disabled={userRole === "apprentice"}
-                      />
-                    </div>
-                    <Button className="bg-gradient-accent">
-                      {t("Save Changes")}
-                    </Button>
-                  </div>
-                </div>
-              )}
-
               {activeSection === "notifications" && (
                 <div className="space-y-6">
                   <div>
@@ -564,6 +510,219 @@ export default function Settings() {
                 </div>
               )}
 
+              {activeSection === "dashboard" && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="font-display font-semibold text-xl text-foreground mb-1">
+                      {t("Dashboard Customization")}
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      {t("Choose your layout, widgets, and preferences")}
+                    </p>
+                  </div>
+                  <Separator />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 border rounded-xl bg-card">
+                      <p className="font-medium mb-3 flex items-center gap-2">
+                        <Layout className="w-4 h-4" />
+                        {t("Layout Template")}
+                      </p>
+                      <div className="space-y-3">
+                        {dashboardLayouts.map((layout) => (
+                          <button
+                            key={layout.id}
+                            onClick={() => setSelectedLayout(layout.id)}
+                            className={cn(
+                              "w-full text-left p-3 rounded-lg border transition-colors",
+                              selectedLayout === layout.id
+                                ? "border-accent bg-accent/5"
+                                : "border-border hover:border-accent/60",
+                            )}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-semibold text-foreground">
+                                  {layout.name}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {layout.description}
+                                </p>
+                              </div>
+                              {layout.isDefault && (
+                                <Badge variant="outline">{t("Default")}</Badge>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-4 border rounded-xl bg-card">
+                      <p className="font-medium mb-3 flex items-center gap-2">
+                        <Bell className="w-4 h-4" />
+                        {t("Auto Refresh")}
+                      </p>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-sm">
+                              {t("Enable auto refresh")}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {t("Keep dashboard widgets up to date")}
+                            </p>
+                          </div>
+                          <Switch
+                            checked={autoRefresh}
+                            onCheckedChange={setAutoRefresh}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>{t("Refresh interval")}</Label>
+                          <Select
+                            value={refreshInterval}
+                            onValueChange={(value) =>
+                              setRefreshInterval(
+                                value as typeof refreshInterval,
+                              )
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="30s">30s</SelectItem>
+                              <SelectItem value="1m">1m</SelectItem>
+                              <SelectItem value="5m">5m</SelectItem>
+                              <SelectItem value="15m">15m</SelectItem>
+                              <SelectItem value="30m">30m</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-sm">
+                              {t("Welcome message")}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {t("Show greeting on dashboard load")}
+                            </p>
+                          </div>
+                          <Switch
+                            checked={welcomeMessage}
+                            onCheckedChange={setWelcomeMessage}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-sm">
+                              {t("Tips & guides")}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {t("Contextual tips for new users")}
+                            </p>
+                          </div>
+                          <Switch
+                            checked={showTips}
+                            onCheckedChange={setShowTips}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 border rounded-xl bg-card">
+                      <p className="font-medium mb-3">{t("Quick Actions")}</p>
+                      <div className="space-y-2">
+                        {quickActions.map((action) => (
+                          <div
+                            key={action.id}
+                            className="flex items-center justify-between p-3 border rounded-lg"
+                          >
+                            <div>
+                              <p className="font-medium text-sm">
+                                {action.label}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {action.action}
+                              </p>
+                            </div>
+                            <Switch
+                              checked={action.enabled}
+                              onCheckedChange={(checked) =>
+                                setQuickActions((prev) =>
+                                  prev.map((qa) =>
+                                    qa.id === action.id
+                                      ? { ...qa, enabled: checked }
+                                      : qa,
+                                  ),
+                                )
+                              }
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-4 border rounded-xl bg-card">
+                      <p className="font-medium mb-3">{t("Saved Views")}</p>
+                      <div className="space-y-2">
+                        {savedViews.map((view) => (
+                          <div
+                            key={view.id}
+                            className="p-3 border rounded-lg flex items-center justify-between"
+                          >
+                            <div>
+                              <p className="font-medium text-sm">{view.name}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {view.description || t("No description")}
+                              </p>
+                            </div>
+                            {view.isDefault && (
+                              <Badge variant="outline">{t("Default")}</Badge>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 border rounded-xl bg-card">
+                    <p className="font-medium mb-3">{t("Available Widgets")}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {widgetCatalog.slice(0, 6).map((widget) => (
+                        <div
+                          key={widget.type}
+                          className="p-3 border rounded-lg"
+                        >
+                          <p className="font-semibold text-sm">{widget.name}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {widget.description}
+                          </p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <Badge variant="secondary">{widget.category}</Badge>
+                            <Badge variant="outline">
+                              {widget.defaultSize}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Button
+                      className="bg-gradient-accent"
+                      onClick={handleSaveDashboardSettings}
+                    >
+                      {t("Save Dashboard Settings")}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {activeSection === "data" && userRole === "owner" && (
                 <div className="space-y-6">
                   <div>
@@ -576,11 +735,19 @@ export default function Settings() {
                   </div>
                   <Separator />
                   <div className="space-y-4">
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      onClick={handleExportAll}
+                    >
                       <Database className="w-4 h-4 mr-2" />
                       {t("Export All Data")}
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      onClick={handleBackup}
+                    >
                       <Database className="w-4 h-4 mr-2" />
                       {t("Backup to Cloud")}
                     </Button>
