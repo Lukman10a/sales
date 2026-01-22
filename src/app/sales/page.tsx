@@ -6,6 +6,15 @@ import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Plus,
   Search,
@@ -15,6 +24,11 @@ import {
   X,
   Minus,
   ShoppingCart,
+  CreditCard,
+  Banknote,
+  Smartphone,
+  AlertTriangle,
+  Percent,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CartItem, SaleItem } from "@/types/salesTypes";
@@ -22,6 +36,7 @@ import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { categories } from "@/data/inventory";
 import Image from "next/image";
 
 export default function Sales() {
@@ -33,7 +48,17 @@ export default function Sales() {
     recentSales,
   } = useData();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState<
+    "cash" | "card" | "transfer"
+  >("cash");
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [quickAddDialog, setQuickAddDialog] = useState<{
+    open: boolean;
+    item: SaleItem | null;
+  }>({ open: false, item: null });
+  const [quickQuantity, setQuickQuantity] = useState("1");
   const { t, formatCurrency, isRTL } = useLanguage();
 
   // Convert inventory items to SaleItem format for cart - memoized
@@ -51,11 +76,52 @@ export default function Sales() {
 
   const filteredItems = useMemo(
     () =>
-      products.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      ),
-    [products, searchQuery],
+      products
+        .filter((item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+        .filter(
+          (item) =>
+            selectedCategory === "All" || item.category === selectedCategory,
+        ),
+    [products, searchQuery, selectedCategory],
   );
+
+  const openQuickAddDialog = (item: SaleItem) => {
+    setQuickAddDialog({ open: true, item });
+    setQuickQuantity("1");
+  };
+
+  const handleQuickAdd = () => {
+    if (!quickAddDialog.item) return;
+    const qty = parseInt(quickQuantity) || 1;
+    const item = quickAddDialog.item;
+
+    if (qty > item.availableQty) {
+      toast(t("Insufficient stock"));
+      return;
+    }
+
+    const existingItem = cart.find((i) => i.id === item.id);
+    if (existingItem) {
+      const newQty = existingItem.quantity + qty;
+      if (newQty > item.availableQty) {
+        toast(t("Insufficient stock"));
+        return;
+      }
+      setCart(
+        cart.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
+      );
+    } else {
+      setCart([
+        ...cart,
+        { ...item, quantity: qty, actualPrice: item.sellingPrice },
+      ]);
+    }
+
+    setQuickAddDialog({ open: false, item: null });
+    toast(t("Added to cart"));
+  };
 
   const addToCart = (item: SaleItem) => {
     const existingItem = cart.find((i) => i.id === item.id);
@@ -103,10 +169,13 @@ export default function Sales() {
     );
   };
 
-  const cartTotal = cart.reduce(
+  const cartSubtotal = cart.reduce(
     (sum, item) => sum + item.actualPrice * item.quantity,
     0,
   );
+
+  const cartDiscount = (cartSubtotal * discountPercent) / 100;
+  const cartTotal = cartSubtotal - cartDiscount;
 
   const handleCompleteSale = () => {
     if (cart.length === 0) {
@@ -142,12 +211,16 @@ export default function Sales() {
       soldBy: user ? user.firstName : "You",
       time: "just now",
       status: "completed" as const,
+      paymentMethod,
+      discount: discountPercent,
     };
     addSaleRecord(newRecord);
 
-    // Clear cart and reset search
+    // Clear cart and reset
     setCart([]);
     setSearchQuery("");
+    setDiscountPercent(0);
+    setPaymentMethod("cash");
 
     toast(t("Sale completed"), {
       description: t("Total {amount}", {
@@ -190,22 +263,65 @@ export default function Sales() {
               />
             </div>
 
+            {/* Category Filters */}
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all",
+                    selectedCategory === category
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted-foreground/10",
+                  )}
+                >
+                  {t(category)}
+                </button>
+              ))}
+            </div>
+
             {/* Products Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {filteredItems.map((item, index) => {
                 const inCart = cart.find((i) => i.id === item.id);
+                const isLowStock = item.availableQty <= 5;
+                const isOutOfStock = item.availableQty === 0;
                 return (
                   <motion.button
                     key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    onClick={() => addToCart(item)}
+                    onClick={() => openQuickAddDialog(item)}
+                    disabled={isOutOfStock}
                     className={cn(
-                      "bg-card rounded-xl border p-3 text-left transition-all card-hover",
+                      "bg-card rounded-xl border p-3 text-left transition-all card-hover relative",
                       inCart && "border-accent ring-2 ring-accent/20",
+                      isOutOfStock && "opacity-50 cursor-not-allowed",
                     )}
                   >
+                    {isLowStock && !isOutOfStock && (
+                      <div className="absolute top-2 left-2 z-10">
+                        <Badge
+                          variant="outline"
+                          className="bg-warning/10 text-warning border-warning/20 text-xs"
+                        >
+                          <AlertTriangle className="w-3 h-3 mr-1" />
+                          {t("Low")}
+                        </Badge>
+                      </div>
+                    )}
+                    {isOutOfStock && (
+                      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-xl flex items-center justify-center z-10">
+                        <Badge
+                          variant="outline"
+                          className="bg-destructive/10 text-destructive border-destructive/20"
+                        >
+                          {t("Out of Stock")}
+                        </Badge>
+                      </div>
+                    )}
                     <div className="aspect-square rounded-lg bg-muted mb-3 overflow-hidden relative">
                       <Image
                         width={400}
@@ -226,7 +342,14 @@ export default function Sales() {
                     <p className="text-accent font-semibold text-sm">
                       {formatCurrency(item.sellingPrice)}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p
+                      className={cn(
+                        "text-xs",
+                        isLowStock
+                          ? "text-warning font-medium"
+                          : "text-muted-foreground",
+                      )}
+                    >
                       {item.availableQty} {t("available")}
                     </p>
                   </motion.button>
@@ -386,15 +509,97 @@ export default function Sales() {
                         {t("Subtotal")}
                       </span>
                       <span className="font-medium">
-                        {formatCurrency(cartTotal)}
+                        {formatCurrency(cartSubtotal)}
                       </span>
                     </div>
+
+                    {/* Discount Input */}
+                    <div className="space-y-2">
+                      <Label className="text-xs flex items-center gap-2">
+                        <Percent className="w-3 h-3" />
+                        {t("Discount (%)")}
+                      </Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={discountPercent}
+                        onChange={(e) =>
+                          setDiscountPercent(
+                            Math.min(
+                              100,
+                              Math.max(0, Number(e.target.value) || 0),
+                            ),
+                          )
+                        }
+                        className="h-8 text-sm"
+                        placeholder="0"
+                      />
+                    </div>
+
+                    {discountPercent > 0 && (
+                      <div className="flex justify-between text-sm text-success">
+                        <span>{t("Discount")}</span>
+                        <span>-{formatCurrency(cartDiscount)}</span>
+                      </div>
+                    )}
+
                     <div className="flex justify-between text-lg font-display font-bold">
                       <span>{t("Total")}</span>
                       <span className="text-accent">
                         {formatCurrency(cartTotal)}
                       </span>
                     </div>
+
+                    {/* Payment Method */}
+                    <div className="space-y-2">
+                      <Label className="text-xs">{t("Payment Method")}</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => setPaymentMethod("cash")}
+                          className={cn(
+                            "p-2 rounded-lg border-2 transition-all flex flex-col items-center gap-1",
+                            paymentMethod === "cash"
+                              ? "border-accent bg-accent/10"
+                              : "border-border hover:border-accent/50",
+                          )}
+                        >
+                          <Banknote className="w-4 h-4" />
+                          <span className="text-xs font-medium">
+                            {t("Cash")}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => setPaymentMethod("card")}
+                          className={cn(
+                            "p-2 rounded-lg border-2 transition-all flex flex-col items-center gap-1",
+                            paymentMethod === "card"
+                              ? "border-accent bg-accent/10"
+                              : "border-border hover:border-accent/50",
+                          )}
+                        >
+                          <CreditCard className="w-4 h-4" />
+                          <span className="text-xs font-medium">
+                            {t("Card")}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => setPaymentMethod("transfer")}
+                          className={cn(
+                            "p-2 rounded-lg border-2 transition-all flex flex-col items-center gap-1",
+                            paymentMethod === "transfer"
+                              ? "border-accent bg-accent/10"
+                              : "border-border hover:border-accent/50",
+                          )}
+                        >
+                          <Smartphone className="w-4 h-4" />
+                          <span className="text-xs font-medium">
+                            {t("Transfer")}
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
                     <Button
                       onClick={handleCompleteSale}
                       disabled={cart.length === 0}
@@ -410,6 +615,63 @@ export default function Sales() {
           </div>
         </div>
       </div>
+
+      {/* Quick Add Dialog */}
+      <Dialog
+        open={quickAddDialog.open}
+        onOpenChange={(open) =>
+          !open && setQuickAddDialog({ open: false, item: null })
+        }
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("Add to Cart")}</DialogTitle>
+            <DialogDescription>
+              {quickAddDialog.item && (
+                <span className="font-medium text-foreground">
+                  {quickAddDialog.item.name} -{" "}
+                  {formatCurrency(quickAddDialog.item.sellingPrice)}
+                </span>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="quantity">{t("Quantity")}</Label>
+              <Input
+                id="quantity"
+                type="number"
+                min="1"
+                max={quickAddDialog.item?.availableQty || 1}
+                value={quickQuantity}
+                onChange={(e) => setQuickQuantity(e.target.value)}
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleQuickAdd();
+                  }
+                }}
+              />
+              <p className="text-xs text-muted-foreground">
+                {t("Available")}: {quickAddDialog.item?.availableQty || 0}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setQuickAddDialog({ open: false, item: null })}
+            >
+              {t("Cancel")}
+            </Button>
+            <Button onClick={handleQuickAdd}>
+              <Plus className="w-4 h-4 mr-2" />
+              {t("Add to Cart")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   );
 }
