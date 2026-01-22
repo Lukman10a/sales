@@ -570,107 +570,208 @@ export default function Profile() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="theme">{t("Theme")}</Label>
-                    <Select
-                      value={appearance.theme}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, theme: value as any })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">{t("Light")}</SelectItem>
-                        <SelectItem value="dark">{t("Dark")}</SelectItem>
-                        <SelectItem value="system">{t("System")}</SelectItem>
-                      </SelectContent>
-                    </Select>
+                <div className="space-y-6">
+                  <div>
+                    <Label className="mb-3 block">{t("Theme")}</Label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <button
+                        onClick={() =>
+                          setAppearance({ ...appearance, theme: "light" })
+                        }
+                        className={cn(
+                          "p-4 border-2 rounded-xl transition-all",
+                          appearance.theme === "light"
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-accent/50",
+                        )}
+                      >
+                        <div className="w-full h-16 bg-white rounded-lg mb-2 border" />
+                        <p className="text-sm font-medium">{t("Light")}</p>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setAppearance({ ...appearance, theme: "dark" })
+                        }
+                        className={cn(
+                          "p-4 border-2 rounded-xl transition-all",
+                          appearance.theme === "dark"
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-accent/50",
+                        )}
+                      >
+                        <div className="w-full h-16 bg-slate-900 rounded-lg mb-2 border" />
+                        <p className="text-sm font-medium">{t("Dark")}</p>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setAppearance({ ...appearance, theme: "system" })
+                        }
+                        className={cn(
+                          "p-4 border-2 rounded-xl transition-all",
+                          appearance.theme === "system"
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-accent/50",
+                        )}
+                      >
+                        <div className="w-full h-16 bg-gradient-to-r from-white to-slate-900 rounded-lg mb-2 border" />
+                        <p className="text-sm font-medium">{t("System")}</p>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="grid gap-2">
-                    <Label htmlFor="language">{t("Language")}</Label>
-                    <Select
-                      value={appearance.language}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, language: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="ar">العربية (Arabic)</SelectItem>
-                        <SelectItem value="fr">Français</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div>
+                    <Label className="mb-3 block">{t("Language")}</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        variant={
+                          appearance.language === "en" ? "default" : "outline"
+                        }
+                        className="flex-1"
+                        onClick={() =>
+                          setAppearance({ ...appearance, language: "en" })
+                        }
+                      >
+                        English
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.language === "ar" ? "default" : "outline"
+                        }
+                        className="flex-1"
+                        onClick={() =>
+                          setAppearance({ ...appearance, language: "ar" })
+                        }
+                      >
+                        العربية
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="grid gap-2">
-                    <Label htmlFor="currency">{t("Currency")}</Label>
-                    <Select
-                      value={appearance.currency}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, currency: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="NGN">
-                          ₦ Nigerian Naira (NGN)
-                        </SelectItem>
-                        <SelectItem value="USD">$ US Dollar (USD)</SelectItem>
-                        <SelectItem value="EUR">€ Euro (EUR)</SelectItem>
-                        <SelectItem value="GBP">
-                          £ British Pound (GBP)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div>
+                    <Label className="mb-3 block">{t("Currency")}</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        variant={
+                          appearance.currency === "NGN" ? "default" : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({ ...appearance, currency: "NGN" })
+                        }
+                      >
+                        ₦ Naira (NGN)
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.currency === "USD" ? "default" : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({ ...appearance, currency: "USD" })
+                        }
+                      >
+                        $ Dollar (USD)
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.currency === "EUR" ? "default" : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({ ...appearance, currency: "EUR" })
+                        }
+                      >
+                        € Euro (EUR)
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.currency === "GBP" ? "default" : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({ ...appearance, currency: "GBP" })
+                        }
+                      >
+                        £ Pound (GBP)
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="grid gap-2">
-                    <Label htmlFor="date-format">{t("Date Format")}</Label>
-                    <Select
-                      value={appearance.dateFormat}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, dateFormat: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
-                        <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
-                        <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div>
+                    <Label className="mb-3 block">{t("Date Format")}</Label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <Button
+                        variant={
+                          appearance.dateFormat === "DD/MM/YYYY"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({
+                            ...appearance,
+                            dateFormat: "DD/MM/YYYY",
+                          })
+                        }
+                      >
+                        DD/MM/YYYY
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.dateFormat === "MM/DD/YYYY"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({
+                            ...appearance,
+                            dateFormat: "MM/DD/YYYY",
+                          })
+                        }
+                      >
+                        MM/DD/YYYY
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.dateFormat === "YYYY-MM-DD"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({
+                            ...appearance,
+                            dateFormat: "YYYY-MM-DD",
+                          })
+                        }
+                      >
+                        YYYY-MM-DD
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="grid gap-2">
-                    <Label htmlFor="time-format">{t("Time Format")}</Label>
-                    <Select
-                      value={appearance.timeFormat}
-                      onValueChange={(value) =>
-                        setAppearance({
-                          ...appearance,
-                          timeFormat: value as any,
-                        })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="12h">12-hour</SelectItem>
-                        <SelectItem value="24h">24-hour</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div>
+                    <Label className="mb-3 block">{t("Time Format")}</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        variant={
+                          appearance.timeFormat === "12h"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({ ...appearance, timeFormat: "12h" })
+                        }
+                      >
+                        {t("12-hour")}
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.timeFormat === "24h"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setAppearance({ ...appearance, timeFormat: "24h" })
+                        }
+                      >
+                        {t("24-hour")}
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t">

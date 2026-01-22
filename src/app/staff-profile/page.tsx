@@ -27,6 +27,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   User,
   Bell,
@@ -115,9 +116,7 @@ export default function StaffProfile() {
               {t("Manage your profile and preferences")}
             </p>
           </div>
-          <Badge className="w-fit">
-            {t("Staff Member")}
-          </Badge>
+          <Badge className="w-fit">{t("Staff Member")}</Badge>
         </div>
 
         {/* Performance Overview */}
@@ -130,8 +129,12 @@ export default function StaffProfile() {
                     <stat.icon className={`w-5 h-5 ${stat.color}`} />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">{t(stat.label)}</p>
-                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {t(stat.label)}
+                    </p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {stat.value}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -384,42 +387,81 @@ export default function StaffProfile() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="theme">{t("Theme")}</Label>
-                    <Select
-                      value={appearance.theme}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, theme: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">{t("Light")}</SelectItem>
-                        <SelectItem value="dark">{t("Dark")}</SelectItem>
-                        <SelectItem value="system">{t("System")}</SelectItem>
-                      </SelectContent>
-                    </Select>
+                <div className="space-y-6">
+                  <div>
+                    <Label className="mb-3 block">{t("Theme")}</Label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <button
+                        onClick={() =>
+                          setAppearance({ ...appearance, theme: "light" })
+                        }
+                        className={cn(
+                          "p-4 border-2 rounded-xl transition-all",
+                          appearance.theme === "light"
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-accent/50",
+                        )}
+                      >
+                        <div className="w-full h-16 bg-white rounded-lg mb-2 border" />
+                        <p className="text-sm font-medium">{t("Light")}</p>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setAppearance({ ...appearance, theme: "dark" })
+                        }
+                        className={cn(
+                          "p-4 border-2 rounded-xl transition-all",
+                          appearance.theme === "dark"
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-accent/50",
+                        )}
+                      >
+                        <div className="w-full h-16 bg-slate-900 rounded-lg mb-2 border" />
+                        <p className="text-sm font-medium">{t("Dark")}</p>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setAppearance({ ...appearance, theme: "system" })
+                        }
+                        className={cn(
+                          "p-4 border-2 rounded-xl transition-all",
+                          appearance.theme === "system"
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-accent/50",
+                        )}
+                      >
+                        <div className="w-full h-16 bg-gradient-to-r from-white to-slate-900 rounded-lg mb-2 border" />
+                        <p className="text-sm font-medium">{t("System")}</p>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="grid gap-2">
-                    <Label htmlFor="language">{t("Language")}</Label>
-                    <Select
-                      value={appearance.language}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, language: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="ar">العربية (Arabic)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div>
+                    <Label className="mb-3 block">{t("Language")}</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        variant={
+                          appearance.language === "en" ? "default" : "outline"
+                        }
+                        className="flex-1"
+                        onClick={() =>
+                          setAppearance({ ...appearance, language: "en" })
+                        }
+                      >
+                        English
+                      </Button>
+                      <Button
+                        variant={
+                          appearance.language === "ar" ? "default" : "outline"
+                        }
+                        className="flex-1"
+                        onClick={() =>
+                          setAppearance({ ...appearance, language: "ar" })
+                        }
+                      >
+                        العربية
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t">
