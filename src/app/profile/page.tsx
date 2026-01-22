@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,19 +57,53 @@ import {
 
 export default function Profile() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [profile, setProfile] = useState(userProfile);
   const [notifications, setNotifications] = useState(notificationPreferences);
   const [appearance, setAppearance] = useState(appearanceSettings);
 
+  // Load appearance settings from localStorage and apply theme
+  useEffect(() => {
+    const saved = localStorage.getItem("luxa_appearance");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setAppearance(parsed);
+      applyTheme(parsed.theme);
+    } else {
+      applyTheme(appearance.theme);
+    }
+  }, []);
+
+  const applyTheme = (theme: string) => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else if (theme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else if (theme === "system") {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      if (prefersDark) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  };
+
   const handleSaveProfile = () => {
+    localStorage.setItem("luxa_profile", JSON.stringify(profile));
     toast(t("Profile updated successfully"));
   };
 
   const handleSaveNotifications = () => {
+    localStorage.setItem("luxa_notifications", JSON.stringify(notifications));
     toast(t("Notification preferences saved"));
   };
 
   const handleSaveAppearance = () => {
+    localStorage.setItem("luxa_appearance", JSON.stringify(appearance));
+    applyTheme(appearance.theme);
     toast(t("Appearance settings saved"));
   };
 
@@ -575,9 +610,10 @@ export default function Profile() {
                     <Label className="mb-3 block">{t("Theme")}</Label>
                     <div className="grid grid-cols-3 gap-3">
                       <button
-                        onClick={() =>
-                          setAppearance({ ...appearance, theme: "light" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, theme: "light" });
+                          applyTheme("light");
+                        }}
                         className={cn(
                           "p-4 border-2 rounded-xl transition-all",
                           appearance.theme === "light"
@@ -589,9 +625,10 @@ export default function Profile() {
                         <p className="text-sm font-medium">{t("Light")}</p>
                       </button>
                       <button
-                        onClick={() =>
-                          setAppearance({ ...appearance, theme: "dark" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, theme: "dark" });
+                          applyTheme("dark");
+                        }}
                         className={cn(
                           "p-4 border-2 rounded-xl transition-all",
                           appearance.theme === "dark"
@@ -603,9 +640,10 @@ export default function Profile() {
                         <p className="text-sm font-medium">{t("Dark")}</p>
                       </button>
                       <button
-                        onClick={() =>
-                          setAppearance({ ...appearance, theme: "system" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, theme: "system" });
+                          applyTheme("system");
+                        }}
                         className={cn(
                           "p-4 border-2 rounded-xl transition-all",
                           appearance.theme === "system"
