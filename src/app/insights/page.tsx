@@ -44,7 +44,7 @@ export default function Insights() {
   const { t, formatCurrency } = useLanguage();
 
   return (
-    <MainLayout>
+    <MainLayout requireRole="owner">
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-start justify-between">
           <div>

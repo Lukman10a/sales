@@ -58,6 +58,14 @@ const ownerNavigation: NavigationItem[] = [
   { name: "AI Insights", href: "/insights", icon: Sparkles },
 ];
 
+const apprenticeNavigation: NavigationItem[] = [
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Inventory", href: "/inventory", icon: Package },
+  { name: "Sales", href: "/sales", icon: ShoppingCart },
+  { name: "Analytics", href: "/analytics", icon: BarChart3 },
+  { name: "Notifications", href: "/notifications", icon: Bell },
+];
+
 const investorNavigation: NavigationItem[] = [
   {
     name: "Investment Dashboard",
@@ -69,7 +77,9 @@ const investorNavigation: NavigationItem[] = [
 ];
 
 const getNavigation = (role: "owner" | "apprentice" | "investor" = "owner") => {
-  return role === "investor" ? investorNavigation : ownerNavigation;
+  if (role === "investor") return investorNavigation;
+  if (role === "apprentice") return apprenticeNavigation;
+  return ownerNavigation;
 };
 
 const Sidebar = ({
@@ -241,7 +251,7 @@ const Sidebar = ({
                       ? t("Owner")
                       : userRole === "investor"
                         ? t("Investor")
-                        : t("Admin")}
+                        : t("Staff")}
                   </p>
                 </div>
               </motion.div>

@@ -21,6 +21,7 @@ interface DataContextType {
   updateInventoryItem: (id: string, updates: Partial<InventoryItem>) => void;
   deleteInventoryItem: (id: string) => void;
   decrementInventory: (id: string, quantity: number) => void;
+  confirmInventoryReceipt: (id: string) => void;
 
   recentSales: SaleRecord[];
   setRecentSales: (sales: SaleRecord[]) => void;
@@ -115,6 +116,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const confirmInventoryReceipt = (id: string) => {
+    setInventory((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, confirmedByApprentice: true } : item,
+      ),
+    );
+  };
+
   const addSaleRecord = (sale: SaleRecord) => {
     setRecentSales((prev) => [sale, ...prev]);
   };
@@ -175,6 +184,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       updateInventoryItem,
       deleteInventoryItem,
       decrementInventory,
+      confirmInventoryReceipt,
       recentSales,
       setRecentSales,
       addSaleRecord,

@@ -83,7 +83,7 @@ const emptyNewItem: Omit<InventoryItem, "id"> = {
 
 export default function Inventory() {
   const { user } = useAuth();
-  const { inventory, addInventoryItem, updateInventoryItem, deleteInventoryItem } = useData();
+  const { inventory, addInventoryItem, updateInventoryItem, deleteInventoryItem, confirmInventoryReceipt } = useData();
   const userRole = user?.role || "owner";
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
@@ -183,6 +183,11 @@ export default function Inventory() {
     deleteInventoryItem(deleteTarget.id);
     toast(t("Item deleted successfully"));
     setDeleteTarget(null);
+  };
+
+  const handleConfirmReceipt = (itemId: string, itemName: string) => {
+    confirmInventoryReceipt(itemId);
+    toast(t("Receipt confirmed for {item}", { values: { item: itemName } }));
   };
 
   return (
@@ -409,7 +414,14 @@ export default function Inventory() {
                       </Badge>
                       {!item.confirmedByApprentice && userRole === "apprentice" && (
                         <div className="absolute inset-0 bg-warning/20 backdrop-blur-sm flex items-center justify-center">
-                          <Button size="sm" className="bg-warning text-warning-foreground">
+                          <Button 
+                            size="sm" 
+                            className="bg-warning text-warning-foreground"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleConfirmReceipt(item.id, item.name);
+                            }}
+                          >
                             <CheckCircle className="w-4 h-4 mr-2" />
                             {t("Confirm Receipt")}
                           </Button>
@@ -539,7 +551,11 @@ export default function Inventory() {
                                 </Button>
                               </>
                             ) : !item.confirmedByApprentice ? (
-                              <Button size="sm" className="bg-warning text-warning-foreground">
+                              <Button 
+                                size="sm" 
+                                className="bg-warning text-warning-foreground"
+                                onClick={() => handleConfirmReceipt(item.id, item.name)}
+                              >
                                 {t("Confirm")}
                               </Button>
                             ) : (

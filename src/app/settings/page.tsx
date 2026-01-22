@@ -119,6 +119,15 @@ export default function Settings() {
   const [selectedLayout, setSelectedLayout] = useState(
     userPreferences.defaultView,
   );
+
+  // Filter settings sections based on user role
+  const visibleSections = settingSections.filter((section) => {
+    if (userRole === "apprentice") {
+      // Apprentices can only access: notifications, appearance, help
+      return ["notifications", "appearance", "help"].includes(section.id);
+    }
+    return true; // Owners see all sections
+  });
   const [welcomeMessage, setWelcomeMessage] = useState(
     userPreferences.showWelcomeMessage,
   );
@@ -179,31 +188,25 @@ export default function Settings() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <nav className="space-y-1">
-              {settingSections
-                .filter(
-                  (s) =>
-                    userRole === "owner" ||
-                    !["staff", "data", "help"].includes(s.id),
-                )
-                .map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
+              {visibleSections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left",
+                    activeSection === section.id
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  <section.icon className="w-5 h-5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{t(section.title)}</p>
+                  </div>
+                  <ChevronRight
                     className={cn(
-                      "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left",
-                      activeSection === section.id
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                    )}
-                  >
-                    <section.icon className="w-5 h-5" />
-                    <div className="flex-1">
-                      <p className="font-medium text-sm">{t(section.title)}</p>
-                    </div>
-                    <ChevronRight
-                      className={cn(
-                        "w-4 h-4",
-                        activeSection === section.id &&
+                      "w-4 h-4",
+                      activeSection === section.id &&
                           "text-primary-foreground",
                       )}
                     />

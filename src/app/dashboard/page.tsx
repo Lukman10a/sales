@@ -112,6 +112,12 @@ const DashboardContent = memo(function DashboardContent() {
   const { t, formatCurrency } = useLanguage();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [greeting] = useState(getTimeBasedGreeting());
+  const userRole = user?.role || "owner";
+
+  // Calculate pending confirmations for apprentices
+  const pendingConfirmations = inventory.filter(
+    (item) => !item.confirmedByApprentice
+  ).length;
 
   // Calculate top selling products
   const topSellingProducts = inventory
@@ -162,7 +168,10 @@ const DashboardContent = memo(function DashboardContent() {
         </div>
 
         {/* Quick Actions */}
-        <QuickActions />
+        <QuickActions 
+          userRole={userRole} 
+          pendingConfirmations={pendingConfirmations}
+        />
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
