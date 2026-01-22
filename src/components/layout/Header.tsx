@@ -46,7 +46,15 @@ const Header = ({
       ? t("Owner")
       : userRole === "investor"
         ? t("Investor")
-        : t("Admin");
+        : t("Staff");
+
+  // Determine profile route based on role
+  const profileRoute =
+    userRole === "investor"
+      ? "/investor-profile"
+      : userRole === "apprentice"
+        ? "/staff-profile"
+        : "/profile";
 
   return (
     <motion.header
@@ -108,7 +116,7 @@ const Header = ({
 
         {/* Profile */}
         <Link
-          href="/profile"
+          href={profileRoute}
           className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 border-l border-border hover:opacity-80 transition-opacity"
         >
           <div className="text-right hidden sm:block">
