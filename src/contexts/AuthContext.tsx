@@ -20,9 +20,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Check for existing session on mount
+  // Check for existing session on mount and load avatar from profile storage
   useEffect(() => {
     const currentUser = AuthService.getUser();
+    if (currentUser) {
+      // Load avatar from profile storage based on role
+      let profileKey = "luxa_profile";
+      if (currentUser.role === "apprentice") {
+        profileKey = "luxa_staff_profile";
+      } else if (currentUser.role === "investor") {
+        profileKey = "luxa_investor_profile";
+      }
+
+      const profileData = localStorage.getItem(profileKey);
+      if (profileData) {
+        try {
+          const profile = JSON.parse(profileData);
+          if (profile.avatar) {
+            currentUser.avatar = profile.avatar;
+          }
+        } catch (e) {
+          console.error("Failed to load avatar from profile:", e);
+        }
+      }
+    }
     setUser(currentUser);
     setIsLoading(false);
   }, []);
@@ -47,8 +68,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateUser = (updates: Partial<User>) => {
     try {
-      const updatedUser = AuthService.updateUser(updates);
-      setUser(updatedUser);
+      // For avatar updates, only update state without localStorage
+      if (updates.avatar && user) {
+        setUser({ ...user, ...updates });
+      } else {
+        const updatedUser = AuthService.updateUser(updates);
+        setUser(updatedUser);
+      }
     } catch (error) {
       console.error("Failed to update user:", error);
     }

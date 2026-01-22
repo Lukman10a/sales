@@ -56,8 +56,8 @@ import {
 } from "@/data/profile";
 
 export default function Profile() {
-  const { t } = useLanguage();
-  const { user } = useAuth();
+  const { t, setLanguage } = useLanguage();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState(userProfile);
   const [notifications, setNotifications] = useState(notificationPreferences);
   const [appearance, setAppearance] = useState(appearanceSettings);
@@ -115,6 +115,7 @@ export default function Profile() {
         "luxa_profile",
         JSON.stringify({ ...profile, avatar: imageData }),
       );
+      updateUser({ avatar: imageData });
       toast(t("Profile picture updated"));
     };
     reader.readAsDataURL(file);
@@ -708,9 +709,10 @@ export default function Profile() {
                           appearance.language === "en" ? "default" : "outline"
                         }
                         className="flex-1"
-                        onClick={() =>
-                          setAppearance({ ...appearance, language: "en" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, language: "en" });
+                          setLanguage("en");
+                        }}
                       >
                         English
                       </Button>
@@ -719,9 +721,10 @@ export default function Profile() {
                           appearance.language === "ar" ? "default" : "outline"
                         }
                         className="flex-1"
-                        onClick={() =>
-                          setAppearance({ ...appearance, language: "ar" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, language: "ar" });
+                          setLanguage("ar");
+                        }}
                       >
                         العربية
                       </Button>

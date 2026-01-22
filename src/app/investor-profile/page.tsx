@@ -41,8 +41,8 @@ import {
 import { toast } from "@/components/ui/sonner";
 
 export default function InvestorProfile() {
-  const { t, formatCurrency } = useLanguage();
-  const { user } = useAuth();
+  const { t, formatCurrency, setLanguage } = useLanguage();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState({
     name: user?.firstName + " " + user?.lastName || "Investor",
     email: user?.email || "",
@@ -64,7 +64,7 @@ export default function InvestorProfile() {
   });
 
   const [appearance, setAppearance] = useState({
-    theme: "dark",
+    theme: "light",
     language: "en",
     currency: "NGN",
     compactMode: false,
@@ -84,8 +84,6 @@ export default function InvestorProfile() {
       const parsed = JSON.parse(savedAppearance);
       setAppearance(parsed);
       applyTheme(parsed.theme);
-    } else {
-      applyTheme(appearance.theme);
     }
   }, []);
 
@@ -130,6 +128,7 @@ export default function InvestorProfile() {
         "luxa_investor_profile",
         JSON.stringify({ ...profile, avatar: imageData }),
       );
+      updateUser({ avatar: imageData });
       toast(t("Profile picture updated"));
     };
     reader.readAsDataURL(file);
@@ -613,9 +612,14 @@ export default function InvestorProfile() {
                           appearance.language === "en" ? "default" : "outline"
                         }
                         className="flex-1"
-                        onClick={() =>
-                          setAppearance({ ...appearance, language: "en" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, language: "en" });
+                          setLanguage("en");
+                          localStorage.setItem(
+                            "luxa_appearance",
+                            JSON.stringify({ ...appearance, language: "en" }),
+                          );
+                        }}
                       >
                         English
                       </Button>
@@ -624,9 +628,14 @@ export default function InvestorProfile() {
                           appearance.language === "ar" ? "default" : "outline"
                         }
                         className="flex-1"
-                        onClick={() =>
-                          setAppearance({ ...appearance, language: "ar" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, language: "ar" });
+                          setLanguage("ar");
+                          localStorage.setItem(
+                            "luxa_appearance",
+                            JSON.stringify({ ...appearance, language: "ar" }),
+                          );
+                        }}
                       >
                         العربية
                       </Button>

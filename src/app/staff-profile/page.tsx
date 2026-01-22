@@ -41,8 +41,8 @@ import {
 import { toast } from "@/components/ui/sonner";
 
 export default function StaffProfile() {
-  const { t } = useLanguage();
-  const { user } = useAuth();
+  const { t, setLanguage } = useLanguage();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState({
     name: user?.firstName + " " + user?.lastName || "Staff Member",
     email: user?.email || "",
@@ -61,7 +61,7 @@ export default function StaffProfile() {
   });
 
   const [appearance, setAppearance] = useState({
-    theme: "dark",
+    theme: "light",
     language: "en",
     compactMode: false,
   });
@@ -78,8 +78,6 @@ export default function StaffProfile() {
       const parsed = JSON.parse(savedAppearance);
       setAppearance(parsed);
       applyTheme(parsed.theme);
-    } else {
-      applyTheme(appearance.theme);
     }
   }, []);
 
@@ -124,6 +122,7 @@ export default function StaffProfile() {
         "luxa_staff_profile",
         JSON.stringify({ ...profile, avatar: imageData }),
       );
+      updateUser({ avatar: imageData });
       toast(t("Profile picture updated"));
     };
     reader.readAsDataURL(file);
@@ -531,9 +530,14 @@ export default function StaffProfile() {
                           appearance.language === "en" ? "default" : "outline"
                         }
                         className="flex-1"
-                        onClick={() =>
-                          setAppearance({ ...appearance, language: "en" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, language: "en" });
+                          setLanguage("en");
+                          localStorage.setItem(
+                            "luxa_appearance",
+                            JSON.stringify({ ...appearance, language: "en" }),
+                          );
+                        }}
                       >
                         English
                       </Button>
@@ -542,9 +546,14 @@ export default function StaffProfile() {
                           appearance.language === "ar" ? "default" : "outline"
                         }
                         className="flex-1"
-                        onClick={() =>
-                          setAppearance({ ...appearance, language: "ar" })
-                        }
+                        onClick={() => {
+                          setAppearance({ ...appearance, language: "ar" });
+                          setLanguage("ar");
+                          localStorage.setItem(
+                            "luxa_appearance",
+                            JSON.stringify({ ...appearance, language: "ar" }),
+                          );
+                        }}
                       >
                         العربية
                       </Button>

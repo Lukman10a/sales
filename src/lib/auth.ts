@@ -115,6 +115,14 @@ export class AuthService {
     if (!user) throw new Error("No user logged in");
     
     const updatedUser = { ...user, ...updates };
+    
+    // Don't persist avatar to localStorage to avoid quota issues
+    // Avatar is stored in profile-specific storage instead
+    if (updates.avatar) {
+      // Just return the updated user without persisting
+      return updatedUser;
+    }
+    
     this.setUser(updatedUser);
     return updatedUser;
   }
