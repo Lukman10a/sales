@@ -100,6 +100,35 @@ export default function StaffProfile() {
     }
   };
 
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (2MB max)
+    if (file.size > 2 * 1024 * 1024) {
+      toast(t("Image size must be less than 2MB"));
+      return;
+    }
+
+    // Check file type
+    if (!file.type.startsWith("image/")) {
+      toast(t("Please select an image file"));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageData = event.target?.result as string;
+      setProfile({ ...profile, avatar: imageData });
+      localStorage.setItem(
+        "luxa_staff_profile",
+        JSON.stringify({ ...profile, avatar: imageData }),
+      );
+      toast(t("Profile picture updated"));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSaveProfile = () => {
     localStorage.setItem("luxa_staff_profile", JSON.stringify(profile));
     toast(t("Profile updated successfully"));
@@ -218,7 +247,21 @@ export default function StaffProfile() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <Button variant="outline" size="sm" className="gap-2">
+                    <input
+                      type="file"
+                      id="avatar-upload-staff"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarUpload}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() =>
+                        document.getElementById("avatar-upload-staff")?.click()
+                      }
+                    >
                       <Camera className="w-4 h-4" />
                       {t("Change Photo")}
                     </Button>
