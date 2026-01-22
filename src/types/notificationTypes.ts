@@ -6,4 +6,6 @@ export interface Notification {
   time: string;
   read: boolean;
   actionable?: boolean;
+  relatedItemId?: string;
+  actionType?: "reorder" | "confirm" | "approve" | "manage" | "task" | "discount" | "return";
 }

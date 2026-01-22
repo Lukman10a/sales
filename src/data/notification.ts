@@ -10,6 +10,8 @@ export const notifications: Notification[] = [
     time: "5 mins ago",
     read: false,
     actionable: true,
+    relatedItemId: "1",
+    actionType: "confirm",
   },
   {
     id: "2",
@@ -20,6 +22,8 @@ export const notifications: Notification[] = [
     time: "15 mins ago",
     read: false,
     actionable: true,
+    relatedItemId: "2",
+    actionType: "reorder",
   },
   {
     id: "3",
@@ -29,6 +33,9 @@ export const notifications: Notification[] = [
       "Ibrahim sold Samsung Galaxy A54 for ₦185,000. Transaction completed successfully.",
     time: "32 mins ago",
     read: false,
+    actionable: true,
+    relatedItemId: "3",
+    actionType: "manage",
   },
   {
     id: "4",
@@ -38,6 +45,9 @@ export const notifications: Notification[] = [
       "USB-C Fast Chargers are selling fast. Consider restocking within 48 hours to avoid stockout.",
     time: "1 hour ago",
     read: true,
+    actionable: true,
+    relatedItemId: "4",
+    actionType: "reorder",
   },
   {
     id: "5",
@@ -47,6 +57,9 @@ export const notifications: Notification[] = [
       "iPhone 15 Pro Max Case has only 2 units left. Reorder to maintain stock levels.",
     time: "2 hours ago",
     read: true,
+    actionable: true,
+    relatedItemId: "1",
+    actionType: "reorder",
   },
   {
     id: "6",
@@ -65,5 +78,7 @@ export const notifications: Notification[] = [
       "Wireless Earbuds Pro are trending. Consider a slight price increase to maximize profits.",
     time: "5 hours ago",
     read: true,
+    actionable: true,
+    actionType: "discount",
   },
 ];

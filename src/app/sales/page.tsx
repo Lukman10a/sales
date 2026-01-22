@@ -76,15 +76,10 @@ export default function Sales() {
 
   const filteredItems = useMemo(
     () =>
-      products
-        .filter((item) =>
-          item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-        )
-        .filter(
-          (item) =>
-            selectedCategory === "All" || item.category === selectedCategory,
-        ),
-    [products, searchQuery, selectedCategory],
+      products.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    [products, searchQuery],
   );
 
   const openQuickAddDialog = (item: SaleItem) => {

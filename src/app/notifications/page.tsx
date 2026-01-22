@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import NotificationActionModal from "@/components/notifications/NotificationActionModal";
 import {
   Bell,
   Check,
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { getNotificationsByRole } from "@/data/roleNotifications";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { Notification } from "@/types/notificationTypes";
 
 const typeConfig = {
   inventory: {
@@ -48,6 +50,9 @@ export default function Notifications() {
   const userRole = user?.role || "owner";
   const [notifs, setNotifs] = useState(getNotificationsByRole(userRole));
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [activeNotification, setActiveNotification] =
+    useState<Notification | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -68,6 +73,19 @@ export default function Notifications() {
 
   const dismissNotif = (id: string) => {
     setNotifs(notifs.filter((n) => n.id !== id));
+  };
+
+  const handleTakeAction = (notif: Notification) => {
+    setActiveNotification(notif);
+    setModalOpen(true);
+  };
+
+  const handleActionComplete = () => {
+    if (activeNotification) {
+      markAsRead(activeNotification.id);
+    }
+    setModalOpen(false);
+    setActiveNotification(null);
   };
 
   return (
@@ -194,7 +212,8 @@ export default function Notifications() {
                           {notif.actionable && (
                             <Button
                               size="sm"
-                              className="h-8 bg-accent text-accent-foreground"
+                              className="h-8 bg-accent text-accent-foreground hover:bg-accent/90"
+                              onClick={() => handleTakeAction(notif)}
                             >
                               {t("Take Action")}
                             </Button>
@@ -209,6 +228,16 @@ export default function Notifications() {
           )}
         </div>
       </div>
+
+      {/* Notification Action Modal */}
+      {activeNotification && (
+        <NotificationActionModal
+          notification={activeNotification}
+          open={modalOpen}
+          onOpenChange={setModalOpen}
+          onActionComplete={handleActionComplete}
+        />
+      )}
     </MainLayout>
   );
 }
