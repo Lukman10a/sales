@@ -107,7 +107,10 @@ const Header = ({
         </Button>
 
         {/* Profile */}
-        <Link href="/profile" className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 border-l border-border hover:opacity-80 transition-opacity">
+        <Link
+          href="/profile"
+          className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 border-l border-border hover:opacity-80 transition-opacity"
+        >
           <div className="text-right hidden sm:block">
             <p className="text-sm font-medium text-foreground">{displayName}</p>
             <Badge

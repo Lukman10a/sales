@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import MainLayout from "@/components/layout/MainLayout";
 import {
   Database,
   Download,
@@ -143,7 +144,7 @@ export default function DataManagementPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6 lg:p-8">
+    <MainLayout>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -1001,6 +1002,6 @@ export default function DataManagementPage() {
           </TabsContent>
         </Tabs>
       </motion.div>
-    </div>
+    </MainLayout>
   );
 }
