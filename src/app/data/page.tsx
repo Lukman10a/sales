@@ -11,14 +11,11 @@ import {
   Shield,
   AlertTriangle,
   CheckCircle2,
-  Clock,
-  Trash2,
   Settings,
   Play,
   FileText,
   Cloud,
   Calendar,
-  Filter,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -62,13 +59,7 @@ import {
   dataCleanup,
   integrityChecks,
 } from "@/data/dataManagement";
-import {
-  Backup,
-  ExportRequest,
-  ImportRecord,
-  DataType,
-  ExportFormat,
-} from "@/types/dataManagementTypes";
+import { DataType, ExportFormat } from "@/types/dataManagementTypes";
 import { format } from "date-fns";
 
 export default function DataManagementPage() {

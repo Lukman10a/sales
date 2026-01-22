@@ -33,18 +33,15 @@ import {
   TrendingDown,
   DollarSign,
   Package,
-  Users,
   ShoppingCart,
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
   salesData,
-  hourlyData,
   categoryData,
   topProducts,
   dailyAnalyticsData,
-  weeklySalesData,
   monthlyAnalyticsData,
 } from "@/data/analytics";
 import { useLanguage } from "@/contexts/LanguageContext";
