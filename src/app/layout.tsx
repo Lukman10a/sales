@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "LUXA Sales - Dashboard",
+  title: "PrimeStock - Inventory Management Dashboard",
   description: "Modern sales management system",
   viewport: {
     width: "device-width",

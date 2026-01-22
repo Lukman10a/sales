@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -198,27 +199,32 @@ const Sidebar = ({
                 exit={{ opacity: 0 }}
                 className="flex items-center gap-3"
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center">
-                  <Package className="w-5 h-5 text-accent-foreground" />
-                </div>
+                <Image
+                  src="/primestore.jpg"
+                  alt="PrimeStock"
+                  width={60}
+                  height={30}
+                  className="h-8 w-auto object-contain"
+                />
                 <div>
                   <h1 className="font-display font-bold text-sidebar-foreground text-lg">
-                    {t("StockFlow")}
+                    {t("PrimeStock")}
                   </h1>
                   <p className="text-xs text-sidebar-foreground/60">
-                    {t("Sales & Inventory")}
+                    {t("Inventory Manager")}
                   </p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
           {collapsed && (
-            <div className="w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center mx-auto">
-              <span
-                className={cn(
-                  "absolute top-1 w-2 h-2 bg-destructive rounded-full",
-                  isRTL ? "left-1" : "right-1",
-                )}
+            <div className="mx-auto">
+              <Image
+                src="/primestore.jpg"
+                alt="PrimeStock"
+                width={40}
+                height={20}
+                className="h-6 w-auto object-contain"
               />
             </div>
           )}

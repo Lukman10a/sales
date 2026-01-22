@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Package } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -35,11 +36,15 @@ export default function AuthLayout({
         <div className="bg-card/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-lg border border-border p-6 sm:p-8">
           {/* Logo & Title */}
           <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-accent rounded-2xl mb-3 sm:mb-4">
-              <Package className="w-7 h-7 sm:w-8 sm:h-8 text-accent-foreground" />
-            </div>
+            <Image
+              src="/primestore.jpg"
+              alt="PrimeStock Logo"
+              width={80}
+              height={40}
+              className="h-12 sm:h-16 w-auto object-contain mx-auto mb-3 sm:mb-4"
+            />
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
-              {t("Welcome to LUXA")}
+              {t("Welcome to PrimeStock")}
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground">
               {t("Sign in to manage your business")}
@@ -52,7 +57,7 @@ export default function AuthLayout({
 
         {/* Footer */}
         <p className="text-center text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6">
-          © 2026 LUXA Sales. {t("All rights reserved.")}
+          © 2026 PrimeStock. {t("All rights reserved.")}
         </p>
       </div>
     </div>
