@@ -206,12 +206,11 @@ export default function Settings() {
                   <ChevronRight
                     className={cn(
                       "w-4 h-4",
-                      activeSection === section.id &&
-                          "text-primary-foreground",
-                      )}
-                    />
-                  </button>
-                ))}
+                      activeSection === section.id && "text-primary-foreground",
+                    )}
+                  />
+                </button>
+              ))}
             </nav>
           </div>
 

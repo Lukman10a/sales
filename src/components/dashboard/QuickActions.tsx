@@ -18,7 +18,10 @@ const variantStyles = {
     "bg-card border border-border hover:border-accent/50 text-foreground",
 };
 
-const QuickActions = ({ userRole = "owner", pendingConfirmations = 0 }: QuickActionsProps) => {
+const QuickActions = ({
+  userRole = "owner",
+  pendingConfirmations = 0,
+}: QuickActionsProps) => {
   const { t } = useLanguage();
   const actionsList = userRole === "apprentice" ? apprenticeActions : actions;
 
@@ -30,7 +33,8 @@ const QuickActions = ({ userRole = "owner", pendingConfirmations = 0 }: QuickAct
       className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
     >
       {actionsList.map((action, index) => {
-        const hasBadge = action.id === "confirm-stock" && pendingConfirmations > 0;
+        const hasBadge =
+          action.id === "confirm-stock" && pendingConfirmations > 0;
         return (
           <Link key={action.id} href={action.href}>
             <motion.div
@@ -50,22 +54,23 @@ const QuickActions = ({ userRole = "owner", pendingConfirmations = 0 }: QuickAct
                 </Badge>
               )}
               <action.icon className="w-5 h-5 sm:w-6 sm:h-6 mb-2 sm:mb-3" />
-            <h4 className="font-semibold text-xs sm:text-sm mb-1">
-              {t(action.title)}
-            </h4>
-            <p
-              className={cn(
-                "text-[10px] sm:text-xs line-clamp-2",
-                action.variant === "secondary"
-                  ? "text-muted-foreground"
-                  : "opacity-80",
-              )}
-            >
-              {t(action.description)}
-            </p>
-          </motion.div>
-        </Link>
-      );})}
+              <h4 className="font-semibold text-xs sm:text-sm mb-1">
+                {t(action.title)}
+              </h4>
+              <p
+                className={cn(
+                  "text-[10px] sm:text-xs line-clamp-2",
+                  action.variant === "secondary"
+                    ? "text-muted-foreground"
+                    : "opacity-80",
+                )}
+              >
+                {t(action.description)}
+              </p>
+            </motion.div>
+          </Link>
+        );
+      })}
     </motion.div>
   );
 };

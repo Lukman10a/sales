@@ -116,7 +116,7 @@ const DashboardContent = memo(function DashboardContent() {
 
   // Calculate pending confirmations for apprentices
   const pendingConfirmations = inventory.filter(
-    (item) => !item.confirmedByApprentice
+    (item) => !item.confirmedByApprentice,
   ).length;
 
   // Calculate top selling products
@@ -168,8 +168,8 @@ const DashboardContent = memo(function DashboardContent() {
         </div>
 
         {/* Quick Actions */}
-        <QuickActions 
-          userRole={userRole} 
+        <QuickActions
+          userRole={userRole}
           pendingConfirmations={pendingConfirmations}
         />
 

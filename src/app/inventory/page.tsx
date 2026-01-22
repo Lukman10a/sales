@@ -54,7 +54,10 @@ import { toast } from "@/components/ui/sonner";
 import { categories } from "@/data/inventory";
 import StockAlerts from "@/components/inventory/StockAlerts";
 
-const statusConfig: Record<InventoryItem["status"], { label: string; className: string }> = {
+const statusConfig: Record<
+  InventoryItem["status"],
+  { label: string; className: string }
+> = {
   "in-stock": {
     label: "In Stock",
     className: "bg-success/10 text-success border-success/20",
@@ -83,7 +86,13 @@ const emptyNewItem: Omit<InventoryItem, "id"> = {
 
 export default function Inventory() {
   const { user } = useAuth();
-  const { inventory, addInventoryItem, updateInventoryItem, deleteInventoryItem, confirmInventoryReceipt } = useData();
+  const {
+    inventory,
+    addInventoryItem,
+    updateInventoryItem,
+    deleteInventoryItem,
+    confirmInventoryReceipt,
+  } = useData();
   const userRole = user?.role || "owner";
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
@@ -93,9 +102,13 @@ export default function Inventory() {
   const [showFilters, setShowFilters] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<Omit<InventoryItem, "id"> | null>(null);
+  const [editingItem, setEditingItem] = useState<Omit<
+    InventoryItem,
+    "id"
+  > | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<InventoryItem | null>(null);
-  const [newItem, setNewItem] = useState<Omit<InventoryItem, "id">>(emptyNewItem);
+  const [newItem, setNewItem] =
+    useState<Omit<InventoryItem, "id">>(emptyNewItem);
   const { t, formatCurrency, isRTL } = useLanguage();
 
   const filteredItems = useMemo(() => {
@@ -103,8 +116,10 @@ export default function Inventory() {
       item.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-    if (filterStatus !== "all") items = items.filter((item) => item.status === filterStatus);
-    if (filterCategory !== "All") items = items.filter((item) => item.category === filterCategory);
+    if (filterStatus !== "all")
+      items = items.filter((item) => item.status === filterStatus);
+    if (filterCategory !== "All")
+      items = items.filter((item) => item.category === filterCategory);
 
     items = [...items].sort((a, b) => {
       switch (sortBy) {
@@ -290,15 +305,22 @@ export default function Inventory() {
                     <SelectContent>
                       <SelectItem value="all">{t("All Statuses")}</SelectItem>
                       <SelectItem value="in-stock">{t("In Stock")}</SelectItem>
-                      <SelectItem value="low-stock">{t("Low Stock")}</SelectItem>
-                      <SelectItem value="out-of-stock">{t("Out of Stock")}</SelectItem>
+                      <SelectItem value="low-stock">
+                        {t("Low Stock")}
+                      </SelectItem>
+                      <SelectItem value="out-of-stock">
+                        {t("Out of Stock")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
                   <Label>{t("Category")}</Label>
-                  <Select value={filterCategory} onValueChange={setFilterCategory}>
+                  <Select
+                    value={filterCategory}
+                    onValueChange={setFilterCategory}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder={t("All Categories")} />
                     </SelectTrigger>
@@ -320,11 +342,21 @@ export default function Inventory() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="name">{t("Name (A-Z)")}</SelectItem>
-                      <SelectItem value="price-asc">{t("Price (Low to High)")}</SelectItem>
-                      <SelectItem value="price-desc">{t("Price (High to Low)")}</SelectItem>
-                      <SelectItem value="quantity-desc">{t("Quantity (High to Low)")}</SelectItem>
-                      <SelectItem value="quantity-asc">{t("Quantity (Low to High)")}</SelectItem>
-                      <SelectItem value="sold-desc">{t("Most Sold")}</SelectItem>
+                      <SelectItem value="price-asc">
+                        {t("Price (Low to High)")}
+                      </SelectItem>
+                      <SelectItem value="price-desc">
+                        {t("Price (High to Low)")}
+                      </SelectItem>
+                      <SelectItem value="quantity-desc">
+                        {t("Quantity (High to Low)")}
+                      </SelectItem>
+                      <SelectItem value="quantity-asc">
+                        {t("Quantity (Low to High)")}
+                      </SelectItem>
+                      <SelectItem value="sold-desc">
+                        {t("Most Sold")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -332,7 +364,9 @@ export default function Inventory() {
 
               <div className="flex justify-between items-center pt-2 border-t">
                 <p className="text-sm text-muted-foreground">
-                  {t("Showing {count} items", { values: { count: filteredItems.length } })}
+                  {t("Showing {count} items", {
+                    values: { count: filteredItems.length },
+                  })}
                 </p>
                 <Button
                   variant="ghost"
@@ -353,23 +387,33 @@ export default function Inventory() {
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
-            <p className="text-xs sm:text-sm text-muted-foreground">{t("Total Items")}</p>
-            <p className="text-xl sm:text-2xl font-display font-bold text-foreground">{inventory.length}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("Total Items")}
+            </p>
+            <p className="text-xl sm:text-2xl font-display font-bold text-foreground">
+              {inventory.length}
+            </p>
           </div>
           <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
-            <p className="text-xs sm:text-sm text-muted-foreground">{t("In Stock")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("In Stock")}
+            </p>
             <p className="text-xl sm:text-2xl font-display font-bold text-success">
               {inventory.filter((i) => i.status === "in-stock").length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
-            <p className="text-xs sm:text-sm text-muted-foreground">{t("Low Stock")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("Low Stock")}
+            </p>
             <p className="text-xl sm:text-2xl font-display font-bold text-warning">
               {inventory.filter((i) => i.status === "low-stock").length}
             </p>
           </div>
           <div className="bg-card rounded-xl border p-3 sm:p-4 card-elevated">
-            <p className="text-xs sm:text-sm text-muted-foreground">{t("Out of Stock")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              {t("Out of Stock")}
+            </p>
             <p className="text-xl sm:text-2xl font-display font-bold text-destructive">
               {inventory.filter((i) => i.status === "out-of-stock").length}
             </p>
@@ -412,51 +456,75 @@ export default function Inventory() {
                       >
                         {t(statusConfig[item.status].label)}
                       </Badge>
-                      {!item.confirmedByApprentice && userRole === "apprentice" && (
-                        <div className="absolute inset-0 bg-warning/20 backdrop-blur-sm flex items-center justify-center">
-                          <Button 
-                            size="sm" 
-                            className="bg-warning text-warning-foreground"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleConfirmReceipt(item.id, item.name);
-                            }}
-                          >
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            {t("Confirm Receipt")}
-                          </Button>
-                        </div>
-                      )}
+                      {!item.confirmedByApprentice &&
+                        userRole === "apprentice" && (
+                          <div className="absolute inset-0 bg-warning/20 backdrop-blur-sm flex items-center justify-center">
+                            <Button
+                              size="sm"
+                              className="bg-warning text-warning-foreground"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleConfirmReceipt(item.id, item.name);
+                              }}
+                            >
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              {t("Confirm Receipt")}
+                            </Button>
+                          </div>
+                        )}
                     </div>
                   </Link>
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-foreground truncate">{item.name}</h3>
+                      <h3 className="font-semibold text-foreground truncate">
+                        {item.name}
+                      </h3>
                       <Badge variant="secondary">{item.category}</Badge>
                     </div>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t("Qty Available")}</span>
-                        <span className="font-medium text-foreground">{item.quantity}</span>
+                        <span className="text-muted-foreground">
+                          {t("Qty Available")}
+                        </span>
+                        <span className="font-medium text-foreground">
+                          {item.quantity}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t("Sold")}</span>
-                        <span className="font-medium text-success">{item.sold}</span>
+                        <span className="text-muted-foreground">
+                          {t("Sold")}
+                        </span>
+                        <span className="font-medium text-success">
+                          {item.sold}
+                        </span>
                       </div>
                       {userRole === "owner" && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">{t("Cost Price")}</span>
-                          <span className="font-medium text-foreground">{formatCurrency(item.wholesalePrice)}</span>
+                          <span className="text-muted-foreground">
+                            {t("Cost Price")}
+                          </span>
+                          <span className="font-medium text-foreground">
+                            {formatCurrency(item.wholesalePrice)}
+                          </span>
                         </div>
                       )}
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t("Selling Price")}</span>
-                        <span className="font-medium text-accent">{formatCurrency(item.sellingPrice)}</span>
+                        <span className="text-muted-foreground">
+                          {t("Selling Price")}
+                        </span>
+                        <span className="font-medium text-accent">
+                          {formatCurrency(item.sellingPrice)}
+                        </span>
                       </div>
                     </div>
                     {userRole === "owner" && (
                       <div className="flex gap-2 mt-4 pt-4 border-t">
-                        <Button variant="outline" size="sm" className="flex-1" onClick={() => handleEditItem(item)}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleEditItem(item)}
+                        >
                           <Edit className="w-3 h-3 mr-1" />
                           {t("Edit")}
                         </Button>
@@ -486,21 +554,40 @@ export default function Inventory() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b bg-muted/50">
-                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">{t("Item")}</th>
-                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">{t("Status")}</th>
-                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">{t("Category")}</th>
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">{t("Qty")}</th>
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">{t("Sold")}</th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                        {t("Item")}
+                      </th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                        {t("Status")}
+                      </th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                        {t("Category")}
+                      </th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        {t("Qty")}
+                      </th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        {t("Sold")}
+                      </th>
                       {userRole === "owner" && (
-                        <th className="text-right p-4 text-sm font-medium text-muted-foreground">{t("Cost")}</th>
+                        <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                          {t("Cost")}
+                        </th>
                       )}
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">{t("Price")}</th>
-                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">{t("Actions")}</th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        {t("Price")}
+                      </th>
+                      <th className="text-right p-4 text-sm font-medium text-muted-foreground">
+                        {t("Actions")}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredItems.map((item) => (
-                      <tr key={item.id} className="border-b hover:bg-muted/30 transition-colors">
+                      <tr
+                        key={item.id}
+                        className="border-b hover:bg-muted/30 transition-colors"
+                      >
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             <Image
@@ -511,7 +598,10 @@ export default function Inventory() {
                               className="w-12 h-12 rounded-lg object-cover"
                             />
                             <div>
-                              <Link href={`/inventory/${item.id}`} className="font-medium text-foreground hover:underline">
+                              <Link
+                                href={`/inventory/${item.id}`}
+                                className="font-medium text-foreground hover:underline"
+                              >
                                 {item.name}
                               </Link>
                               {!item.confirmedByApprentice && (
@@ -524,22 +614,39 @@ export default function Inventory() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <Badge variant="outline" className={statusConfig[item.status].className}>
+                          <Badge
+                            variant="outline"
+                            className={statusConfig[item.status].className}
+                          >
                             {t(statusConfig[item.status].label)}
                           </Badge>
                         </td>
-                        <td className="p-4 text-sm text-muted-foreground">{item.category}</td>
-                        <td className="p-4 text-right font-medium">{item.quantity}</td>
-                        <td className="p-4 text-right font-medium text-success">{item.sold}</td>
+                        <td className="p-4 text-sm text-muted-foreground">
+                          {item.category}
+                        </td>
+                        <td className="p-4 text-right font-medium">
+                          {item.quantity}
+                        </td>
+                        <td className="p-4 text-right font-medium text-success">
+                          {item.sold}
+                        </td>
                         {userRole === "owner" && (
-                          <td className="p-4 text-right">{formatCurrency(item.wholesalePrice)}</td>
+                          <td className="p-4 text-right">
+                            {formatCurrency(item.wholesalePrice)}
+                          </td>
                         )}
-                        <td className="p-4 text-right font-medium text-accent">{formatCurrency(item.sellingPrice)}</td>
+                        <td className="p-4 text-right font-medium text-accent">
+                          {formatCurrency(item.sellingPrice)}
+                        </td>
                         <td className="p-4 text-right">
                           <div className="flex justify-end gap-2">
                             {userRole === "owner" ? (
                               <>
-                                <Button variant="ghost" size="icon" onClick={() => handleEditItem(item)}>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleEditItem(item)}
+                                >
                                   <Edit className="w-4 h-4" />
                                 </Button>
                                 <Button
@@ -551,10 +658,12 @@ export default function Inventory() {
                                 </Button>
                               </>
                             ) : !item.confirmedByApprentice ? (
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 className="bg-warning text-warning-foreground"
-                                onClick={() => handleConfirmReceipt(item.id, item.name)}
+                                onClick={() =>
+                                  handleConfirmReceipt(item.id, item.name)
+                                }
                               >
                                 {t("Confirm")}
                               </Button>
@@ -588,24 +697,30 @@ export default function Inventory() {
                 id="name"
                 placeholder={t("e.g. Bluetooth Speaker")}
                 value={newItem.name}
-                onChange={(e) => setNewItem((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setNewItem((prev) => ({ ...prev, name: e.target.value }))
+                }
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="category">{t("Category")}</Label>
               <Select
                 value={newItem.category}
-                onValueChange={(value) => setNewItem((prev) => ({ ...prev, category: value }))}
+                onValueChange={(value) =>
+                  setNewItem((prev) => ({ ...prev, category: value }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder={t("Select category")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.filter((c) => c !== "All").map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {t(category)}
-                    </SelectItem>
-                  ))}
+                  {categories
+                    .filter((c) => c !== "All")
+                    .map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {t(category)}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -615,7 +730,9 @@ export default function Inventory() {
                 id="image"
                 placeholder="https://..."
                 value={newItem.image}
-                onChange={(e) => setNewItem((prev) => ({ ...prev, image: e.target.value }))}
+                onChange={(e) =>
+                  setNewItem((prev) => ({ ...prev, image: e.target.value }))
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -626,7 +743,12 @@ export default function Inventory() {
                   type="number"
                   min={0}
                   value={newItem.wholesalePrice}
-                  onChange={(e) => setNewItem((prev) => ({ ...prev, wholesalePrice: Number(e.target.value) || 0 }))}
+                  onChange={(e) =>
+                    setNewItem((prev) => ({
+                      ...prev,
+                      wholesalePrice: Number(e.target.value) || 0,
+                    }))
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -636,7 +758,12 @@ export default function Inventory() {
                   type="number"
                   min={0}
                   value={newItem.sellingPrice}
-                  onChange={(e) => setNewItem((prev) => ({ ...prev, sellingPrice: Number(e.target.value) || 0 }))}
+                  onChange={(e) =>
+                    setNewItem((prev) => ({
+                      ...prev,
+                      sellingPrice: Number(e.target.value) || 0,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -648,7 +775,12 @@ export default function Inventory() {
                   type="number"
                   min={0}
                   value={newItem.quantity}
-                  onChange={(e) => setNewItem((prev) => ({ ...prev, quantity: Number(e.target.value) || 0 }))}
+                  onChange={(e) =>
+                    setNewItem((prev) => ({
+                      ...prev,
+                      quantity: Number(e.target.value) || 0,
+                    }))
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -656,7 +788,10 @@ export default function Inventory() {
                 <Select
                   value={newItem.status}
                   onValueChange={(value) =>
-                    setNewItem((prev) => ({ ...prev, status: value as InventoryItem["status"] }))
+                    setNewItem((prev) => ({
+                      ...prev,
+                      status: value as InventoryItem["status"],
+                    }))
                   }
                 >
                   <SelectTrigger>
@@ -665,7 +800,9 @@ export default function Inventory() {
                   <SelectContent>
                     <SelectItem value="in-stock">{t("In Stock")}</SelectItem>
                     <SelectItem value="low-stock">{t("Low Stock")}</SelectItem>
-                    <SelectItem value="out-of-stock">{t("Out of Stock")}</SelectItem>
+                    <SelectItem value="out-of-stock">
+                      {t("Out of Stock")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -709,24 +846,34 @@ export default function Inventory() {
                 <Input
                   id="edit-name"
                   value={editingItem.name}
-                  onChange={(e) => setEditingItem((prev) => (prev ? { ...prev, name: e.target.value } : null))}
+                  onChange={(e) =>
+                    setEditingItem((prev) =>
+                      prev ? { ...prev, name: e.target.value } : null,
+                    )
+                  }
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="edit-category">{t("Category")}</Label>
                 <Select
                   value={editingItem.category}
-                  onValueChange={(value) => setEditingItem((prev) => (prev ? { ...prev, category: value } : null))}
+                  onValueChange={(value) =>
+                    setEditingItem((prev) =>
+                      prev ? { ...prev, category: value } : null,
+                    )
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t("Select category")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.filter((c) => c !== "All").map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {t(category)}
-                      </SelectItem>
-                    ))}
+                    {categories
+                      .filter((c) => c !== "All")
+                      .map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {t(category)}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -735,31 +882,53 @@ export default function Inventory() {
                 <Input
                   id="edit-image"
                   value={editingItem.image}
-                  onChange={(e) => setEditingItem((prev) => (prev ? { ...prev, image: e.target.value } : null))}
+                  onChange={(e) =>
+                    setEditingItem((prev) =>
+                      prev ? { ...prev, image: e.target.value } : null,
+                    )
+                  }
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="grid gap-2">
-                  <Label htmlFor="edit-wholesale">{t("Cost Price (NGN)")}</Label>
+                  <Label htmlFor="edit-wholesale">
+                    {t("Cost Price (NGN)")}
+                  </Label>
                   <Input
                     id="edit-wholesale"
                     type="number"
                     min={0}
                     value={editingItem.wholesalePrice}
                     onChange={(e) =>
-                      setEditingItem((prev) => (prev ? { ...prev, wholesalePrice: Number(e.target.value) || 0 } : null))
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              wholesalePrice: Number(e.target.value) || 0,
+                            }
+                          : null,
+                      )
                     }
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="edit-selling">{t("Selling Price (NGN)")}</Label>
+                  <Label htmlFor="edit-selling">
+                    {t("Selling Price (NGN)")}
+                  </Label>
                   <Input
                     id="edit-selling"
                     type="number"
                     min={0}
                     value={editingItem.sellingPrice}
                     onChange={(e) =>
-                      setEditingItem((prev) => (prev ? { ...prev, sellingPrice: Number(e.target.value) || 0 } : null))
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              sellingPrice: Number(e.target.value) || 0,
+                            }
+                          : null,
+                      )
                     }
                   />
                 </div>
@@ -773,7 +942,11 @@ export default function Inventory() {
                     min={0}
                     value={editingItem.quantity}
                     onChange={(e) =>
-                      setEditingItem((prev) => (prev ? { ...prev, quantity: Number(e.target.value) || 0 } : null))
+                      setEditingItem((prev) =>
+                        prev
+                          ? { ...prev, quantity: Number(e.target.value) || 0 }
+                          : null,
+                      )
                     }
                   />
                 </div>
@@ -782,7 +955,14 @@ export default function Inventory() {
                   <Select
                     value={editingItem.status}
                     onValueChange={(value) =>
-                      setEditingItem((prev) => (prev ? { ...prev, status: value as InventoryItem["status"] } : null))
+                      setEditingItem((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              status: value as InventoryItem["status"],
+                            }
+                          : null,
+                      )
                     }
                   >
                     <SelectTrigger>
@@ -790,8 +970,12 @@ export default function Inventory() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="in-stock">{t("In Stock")}</SelectItem>
-                      <SelectItem value="low-stock">{t("Low Stock")}</SelectItem>
-                      <SelectItem value="out-of-stock">{t("Out of Stock")}</SelectItem>
+                      <SelectItem value="low-stock">
+                        {t("Low Stock")}
+                      </SelectItem>
+                      <SelectItem value="out-of-stock">
+                        {t("Out of Stock")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -808,7 +992,10 @@ export default function Inventory() {
             >
               {t("Cancel")}
             </Button>
-            <Button onClick={handleSaveEdit} disabled={!editingItem?.name?.trim()}>
+            <Button
+              onClick={handleSaveEdit}
+              disabled={!editingItem?.name?.trim()}
+            >
               {t("Save Changes")}
             </Button>
           </DialogFooter>
@@ -826,9 +1013,12 @@ export default function Inventory() {
           <AlertDialogHeader>
             <AlertDialogTitle>{t("Delete item")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("This action cannot be undone. You are about to delete {item} from inventory.", {
-                values: { item: deleteTarget?.name || t("this item") },
-              })}
+              {t(
+                "This action cannot be undone. You are about to delete {item} from inventory.",
+                {
+                  values: { item: deleteTarget?.name || t("this item") },
+                },
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
