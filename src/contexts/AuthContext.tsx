@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
   user: User | null;
   login: (credentials: LoginCredentials) => Promise<void>;
+  register: (data: import("@/lib/auth").SignupData) => Promise<void>;
   logout: () => void;
   updateUser: (updates: Partial<User>) => void;
   isAuthenticated: boolean;
@@ -60,6 +61,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const register = async (data: import("@/lib/auth").SignupData) => {
+    const user = await AuthService.register(data);
+    setUser(user);
+    // Redirect based on user role
+    if (user.role === "investor") {
+      router.push("/investor-dashboard");
+    } else {
+      router.push("/dashboard");
+    }
+  };
+
   const logout = () => {
     AuthService.logout();
     setUser(null);
@@ -85,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user,
       login,
       logout,
+      register,
       updateUser,
       isAuthenticated: !!user,
       isLoading,

@@ -18,6 +18,15 @@ export interface LoginCredentials {
   role: "owner" | "apprentice" | "investor";
 }
 
+export interface SignupData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role: "owner" | "apprentice" | "investor";
+  businessName: string;
+}
+
 // Mock users database
 const MOCK_USERS: Record<string, { password: string; user: User }> = {
   "ahmed@luxa.com": {
@@ -74,6 +83,7 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
 
 const AUTH_STORAGE_KEY = "luxa_auth_user";
 const ROLE_STORAGE_KEY = "luxa_last_role";
+const REGISTERED_USERS_KEY = "luxa_registered_users";
 
 export class AuthService {
   // Login user
@@ -81,25 +91,31 @@ export class AuthService {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
 
+    // First check dynamic registered users
+    const registered = this.getRegisteredUsers();
+    const regRecord = registered.find((u) => u.email === credentials.email);
+    if (regRecord) {
+      if (regRecord.password !== credentials.password) {
+        throw new Error("Invalid email or password");
+      }
+      if (regRecord.user.role !== credentials.role) {
+        throw new Error(`You don't have ${credentials.role} access`);
+      }
+      this.setUser(regRecord.user);
+      this.setLastRole(credentials.role);
+      return regRecord.user;
+    }
+
+    // Fallback to mock users
     const userRecord = MOCK_USERS[credentials.email];
-
-    if (!userRecord) {
+    if (!userRecord || userRecord.password !== credentials.password) {
       throw new Error("Invalid email or password");
     }
-
-    if (userRecord.password !== credentials.password) {
-      throw new Error("Invalid email or password");
-    }
-
-    // Check if user has permission for the selected role
     if (userRecord.user.role !== credentials.role) {
       throw new Error(`You don't have ${credentials.role} access`);
     }
-
-    // Store user in localStorage
     this.setUser(userRecord.user);
     this.setLastRole(credentials.role);
-
     return userRecord.user;
   }
 
@@ -174,5 +190,56 @@ export class AuthService {
   static getUserDisplayName(): string {
     const user = this.getUser();
     return user ? `${user.firstName} ${user.lastName}` : "";
+  }
+
+  // Registration support
+  static register(data: SignupData): Promise<User> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // Validate email uniqueness
+        const registered = this.getRegisteredUsers();
+        const existsInRegistered = registered.some((u) => u.email === data.email);
+        const existsInMock = !!MOCK_USERS[data.email];
+        if (existsInRegistered || existsInMock) {
+          reject(new Error("Email already exists"));
+          return;
+        }
+
+        const newUser: User = {
+          id: `${Date.now()}`,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          role: data.role,
+          businessName: data.businessName,
+          avatar: "",
+        };
+
+        const record = { password: data.password, user: newUser };
+        const updated = [...registered, { email: data.email, ...record }];
+        this.setRegisteredUsers(updated);
+
+        this.setUser(newUser);
+        this.setLastRole(data.role);
+        resolve(newUser);
+      }, 800);
+    });
+  }
+
+  private static getRegisteredUsers(): Array<{ email: string; password: string; user: User }> {
+    if (typeof window === "undefined") return [];
+    const raw = localStorage.getItem(REGISTERED_USERS_KEY);
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      localStorage.removeItem(REGISTERED_USERS_KEY);
+      return [];
+    }
+  }
+
+  private static setRegisteredUsers(users: Array<{ email: string; password: string; user: User }>): void {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
   }
 }
